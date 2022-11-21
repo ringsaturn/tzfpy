@@ -1,0 +1,17 @@
+[build-system]
+requires = ["maturin>=0.13,<0.14"]
+build-backend = "maturin"
+
+[project]
+name = "tzfpy"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+[project.urls]
+"Source Code" = "https://github.com/ringsaturn/tzfpy"
+Issues = "https://github.com/ringsaturn/tzfpy/issues"
+Documentation = "https://github.com/ringsaturn/tzfpy"
