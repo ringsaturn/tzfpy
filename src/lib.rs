@@ -13,8 +13,15 @@ pub fn get_tz(lng: f64, lat: f64) -> PyResult<String> {
     Ok(FINDER.get_tz_name(lng, lat).to_string())
 }
 
+#[pyfunction]
+pub fn timezonenames(py: Python) -> PyResult<Vec<&str>>{
+    return Ok(FINDER.timezonenames());
+}
+
+
 #[pymodule]
 fn tzfpy(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(get_tz, m)?)?;
+    m.add_function(wrap_pyfunction!(timezonenames, m)?)?;
     Ok(())
 }
