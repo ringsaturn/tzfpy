@@ -8,6 +8,8 @@ NOTE:
 2. Rust use lazzy init, so first calling will be a little slow.
 3. Use about 40MB memory.
 
+It's tested under Python 3.9+ but supprt 3.7+(noqa).
+
 ## Usage
 
 ```bash
