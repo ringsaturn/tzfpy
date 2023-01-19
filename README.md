@@ -17,8 +17,11 @@ pip install tzfpy
 ```
 
 ```python
->>> from tzfpy import get_tz
->>> print(get_tz(116.3883, 39.9289))
+>>> from tzfpy import get_tz, get_tzs
+>>> get_tz(116.3883, 39.9289)
+'Asia/Shanghai'
+>>> get_tzs(87.4160, 44.0400)
+['Asia/Shanghai', 'Asia/Urumqi']
 ```
 
 ## Background
