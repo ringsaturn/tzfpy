@@ -46,7 +46,7 @@ jobs:
           source venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements_dev.txt
-          maturin develop
+          maturin develop --release
           pytest --cov | tee benchmark_result.txt
 
       - name: Install tzfpy and test(windows)
@@ -56,7 +56,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements_dev.txt
-          maturin build
+          maturin build --release
           pip install target/wheels/tzfpy-*.whl
           pytest --cov | tee benchmark_result.txt
 
