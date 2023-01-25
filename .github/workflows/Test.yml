@@ -46,8 +46,8 @@ jobs:
           source venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements_dev.txt
-          maturin develop
-          pytest --cov
+          maturin develop --release
+          pytest --cov | tee benchmark_result.txt
 
       - name: Install tzfpy and test(windows)
         shell: bash
@@ -56,6 +56,39 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements_dev.txt
-          maturin build
+          maturin build --release
           pip install target/wheels/tzfpy-*.whl
-          pytest --cov
+          pytest --cov | tee benchmark_result.txt
+
+      - name: Setup benchmark file name
+        id: gen-benchmark-file-name
+        shell: bash
+        run: |
+          echo "filename=tzfpy_benchmark_py_${{ matrix.python-version }}_${{ matrix.os }}.md" >> $GITHUB_OUTPUT
+
+      - name: Report
+        shell: bash
+        run: |
+          set +e
+          echo "## Python ${{ matrix.python-version }} with ${{ matrix.os }}" >> ${{ steps.gen-benchmark-file-name.outputs.filename }}
+          echo '```' >> ${{ steps.gen-benchmark-file-name.outputs.filename }}
+          cat benchmark_result.txt >> ${{ steps.gen-benchmark-file-name.outputs.filename }}
+          echo '```' >> ${{ steps.gen-benchmark-file-name.outputs.filename }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: "benchmark_result_as_md"
+          path: ${{ steps.gen-benchmark-file-name.outputs.filename }}
+
+  Summary:
+    needs: [Testing]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: "benchmark_result_as_md"
+          path: ""
+
+      - run: cat tzfpy_benchmark_*.md > $GITHUB_STEP_SUMMARY
