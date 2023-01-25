@@ -21,5 +21,6 @@ crate-type = ["cdylib"]
 pyo3 = { version = "0.18.0", features = ["extension-module"] }
 lazy_static = "1.4.0"
 
+# when tzf-rs PR merged and bump another change this
 tzf-rs = { git =  "http://github.com/yihong0618/tzf-rs", rev = "fce8f4cd19ee05a8f0bd00aca3f2822a5f18ce2a"}
 # tzf-rs = "0.2.0"
