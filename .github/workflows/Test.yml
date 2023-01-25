@@ -50,6 +50,7 @@ jobs:
           pytest --cov
 
       - name: Install tzfpy and test(windows)
+        shell: bash
         # for windows need maturin build
         if: matrix.os == 'windows-latest'
         run: |
