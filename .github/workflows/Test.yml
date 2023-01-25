@@ -11,12 +11,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  linux:
-    runs-on: ubuntu-latest
+  Testing:
+    runs-on:  ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         python-version: ["3.9", "3.10", "3.11"]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v3
 
@@ -39,10 +40,20 @@ jobs:
         run: |
           python -m venv venv
 
-      - name: Install tzfpy and test
+      - name: Install tzfpy and test(not windows)
+        if: matrix.os != 'windows-latest'
         run: |
           source venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements_dev.txt
+          maturin develop
+          pytest --cov
+
+      - name: Install tzfpy and test(windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          . venv\Scripts\activate.bat
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements_dev.txt
           maturin develop
           pytest --cov
