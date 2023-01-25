@@ -62,6 +62,7 @@ jobs:
 
       - name: Setup benchmark file name
         id: gen-benchmark-file-name
+        shell: bash
         run: |
           echo "filename=tzfpy_benchmark_py_${{ matrix.python-version }}_${{ matrix.os }}.md" >> $GITHUB_OUTPUT
 
