@@ -50,10 +50,12 @@ jobs:
           pytest --cov
 
       - name: Install tzfpy and test(windows)
+        # for windows need maturin build
         if: matrix.os == 'windows-latest'
         run: |
           . venv\Scripts\activate.bat
           python -m pip install --upgrade pip
           python -m pip install -r requirements_dev.txt
-          maturin develop
+          maturin build
+          pip install target/wheels/citiespy-*.whl
           pytest --cov
