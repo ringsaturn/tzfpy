@@ -90,5 +90,4 @@ jobs:
           name: "benchmark_result_as_md"
           path: ""
 
-      - name: Summary
-        run: cat tzfpy_benchmark_*.md > $GITHUB_STEP_SUMMARY
+      - run: cat tzfpy_benchmark_*.md > $GITHUB_STEP_SUMMARY
