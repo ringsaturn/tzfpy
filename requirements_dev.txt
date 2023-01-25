@@ -1,4 +1,4 @@
-citiespy==0.3.2
+citiespy==0.3.3
 maturin==0.14.8
 pytest
 pytest-benchmark
