@@ -81,7 +81,7 @@ jobs:
           name: "benchmark_result_as_md"
           path: ${{ steps.gen-benchmark-file-name.outputs.filename }}
 
-  Summary:
+  Report:
     needs: [Testing]
     runs-on: ubuntu-latest
     steps:
