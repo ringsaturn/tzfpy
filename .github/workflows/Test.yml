@@ -50,7 +50,6 @@ jobs:
           pytest --cov
 
       - name: Install tzfpy and test(windows)
-        shell: bash
         # for windows need maturin build
         if: matrix.os == 'windows-latest'
         run: |
@@ -58,5 +57,5 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements_dev.txt
           maturin build
-          pip install target/wheels/tzfpy-*.whl
+          pip install target\wheels\tzfpy-*.whl
           pytest --cov
