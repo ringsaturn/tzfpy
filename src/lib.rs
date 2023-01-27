@@ -1,4 +1,4 @@
-#![allow(unused)]
+// #![allow(unused)]
 
 use lazy_static::lazy_static;
 use pyo3::prelude::*;
@@ -14,15 +14,14 @@ pub fn get_tz(lng: f64, lat: f64) -> PyResult<String> {
 }
 
 #[pyfunction]
-pub fn get_tzs(py: Python, lng: f64, lat: f64) -> PyResult<Vec<&str>> {
+pub fn get_tzs(_py: Python, lng: f64, lat: f64) -> PyResult<Vec<&str>> {
     Ok(FINDER.get_tz_names(lng, lat))
 }
 
 #[pyfunction]
-pub fn timezonenames(py: Python) -> PyResult<Vec<&str>>{
+pub fn timezonenames(_py: Python) -> PyResult<Vec<&str>>{
     return Ok(FINDER.timezonenames());
 }
-
 
 #[pymodule]
 fn tzfpy(_py: Python, m: &PyModule) -> PyResult<()> {
