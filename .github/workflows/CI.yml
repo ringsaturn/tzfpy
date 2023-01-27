@@ -107,8 +107,7 @@ jobs:
         linux,
         windows,
         manylinux-aarch64,
-        aarch64-linux-gnueabihf,
-        arm-linux-gnueabihf,
+        # armv7-unknown-linux-gnueabi,
       ]
     steps:
       - uses: actions/download-artifact@v3
