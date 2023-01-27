@@ -47,26 +47,8 @@ jobs:
           name: wheels
           path: dist
 
-  # ARM8
-  aarch64-linux-gnueabihf:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Cache
-        uses: Swatinem/rust-cache@v2
-      - uses: messense/maturin-action@v1
-        with:
-          target: aarch64-linux-gnueabihf
-          command: build
-          args: --release -o dist --find-interpreter
-      - name: Upload wheels
-        uses: actions/upload-artifact@v3
-        with:
-          name: wheels
-          path: dist
-
   # ARM7
-  arm-linux-gnueabihf:
+  armv7-unknown-linux-gnueabi:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -74,7 +56,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
       - uses: messense/maturin-action@v1
         with:
-          target: arm-linux-gnueabihf
+          target: armv7-unknown-linux-gnueabi
           command: build
           args: --release -o dist --find-interpreter
       - name: Upload wheels
