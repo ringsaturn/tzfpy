@@ -10,6 +10,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+    SCCACHE_GHA_ENABLED: "true"
+    RUSTC_WRAPPER: "sccache"
+
 jobs:
   Testing:
     runs-on:  ${{ matrix.os }}
@@ -26,8 +30,11 @@ jobs:
         with:
           toolchain: nightly-2022-12-20
 
-      - name: Cache Rust
-        uses: Swatinem/rust-cache@v2
+      - name: Sccache Setup
+        # Just for test, come back to upstream after released
+        uses: Xuanwo/sccache-action@c94e27bef21ab3fb4a5152c8a878c53262b4abb0
+        with:
+          version: "v0.4.0-pre.6"
 
       - name: Set up Python
         uses: actions/setup-python@v4
