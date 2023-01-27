@@ -82,7 +82,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     if: "startsWith(github.ref, 'refs/tags/')"
-    needs: [macos, linux, windows]
+    needs: [macos, linux, windows, manylinux-aarch64]
     steps:
       - uses: actions/download-artifact@v3
         with:
