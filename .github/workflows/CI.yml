@@ -48,7 +48,7 @@ jobs:
           path: dist
 
   # ARM7
-  armv7-unknown-linux-gnueabi:
+  armv7:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -56,7 +56,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
       - uses: messense/maturin-action@v1
         with:
-          target: armv7-unknown-linux-gnueabi
+          target: armv7
           command: build
           args: --release -o dist --find-interpreter
           container: messense/manylinux_2_24-cross:armv7
