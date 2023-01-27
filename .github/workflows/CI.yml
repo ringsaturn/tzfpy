@@ -59,6 +59,7 @@ jobs:
           target: armv7-unknown-linux-gnueabi
           command: build
           args: --release -o dist --find-interpreter
+          container: messense/manylinux_2_24-cross:armv7
       - name: Upload wheels
         uses: actions/upload-artifact@v3
         with:
