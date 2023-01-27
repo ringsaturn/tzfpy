@@ -7,9 +7,6 @@ on:
     tags:
       - "*.*.*"
   pull_request:
-  release:
-    types:
-      - published
 
 jobs:
   linux:
@@ -23,6 +20,79 @@ jobs:
           manylinux: auto
           command: build
           args: --release -o dist --find-interpreter
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: dist
+
+  # Docker with  Apple Silicon
+  manylinux-aarch64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache
+        uses: Swatinem/rust-cache@v2
+      - uses: messense/maturin-action@v1
+        with:
+          target: aarch64-unknown-linux-gnu
+          command: build
+          args: --release -o dist --find-interpreter
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: dist
+
+  # ARM7
+  armv7:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache
+        uses: Swatinem/rust-cache@v2
+      - uses: messense/maturin-action@v1
+        with:
+          target: armv7
+          command: build
+          args: --release -o dist --find-interpreter
+          container: messense/manylinux_2_24-cross:armv7
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: dist
+
+  musllinux-x86_64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache
+        uses: Swatinem/rust-cache@v2
+      - uses: messense/maturin-action@v1
+        with:
+          target: x86_64
+          command: build
+          args: --release -o dist --find-interpreter
+          manylinux: musllinux_1_1
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: dist
+
+  musllinux-aarch64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache
+        uses: Swatinem/rust-cache@v2
+      - uses: messense/maturin-action@v1
+        with:
+          target: aarch64
+          command: build
+          args: --release -o dist --find-interpreter
+          manylinux: musllinux_1_1
       - name: Upload wheels
         uses: actions/upload-artifact@v3
         with:
@@ -65,7 +135,16 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     if: "startsWith(github.ref, 'refs/tags/')"
-    needs: [macos, linux, windows]
+    needs:
+      [
+        macos,
+        linux,
+        windows,
+        manylinux-aarch64,
+        armv7,
+        musllinux-x86_64,
+        musllinux-aarch64,
+      ]
     steps:
       - uses: actions/download-artifact@v3
         with:
