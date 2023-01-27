@@ -29,6 +29,23 @@ jobs:
           name: wheels
           path: dist
 
+  manylinux-aarch64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache
+        uses: Swatinem/rust-cache@v2
+      - uses: messense/maturin-action@v1
+        with:
+          target: aarch64-unknown-linux-gnu
+          command: build
+          args: --release -o dist -u ritchie46
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: dist
+
   windows:
     runs-on: windows-latest
     steps:
