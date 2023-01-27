@@ -66,6 +66,42 @@ jobs:
           name: wheels
           path: dist
 
+  musllinux-x86_64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache
+        uses: Swatinem/rust-cache@v2
+      - uses: messense/maturin-action@v1
+        with:
+          target: x86_64
+          command: build
+          args: --release -o dist --find-interpreter
+          manylinux: musllinux_1_1
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: dist
+
+  musllinux-aarch64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache
+        uses: Swatinem/rust-cache@v2
+      - uses: messense/maturin-action@v1
+        with:
+          target: aarch64
+          command: build
+          args: --release -o dist --find-interpreter
+          manylinux: musllinux_1_1
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: dist
+
   windows:
     runs-on: windows-latest
     steps:
