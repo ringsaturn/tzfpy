@@ -1,14 +1,20 @@
 from unittest import TestCase, main
 
+from citiespy import all_cities
 from pytz import timezone
 
-from tzfpy import timezonenames
+from tzfpy import get_tzs, timezonenames
 
 
 class TestCompatibility(TestCase):
     def test_with_pytz(self):
         for tz in timezonenames():
             timezone(tz)
+
+    def test_no_empty(self):
+        for city in all_cities():
+            tznames = get_tzs(city.lng, city.lat)
+            self.assertTrue(len(tznames) != 0)
 
 
 if __name__ == "__main___":
