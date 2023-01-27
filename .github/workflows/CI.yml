@@ -8,13 +8,20 @@ on:
       - "*.*.*"
   pull_request:
 
+env:
+  SCCACHE_GHA_ENABLED: "true"
+  RUSTC_WRAPPER: "sccache"
+
 jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Cache
-        uses: Swatinem/rust-cache@v2
+      - name: Sccache Setup
+        # Just for test, come back to upstream after released
+        uses: Xuanwo/sccache-action@c94e27bef21ab3fb4a5152c8a878c53262b4abb0
+        with:
+          version: "v0.4.0-pre.6"
       - uses: messense/maturin-action@v1
         with:
           manylinux: auto
@@ -31,8 +38,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Cache
-        uses: Swatinem/rust-cache@v2
+      - name: Sccache Setup
+        # Just for test, come back to upstream after released
+        uses: Xuanwo/sccache-action@c94e27bef21ab3fb4a5152c8a878c53262b4abb0
+        with:
+          version: "v0.4.0-pre.6"
       - uses: messense/maturin-action@v1
         with:
           target: aarch64-unknown-linux-gnu
@@ -49,8 +59,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Cache
-        uses: Swatinem/rust-cache@v2
+      - name: Sccache Setup
+        # Just for test, come back to upstream after released
+        uses: Xuanwo/sccache-action@c94e27bef21ab3fb4a5152c8a878c53262b4abb0
+        with:
+          version: "v0.4.0-pre.6"
       - uses: messense/maturin-action@v1
         with:
           target: armv7
@@ -67,8 +80,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Cache
-        uses: Swatinem/rust-cache@v2
+      - name: Sccache Setup
+        # Just for test, come back to upstream after released
+        uses: Xuanwo/sccache-action@c94e27bef21ab3fb4a5152c8a878c53262b4abb0
+        with:
+          version: "v0.4.0-pre.6"
       - uses: messense/maturin-action@v1
         with:
           target: x86_64
@@ -85,8 +101,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Cache
-        uses: Swatinem/rust-cache@v2
+      - name: Sccache Setup
+        # Just for test, come back to upstream after released
+        uses: Xuanwo/sccache-action@c94e27bef21ab3fb4a5152c8a878c53262b4abb0
+        with:
+          version: "v0.4.0-pre.6"
       - uses: messense/maturin-action@v1
         with:
           target: aarch64
@@ -103,8 +122,11 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Cache
-        uses: Swatinem/rust-cache@v2
+      - name: Sccache Setup
+        # Just for test, come back to upstream after released
+        uses: Xuanwo/sccache-action@c94e27bef21ab3fb4a5152c8a878c53262b4abb0
+        with:
+          version: "v0.4.0-pre.6"
       - uses: messense/maturin-action@v1
         with:
           command: build
@@ -119,8 +141,11 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Cache
-        uses: Swatinem/rust-cache@v2
+      - name: Sccache Setup
+        # Just for test, come back to upstream after released
+        uses: Xuanwo/sccache-action@c94e27bef21ab3fb4a5152c8a878c53262b4abb0
+        with:
+          version: "v0.4.0-pre.6"
       - uses: messense/maturin-action@v1
         with:
           command: build
