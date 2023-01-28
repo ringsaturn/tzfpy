@@ -105,9 +105,9 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "cities-json"
-version = "0.3.2"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3288756d9a1e52c63d2b0b68e1c9aa108f4be2caa4d9ac357a2132f91c29fac9"
+checksum = "a2508c1eba29c776a88b0f8374c59a8345c29e22fe5e9a168dab0e46a42221b0"
 dependencies = [
  "lazy_static",
  "rand",
@@ -117,9 +117,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.1.1"
+version = "4.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4ec7a4128863c188deefe750ac1d1dfe66c236909f845af04beed823638dc1b2"
+checksum = "f13b9c79b5d1dd500d20ef541215a6423c75829ef43117e1b4d17fd8af0b5d76"
 dependencies = [
  "bitflags",
  "clap_derive",
@@ -976,15 +976,15 @@ dependencies = [
 
 [[package]]
 name = "tzf-rel"
-version = "0.0.2022-g"
+version = "0.0.2022-g1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "19d417415297976a83bea6037a0e2ef756f7e8a47e0b0f51df4b1baed99138a6"
+checksum = "9740d99d1cf246ba7848086fdbebc8ce6adc64715e6e5edd4695985f8053064b"
 
 [[package]]
 name = "tzf-rs"
-version = "0.2.1"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4eb8ad8a4151e861bc0b229c1828b5aa3de6bed2c2471afd7deffa6786eaabb9"
+checksum = "696d8f5abef38f16dc4bb184c45aacc19c203dea901ae7beff6835d0eaac735f"
 dependencies = [
  "anyhow",
  "bytes",
