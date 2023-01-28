@@ -1001,7 +1001,7 @@ dependencies = [
 
 [[package]]
 name = "tzfpy"
-version = "0.13.0"
+version = "0.13.1"
 dependencies = [
  "lazy_static",
  "pyo3",
