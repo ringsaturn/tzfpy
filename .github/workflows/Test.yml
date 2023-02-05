@@ -40,14 +40,35 @@ jobs:
         run: |
           python -m venv venv
 
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          profile: minimal
+          components: llvm-tools-preview
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
+
       - name: Install tzfpy and test(not windows)
         if: matrix.os != 'windows-latest'
         run: |
           source venv/bin/activate
+          source <(cargo llvm-cov show-env --export-prefix)
+          export CARGO_TARGET_DIR=$CARGO_LLVM_COV_TARGET_DIR
+          export CARGO_INCREMENTAL=1
+          cargo llvm-cov clean --workspace
+          cargo test
           pip install --upgrade pip
           pip install -r requirements_dev.txt
           maturin develop --release
-          pytest --cov | tee benchmark_result.txt
+          pytest --cov --cov-report xml | tee benchmark_result.txt
+          cargo llvm-cov --no-run --lcov --output-path coverage.lcov
+
+      - uses: codecov/codecov-action@v3
+        if: matrix.os != 'windows-latest'
+        with:
+          files: coverage.lcov,coverage.xml
+          name: ${{ matrix.os }}
 
       - name: Install tzfpy and test(windows)
         shell: bash
