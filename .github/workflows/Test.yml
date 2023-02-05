@@ -46,11 +46,12 @@ jobs:
           override: true
           profile: minimal
           components: llvm-tools-preview
+
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@cargo-llvm-cov
 
-      - name: Install tzfpy and test(not windows)
-        if: matrix.os != 'windows-latest'
+      - name: Install tzfpy and test(ubuntu)
+        if: matrix.os == 'ubuntu-latest'
         run: |
           source venv/bin/activate
           source <(cargo llvm-cov show-env --export-prefix)
@@ -65,7 +66,7 @@ jobs:
           cargo llvm-cov --no-run --lcov --output-path coverage.lcov
 
       - uses: codecov/codecov-action@v3
-        if: matrix.os != 'windows-latest'
+        if: matrix.os == 'ubuntu-latest'
         with:
           files: coverage.lcov,coverage.xml
           name: ${{ matrix.os }}
@@ -79,6 +80,15 @@ jobs:
           python -m pip install -r requirements_dev.txt
           maturin build --release
           pip install target/wheels/tzfpy-*.whl
+          pytest --cov | tee benchmark_result.txt
+
+      - name: Install tzfpy and test(macos)
+        if: matrix.os == 'macos-latest'
+        run: |
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements_dev.txt
+          maturin develop --release
           pytest --cov | tee benchmark_result.txt
 
       - name: Setup benchmark file name
