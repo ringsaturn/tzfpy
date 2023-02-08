@@ -18,7 +18,7 @@ name = "tzfpy"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.18.0", features = ["extension-module"] }
+pyo3 = { version = "0.18.1", features = ["extension-module"] }
 lazy_static = "1.4.0"
 
 # tzf-rs = { git =  "http://github.com/ringsaturn/tzf-rs", rev = "8f6873966079f8c27b6816cdfe3a1652469ebd24"}
