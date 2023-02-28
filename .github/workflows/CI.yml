@@ -19,6 +19,7 @@ jobs:
         with:
           manylinux: auto
           command: build
+          sccache: "true"
           args: --release -o dist --find-interpreter
       - name: Upload wheels
         uses: actions/upload-artifact@v3
@@ -37,6 +38,7 @@ jobs:
         with:
           target: aarch64-unknown-linux-gnu
           command: build
+          sccache: "true"
           args: --release -o dist --find-interpreter
       - name: Upload wheels
         uses: actions/upload-artifact@v3
@@ -55,6 +57,7 @@ jobs:
         with:
           target: armv7
           command: build
+          sccache: "true"
           args: --release -o dist --find-interpreter
           container: messense/manylinux_2_24-cross:armv7
       - name: Upload wheels
@@ -73,6 +76,7 @@ jobs:
         with:
           target: x86_64
           command: build
+          sccache: "true"
           args: --release -o dist --find-interpreter
           manylinux: musllinux_1_1
       - name: Upload wheels
@@ -91,6 +95,7 @@ jobs:
         with:
           target: aarch64
           command: build
+          sccache: "true"
           args: --release -o dist --find-interpreter
           manylinux: musllinux_1_1
       - name: Upload wheels
@@ -108,6 +113,7 @@ jobs:
       - uses: messense/maturin-action@v1
         with:
           command: build
+          sccache: "true"
           args: --release -o dist --universal2 --find-interpreter
       - name: Upload wheels
         uses: actions/upload-artifact@v3
@@ -124,6 +130,7 @@ jobs:
       - uses: messense/maturin-action@v1
         with:
           command: build
+          sccache: "true"
           args: --release -o dist --universal2 --find-interpreter
       - name: Upload wheels
         uses: actions/upload-artifact@v3
