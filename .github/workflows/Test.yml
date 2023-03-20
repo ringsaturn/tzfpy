@@ -56,19 +56,36 @@ jobs:
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@cargo-llvm-cov
 
-      - name: Install tzfpy and test(ubuntu)
+      - name: "Test Rust"
         if: matrix.os == 'ubuntu-latest'
         run: |
-          source venv/bin/activate
           source <(cargo llvm-cov show-env --export-prefix)
-          # export CARGO_TARGET_DIR=$CARGO_LLVM_COV_TARGET_DIR
-          # export CARGO_INCREMENTAL=1
-          # cargo llvm-cov clean --workspace
           cargo test
+
+      - name: Install tzfpy and test(Windows)
+        if: matrix.os == 'windows-latest'
+        shell: bash
+        run: |
+          source venv/Scripts/activate
+          python -m pip install --upgrade pip
+          pip install -r requirements_dev.txt
+          maturin develop --release --extras=pytz
+          pytest --cov --cov-report xml | tee benchmark_result.txt
+
+      - name: Install tzfpy and test(Ubuntu&macoS)
+        if: matrix.os != 'windows-latest'
+        shell: bash
+        run: |
+          source venv/bin/activate
           pip install --upgrade pip
           pip install -r requirements_dev.txt
-          maturin develop --release
+          maturin develop --release --extras=pytz
           pytest --cov --cov-report xml | tee benchmark_result.txt
+
+      - name: Postprocessing cov
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          source <(cargo llvm-cov show-env --export-prefix)
           cargo llvm-cov --no-run --lcov --output-path coverage.lcov
 
       - uses: codecov/codecov-action@v3
@@ -76,26 +93,6 @@ jobs:
         with:
           files: coverage.lcov,coverage.xml
           name: ${{ matrix.os }}
-
-      - name: Install tzfpy and test(windows)
-        shell: bash
-        # for windows need maturin build
-        if: matrix.os == 'windows-latest'
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r requirements_dev.txt
-          maturin build --release
-          pip install target/wheels/tzfpy-*.whl
-          pytest --cov | tee benchmark_result.txt
-
-      - name: Install tzfpy and test(macos)
-        if: matrix.os == 'macos-latest'
-        run: |
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements_dev.txt
-          maturin develop --release
-          pytest --cov | tee benchmark_result.txt
 
       - name: Setup benchmark file name
         id: gen-benchmark-file-name
