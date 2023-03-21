@@ -1,13 +1,14 @@
 from unittest import TestCase, main
 
 from citiespy import all_cities
-from pytz import timezone
 
 from tzfpy import get_tzs, timezonenames
 
 
 class TestCompatibility(TestCase):
     def test_with_pytz(self):
+        from pytz import timezone
+
         for tz in timezonenames():
             timezone(tz)
 
