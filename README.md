@@ -15,7 +15,7 @@ It's tested under Python 3.9+ but support 3.7+(noqa).
 ## Usage
 
 Please note that new timezone names may be added to tzfpy, which could be
-incompatible with old version package like pytz. As an option, tzfpy support
+incompatible with old version package like pytz. As an option, tzfpy supports
 install compatible version of those packages with extra params.
 
 ```bash
