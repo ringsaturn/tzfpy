@@ -16,7 +16,7 @@ requires-python = ">=3.7"
 
 [project.optional-dependencies]
 pytz = [
-  "pytz==2023.2",
+  "pytz>=2023.2",
 ]
 
 [project.urls]
