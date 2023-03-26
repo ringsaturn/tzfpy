@@ -24,6 +24,6 @@ def timezonenames() -> List[str]:
     ...
 
 
-def data_version() -> List[str]:
+def data_version() -> str:
     """Show current tzdata version"""
     ...
