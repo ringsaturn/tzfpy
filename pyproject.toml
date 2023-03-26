@@ -1,7 +1,6 @@
 [build-system]
 build-backend = "maturin"
-dependencies = []
-requires = ["maturin>=0.13,<0.14"]
+requires = ["maturin>=0.14,<0.15"]
 
 [project]
 classifiers = [
