@@ -19,12 +19,12 @@ pub fn get_tzs(_py: Python, lng: f64, lat: f64) -> PyResult<Vec<&str>> {
 }
 
 #[pyfunction]
-pub fn timezonenames(_py: Python) -> PyResult<Vec<&str>>{
+pub fn timezonenames(_py: Python) -> PyResult<Vec<&str>> {
     return Ok(FINDER.timezonenames());
 }
 
 #[pyfunction]
-pub fn data_version(_py: Python) -> PyResult<String>{
+pub fn data_version(_py: Python) -> PyResult<String> {
     return Ok(FINDER.data_version().to_string());
 }
 

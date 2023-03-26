@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "maturin"
-dependencies = ["flask~=1.1.0", "toml==0.10.0"]
+dependencies = []
 requires = ["maturin>=0.13,<0.14"]
 
 [project]
