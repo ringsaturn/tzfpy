@@ -19,8 +19,13 @@ pub fn get_tzs(_py: Python, lng: f64, lat: f64) -> PyResult<Vec<&str>> {
 }
 
 #[pyfunction]
-pub fn timezonenames(_py: Python) -> PyResult<Vec<&str>>{
+pub fn timezonenames(_py: Python) -> PyResult<Vec<&str>> {
     return Ok(FINDER.timezonenames());
+}
+
+#[pyfunction]
+pub fn data_version(_py: Python) -> PyResult<String> {
+    return Ok(FINDER.data_version().to_string());
 }
 
 #[pymodule]
@@ -28,5 +33,6 @@ fn tzfpy(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(get_tz, m)?)?;
     m.add_function(wrap_pyfunction!(get_tzs, m)?)?;
     m.add_function(wrap_pyfunction!(timezonenames, m)?)?;
+    m.add_function(wrap_pyfunction!(data_version, m)?)?;
     Ok(())
 }

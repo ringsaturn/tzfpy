@@ -1,12 +1,6 @@
 [build-system]
 build-backend = "maturin"
-dependencies = ["flask~=1.1.0", "toml==0.10.0"]
-requires = ["maturin>=0.13,<0.14"]
-
-[project.optional-dependencies]
-pytz = [
-  "pytz==2022.7.1",
-]
+requires = ["maturin>=0.14,<0.15"]
 
 [project]
 classifiers = [
@@ -14,9 +8,15 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
+dependencies = []
 description = "Probably the fastest Python package to convert longitude/latitude to timezone name"
 name = "tzfpy"
 requires-python = ">=3.7"
+
+[project.optional-dependencies]
+pytz = [
+  "pytz>=2023.2",
+]
 
 [project.urls]
 Documentation = "https://github.com/ringsaturn/tzfpy"
