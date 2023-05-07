@@ -21,5 +21,5 @@ crate-type = ["cdylib"]
 lazy_static = "1.4.0"
 pyo3 = {version = "0.18.3", features = ["extension-module"]}
 
-# tzf-rs = { git =  "http://github.com/ringsaturn/tzf-rs", tag = "v0.4.0"}
-tzf-rs = "0.4.0"
+# tzf-rs = { git =  "https://github.com/ringsaturn/tzf-rs", rev = "06a1bbf", default-features = false}
+tzf-rs = "0.4.1"
