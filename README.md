@@ -7,7 +7,7 @@ NOTE:
 
 1. This package use a simplified polygon data and not so accurate around
    borders.
-2. Rust use lazzy init, so first calling will be a little slow.
+2. Rust use lazy init, so first calling will be a little slow.
 3. Use about 40MB memory.
 
 It's tested under Python 3.9+ but support 3.7+(noqa).
