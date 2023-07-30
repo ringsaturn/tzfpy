@@ -75,3 +75,10 @@ port's Python binding; you can view it
 
 [tzf]: https://github.com/ringsaturn/tzf
 [tzf-rs]: https://github.com/ringsaturn/tzf-rs
+
+## LICENSE
+
+This project is licensed under the [MIT license](./LICENSE). The data is
+licensed under the
+[ODbL license](https://github.com/ringsaturn/tzf-rel/blob/main/LICENSE), same as
+[`evansiroky/timezone-boundary-builder`](https://github.com/evansiroky/timezone-boundary-builder)
