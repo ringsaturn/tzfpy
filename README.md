@@ -69,5 +69,9 @@ Or you can view more benchmark results on
 `.so` to be used by Python. Since `v0.11.0` it's rewritten in Rust built on PyO3
 and [`tzf-rs`][tzf-rs], a tzf's Rust port.
 
+I have written an article about the history of tzf, its Rust port, and its Rust
+port's Python binding; you can view it
+[here](https://blog.ringsaturn.me/en/posts/2023-01-31-history-of-tzf/).
+
 [tzf]: https://github.com/ringsaturn/tzf
 [tzf-rs]: https://github.com/ringsaturn/tzf-rs
