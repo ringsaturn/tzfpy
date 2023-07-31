@@ -22,4 +22,4 @@ lazy_static = "1.4.0"
 pyo3 = {version = "0.19.1", features = ["extension-module"]}
 
 # tzf-rs = { git =  "https://github.com/ringsaturn/tzf-rs", rev = "06a1bbf", default-features = false}
-tzf-rs = "0.4.1"
+tzf-rs = "0.4.2"
