@@ -127,7 +127,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    if: "startsWith(github.ref, 'refs/tags/')"
+    if: github.event_name == 'release' && github.event.action == 'published'
     needs:
       [
         macos,
