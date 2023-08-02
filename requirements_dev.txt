@@ -1,7 +1,7 @@
-citiespy==0.3.3
-maturin==0.14.8
+citiespy==0.4.0
+maturin==1.1.0
 pytest
 pytest-benchmark
 pytest-cov
 pytest-pretty 
-pytz==2022.7
+pytz==2023.3
