@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "maturin"
-requires = ["maturin>=0.14,<0.15"]
+requires = ["maturin>=1,<2"]
 
 [project]
 classifiers = [
@@ -15,7 +15,7 @@ requires-python = ">=3.7"
 
 [project.optional-dependencies]
 pytz = [
-  "pytz>=2023.2",
+  "pytz>=2023.3",
 ]
 
 [project.urls]
