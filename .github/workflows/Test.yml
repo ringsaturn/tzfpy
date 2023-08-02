@@ -27,39 +27,22 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@master
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           toolchain: nightly
-
-      - name: Cache Rust
-        uses: Swatinem/rust-cache@v2
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "pip"
-          cache-dependency-path: "requirements_dev.txt"
 
       - name: Create virtual environment
         run: |
           python -m venv venv
 
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          profile: minimal
-          components: llvm-tools-preview
-
-      - name: Install cargo-llvm-cov
-        uses: taiki-e/install-action@cargo-llvm-cov
-
       - name: "Test Rust"
         if: matrix.os == 'ubuntu-latest'
         run: |
-          source <(cargo llvm-cov show-env --export-prefix)
           cargo test
 
       - name: Install tzfpy and test(Windows)
@@ -70,7 +53,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements_dev.txt
           maturin develop --release --extras=pytz
-          pytest --cov --cov-report xml | tee benchmark_result.txt
+          pytest | tee benchmark_result.txt
 
       - name: Install tzfpy and test(Ubuntu&macoS)
         if: matrix.os != 'windows-latest'
@@ -80,19 +63,8 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements_dev.txt
           maturin develop --release --extras=pytz
-          pytest --cov --cov-report xml | tee benchmark_result.txt
+          pytest | tee benchmark_result.txt
 
-      - name: Postprocessing cov
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          source <(cargo llvm-cov show-env --export-prefix)
-          cargo llvm-cov --no-run --lcov --output-path coverage.lcov
-
-      - uses: codecov/codecov-action@v3
-        if: matrix.os == 'ubuntu-latest'
-        with:
-          files: coverage.lcov,coverage.xml
-          name: ${{ matrix.os }}
 
       - name: Setup benchmark file name
         id: gen-benchmark-file-name
