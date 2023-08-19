@@ -45,7 +45,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements_dev.txt
           maturin develop --release --extras=pytz
-          pytest tests | tee benchmark_result.txt
+          pytest tests/ | tee benchmark_result.txt
           pytest test_batch | tee -a benchmark_result.txt
 
       - name: Install tzfpy and test(Ubuntu&macoS)
