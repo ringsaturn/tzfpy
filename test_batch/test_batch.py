@@ -5,7 +5,7 @@ from citiespy import all_cities
 from tzfpy import get_tz
 
 ROUNDS = 1
-ITER = 1
+ITER = 3
 
 # warmup lazy init
 _ = get_tz(116.3883, 39.9289)
