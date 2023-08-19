@@ -56,7 +56,8 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements_dev.txt
           maturin develop --release --extras=pytz
-          pytest | tee benchmark_result.txt
+          pytest tests/ | tee benchmark_result.txt
+          pytest test_batch | tee -a benchmark_result.txt
 
       - name: Setup benchmark file name
         id: gen-benchmark-file-name
