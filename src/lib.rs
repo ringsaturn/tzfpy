@@ -5,7 +5,7 @@ use pyo3::prelude::*;
 use tzf_rs::DefaultFinder;
 
 lazy_static! {
-    static ref FINDER: DefaultFinder = DefaultFinder::new();
+    static ref FINDER: DefaultFinder = DefaultFinder::default();
 }
 
 #[pyfunction]
