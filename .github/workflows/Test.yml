@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   Testing:
-    runs-on:  ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
@@ -56,7 +56,6 @@ jobs:
           pip install -r requirements_dev.txt
           maturin develop --release --extras=pytz
           pytest | tee benchmark_result.txt
-
 
       - name: Setup benchmark file name
         id: gen-benchmark-file-name
