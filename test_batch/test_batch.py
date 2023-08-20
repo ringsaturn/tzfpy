@@ -4,7 +4,7 @@ import polars as pl
 from citiespy import all_cities
 from tzfpy import get_tz
 
-ROUNDS = 1
+ROUNDS = 5
 ITER = 3
 
 # warmup lazy init
