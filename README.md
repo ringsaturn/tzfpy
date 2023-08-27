@@ -2,17 +2,15 @@
 
 ![](https://github.com/ringsaturn/tzf/blob/gh-pages/docs/tzf-social-media.png?raw=true)
 
-It's probably the fastest Python package to convert longitude/latitude to
-timezone name.
-
 > **NOTE**
 >
+> 0. It's probably the fastest Python package to convert longitude/latitude to
+   > timezone name.
 > 1. This package use a simplified polygon data and not so accurate around
    > borders.
 > 2. Rust use lazy init, so first calling will be a little slow.
 > 3. Use about 40MB memory.
-
-It's tested under Python 3.9+ but support 3.7+(noqa).
+> 4. It's tested under Python 3.9+ but support 3.7+(noqa).
 
 ## Usage
 
