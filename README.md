@@ -74,6 +74,39 @@ port's Python binding; you can view it
 [tzf]: https://github.com/ringsaturn/tzf
 [tzf-rs]: https://github.com/ringsaturn/tzf-rs
 
+## Project status
+
+`tzfpy` is still under development and it has been deployed into
+[my current company](https://github.com/caiyunapp)'s production environment and
+it works well under high concurrency for weather API and location related data
+processed. So I think it's ready to be used in production with caution.
+
+I haven't release the v1.0.0 yet and I will try my best to keep current API as
+stable as possible(only 3 functions). I'm still working on performance
+improvements on Rust side, which is a release blocker for both tzf-rs and tzfpy.
+
+## Compare with other packages
+
+Please note that directly compare with other packages is not fair, because they
+have different use cases and design goals, for example, the precise.
+
+### [TimezoneFinder](https://github.com/jannikmi/timezonefinder)
+
+I got lots of inspiration from it. Timezonefinder is a very good package and
+it's mostly written in Python, so it's easy to use. And it's much
+[more widely used](https://github.com/jannikmi/timezonefinder/network/dependents)
+compared with tzfpy if you care about that.
+
+However, it's slower than tzfpy, especially around the borders, and I have lots
+of API requests from there. That's the reason I created tzf originally. And then
+tzf-rs and tzfpy.
+
+### [pytzwhere](https://github.com/pegler/pytzwhere)
+
+I recommend to read timezonefinder's
+[Comparison to pytzwhere](https://timezonefinder.readthedocs.io/en/latest/3_about.html#comparison-to-pytzwhere)
+since it's very detailed.
+
 ## LICENSE
 
 This project is licensed under the [MIT license](./LICENSE). The data is
