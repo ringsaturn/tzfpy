@@ -12,7 +12,7 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: messense/maturin-action@v1
         with:
           manylinux: auto
@@ -29,7 +29,7 @@ jobs:
   manylinux-aarch64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: messense/maturin-action@v1
         with:
           target: aarch64-unknown-linux-gnu
@@ -46,7 +46,7 @@ jobs:
   armv7:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: messense/maturin-action@v1
         with:
           target: armv7
@@ -63,7 +63,7 @@ jobs:
   musllinux-x86_64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: messense/maturin-action@v1
         with:
           target: x86_64
@@ -80,7 +80,7 @@ jobs:
   musllinux-aarch64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: messense/maturin-action@v1
         with:
           target: aarch64
@@ -97,7 +97,7 @@ jobs:
   windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: messense/maturin-action@v1
         with:
           command: build
@@ -112,7 +112,7 @@ jobs:
   macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: messense/maturin-action@v1
         with:
           command: build
