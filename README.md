@@ -24,6 +24,9 @@ pip install tzfpy
 
 # Install tzfpy with pytz
 pip install "tzfpy[pytz]"
+
+# Install via conda
+conda install -c conda-forge tzfpy
 ```
 
 ```python
