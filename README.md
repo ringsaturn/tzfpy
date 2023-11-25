@@ -2,7 +2,7 @@
 
 ![](https://github.com/ringsaturn/tzf/blob/gh-pages/docs/tzf-social-media.png?raw=true)
 
-> **NOTE**
+> [!NOTE]
 >
 > 0. It's probably the fastest Python package to convert longitude/latitude to
    > timezone name.
