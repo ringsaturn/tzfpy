@@ -40,25 +40,25 @@ conda install -c conda-forge tzfpy
 ## Performance
 
 Benchmark runs under
-[`v0.15.0`](https://github.com/ringsaturn/tzfpy/releases/tag/v0.15.0) on my
-MacBook Pro with 2.3 GHz 8-Core Intel Core i9.
+[`v0.15.3`](https://github.com/ringsaturn/tzfpy/releases/tag/v0.15.3) on my
+MacBook Pro with Apple M3 Max.
 
 ```bash
 pytest tests/test_bench.py
 ```
 
 ```
--------------------------------------------------- benchmark: 1 tests --------------------------------------------------
-Name (time in us)               Min      Max    Mean  StdDev  Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-------------------------------------------------------------------------------------------------------------------------
-test_tzfpy_random_cities     1.4783  34.8846  3.6341  1.9382  3.2185  2.1708  4384;754      275.1715   20000          10
-------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------ benchmark: 1 tests ------------------------------------------------------------
+Name (time in ns)                 Min          Max        Mean    StdDev      Median         IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+--------------------------------------------------------------------------------------------------------------------------------------------
+test_tzfpy_random_cities     837.4918  11,183.2982  1,973.3456  833.9543  1,820.9103  1,066.7020  6422;511      506.7536   20000          10
+--------------------------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-Results (1.10s):
-         1 passed
+Results (1.95s):
+         4 passed
 ```
 
 Or you can view more benchmark results on
