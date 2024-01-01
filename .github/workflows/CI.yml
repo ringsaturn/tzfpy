@@ -24,7 +24,7 @@ jobs:
           sccache: true
           args: --release -o dist --find-interpreter
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wheels
           path: dist
@@ -45,7 +45,7 @@ jobs:
           sccache: true
           args: --release -o dist --find-interpreter
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wheels
           path: dist
@@ -67,7 +67,7 @@ jobs:
           args: --release -o dist --find-interpreter
           container: messense/manylinux_2_24-cross:armv7
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wheels
           path: dist
@@ -88,7 +88,7 @@ jobs:
           args: --release -o dist --find-interpreter
           manylinux: musllinux_1_1
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wheels
           path: dist
@@ -109,7 +109,7 @@ jobs:
           args: --release -o dist --find-interpreter
           manylinux: musllinux_1_1
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wheels
           path: dist
@@ -128,7 +128,7 @@ jobs:
           sccache: true
           args: --release -o dist --find-interpreter
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wheels
           path: dist
@@ -147,7 +147,7 @@ jobs:
           sccache: true
           args: --release -o dist --target universal2-apple-darwin --find-interpreter
       - name: Upload wheels
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wheels
           path: dist

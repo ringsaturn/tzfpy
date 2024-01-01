@@ -73,7 +73,7 @@ jobs:
           echo '```' >> ${{ steps.gen-benchmark-file-name.outputs.filename }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "benchmark_result_as_md"
           path: ${{ steps.gen-benchmark-file-name.outputs.filename }}
