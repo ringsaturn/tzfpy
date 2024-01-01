@@ -26,7 +26,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-linux
           path: dist
 
   # Docker with  Apple Silicon
@@ -47,7 +47,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-manylinux-aarch64
           path: dist
 
   # ARM7
@@ -69,7 +69,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-armv7
           path: dist
 
   musllinux-x86_64:
@@ -90,7 +90,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-musllinux-x86_64
           path: dist
 
   musllinux-aarch64:
@@ -111,7 +111,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-musllinux-aarch64
           path: dist
 
   windows:
@@ -130,7 +130,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-windows
           path: dist
 
   macos:
@@ -149,7 +149,7 @@ jobs:
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels
+          name: wheels-macos
           path: dist
 
   release:
@@ -169,7 +169,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: wheels
+          pattern: wheels*
       - name: Publish to PyPI
         uses: messense/maturin-action@v1
         env:
