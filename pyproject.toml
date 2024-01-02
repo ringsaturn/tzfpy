@@ -7,7 +7,6 @@ classifiers = [
   "Programming Language :: Rust",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
-  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -17,7 +16,7 @@ classifiers = [
 dependencies = []
 description = "Probably the fastest Python package to convert longitude/latitude to timezone name"
 name = "tzfpy"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 
 [project.optional-dependencies]
 pytz = ["pytz>=2023.3"]
