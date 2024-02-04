@@ -4,4 +4,4 @@ pytest
 pytest-benchmark
 pytest-cov
 pytest-pretty 
-pytz==2023.3.post1
+pytz==2023.4
