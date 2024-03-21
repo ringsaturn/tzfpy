@@ -1,0 +1,45 @@
+name: Bench
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  benchmark_with_bencher:
+    name: Continuous Benchmarking with Bencher
+    runs-on: ubuntu-latest
+    env:
+      BENCHER_PROJECT: tzfpy
+      BENCHER_TESTBED: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Create virtual environment
+        run: |
+          python -m venv venv
+
+      - uses: bencherdev/bencher@main
+
+      - name: Install tzfpy and test
+        shell: bash
+        run: |
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements_dev.txt
+          maturin develop --release --extras=pytz
+          # pytest | tee benchmark_result.txt
+          bencher run \
+            --file results.json \
+            --branch "$GITHUB_REF_NAME" \
+            --token "${{ secrets.BENCHER_API_TOKEN }}" \
+            --adapter python_pytest \
+            --err \
+            "pytest --benchmark-json results.json tests/test_bench.py"
