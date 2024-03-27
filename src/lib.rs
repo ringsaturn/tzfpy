@@ -29,7 +29,7 @@ pub fn data_version(_py: Python) -> PyResult<String> {
 }
 
 #[pymodule]
-fn tzfpy(_py: Python, m: &PyModule) -> PyResult<()> {
+fn tzfpy(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(get_tz, m)?)?;
     m.add_function(wrap_pyfunction!(get_tzs, m)?)?;
     m.add_function(wrap_pyfunction!(timezonenames, m)?)?;
