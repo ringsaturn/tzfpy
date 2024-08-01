@@ -19,7 +19,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 lazy_static = "1.5.0"
-pyo3 = {version = "0.22.0", features = ["extension-module"]}
+pyo3 = {version = "0.22.2", features = ["extension-module"]}
 
 # tzf-rs = { git =  "https://github.com/ringsaturn/tzf-rs", rev = "31b1730", default-features = false}
 tzf-rs = { version = "0.4.8", default-features = false }
