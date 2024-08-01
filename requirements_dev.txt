@@ -1,5 +1,5 @@
 citiespy==0.5.5
-maturin==1.6.0
+maturin==1.7.0
 pytest
 pytest-benchmark
 pytest-cov
