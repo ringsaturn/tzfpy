@@ -27,3 +27,7 @@ pytz = ["pytz>=2024.2"]
 Documentation = "https://github.com/ringsaturn/tzfpy"
 Issues = "https://github.com/ringsaturn/tzfpy/issues"
 "Source Code" = "https://github.com/ringsaturn/tzfpy"
+
+[tool.maturin]
+# "extension-module" tells pyo3 we want to build an extension module (skips linking against libpython.so)
+features = ["pyo3/extension-module"]
