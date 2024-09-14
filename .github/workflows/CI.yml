@@ -12,6 +12,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  PYO3_USE_ABI3_FORWARD_COMPATIBILITY: 1
+
 jobs:
   linux:
     runs-on: ubuntu-latest
@@ -26,7 +29,7 @@ jobs:
           manylinux: auto
           command: build
           sccache: true
-          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12 3.13
+          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12 3.13.0-rc.2
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -47,7 +50,7 @@ jobs:
           target: aarch64-unknown-linux-gnu
           command: build
           sccache: true
-          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12 3.13
+          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12 3.13.0-rc.2
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -68,7 +71,7 @@ jobs:
           target: armv7
           command: build
           sccache: true
-          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12 3.13
+          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12 3.13.0-rc.2
           container: messense/manylinux_2_24-cross:armv7
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -89,7 +92,7 @@ jobs:
           target: x86_64
           command: build
           sccache: true
-          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12 3.13
+          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12 3.13.0-rc.2
           manylinux: musllinux_1_1
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -110,7 +113,7 @@ jobs:
           target: aarch64
           command: build
           sccache: true
-          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12 3.13
+          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12 3.13.0-rc.2
           manylinux: musllinux_1_1
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -130,7 +133,7 @@ jobs:
         with:
           command: build
           sccache: true
-          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12 3.13
+          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12 3.13.0-rc.2
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -149,7 +152,7 @@ jobs:
         with:
           command: build
           sccache: true
-          args: --release -o dist --target universal2-apple-darwin -i 3.8 3.9 3.10 3.11 3.12 3.13
+          args: --release -o dist --target universal2-apple-darwin -i 3.8 3.9 3.10 3.11 3.12 3.13.0-rc.2
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
