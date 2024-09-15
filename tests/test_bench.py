@@ -13,4 +13,4 @@ def _test_tzfpy_random_city():
 
 
 def test_tzfpy_random_cities(benchmark):
-    benchmark.pedantic(_test_tzfpy_random_city, rounds=20000, iterations=10)
+    benchmark(_test_tzfpy_random_city)

@@ -43,4 +43,5 @@ dev-dependencies = [
     "pytest-pretty>=1.2.0",
     "pytz>=2024.2",
     "tzdata>=2024.1",
+    "pytest-codspeed>=2.2.1",
 ]
