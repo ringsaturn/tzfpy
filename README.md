@@ -1,13 +1,20 @@
-# tzfpy [![PyPI](https://img.shields.io/pypi/v/tzfpy)](https://pypi.org/project/tzfpy/) [![Anaconda-Server Badge](https://anaconda.org/conda-forge/tzfpy/badges/version.svg)](https://anaconda.org/conda-forge/tzfpy)
+# tzfpy
+
+- [![PyPI](https://img.shields.io/pypi/v/tzfpy)](https://pypi.org/project/tzfpy/)
+- [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/tzfpy)](https://pypi.org/project/tzfpy/)
+- ![PyPI - Downloads](https://img.shields.io/pypi/dd/tzfpy)
+- [![Anaconda-Server Badge](https://anaconda.org/conda-forge/tzfpy/badges/version.svg)](https://anaconda.org/conda-forge/tzfpy)
+- ![Conda Downloads](https://img.shields.io/conda/d/conda-forge/tzfpy)
+- ![Conda Platform](https://img.shields.io/conda/p/conda-forge/tzfpy)
 
 ![](https://github.com/ringsaturn/tzf/blob/gh-pages/docs/tzf-social-media.png?raw=true)
 
 > [!NOTE]
 >
 > 0. It's probably the fastest Python package to convert longitude/latitude to
-   > timezone name.
+>    timezone name.
 > 1. This package use a simplified polygon data and not so accurate around
-   > borders.
+>    borders.
 > 2. Rust use lazy init, so first calling will be a little slow.
 > 3. Use about 40MB memory.
 > 4. It's tested under Python 3.9+ but support 3.8+(noqa).
