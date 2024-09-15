@@ -68,7 +68,8 @@ jobs:
             uv-${{ runner.os }}
 
       - name: Install
-        run: uv sync
+        run: |
+          uv build -v --config-setting profile==profiling
 
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v3
