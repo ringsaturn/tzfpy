@@ -5,3 +5,4 @@ pytest-benchmark
 pytest-cov
 pytest-pretty
 pytz==2024.2
+tzdata==2024.1
