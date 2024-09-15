@@ -177,6 +177,9 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
     if: startsWith(github.ref, 'refs/tags/')
     needs:
       [
@@ -193,8 +196,6 @@ jobs:
       - uses: actions/download-artifact@v4
       - name: Publish to PyPI
         uses: messense/maturin-action@v1
-        env:
-          MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
         with:
           command: upload
           args: --skip-existing wheels-*/*
