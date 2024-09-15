@@ -29,7 +29,7 @@ jobs:
           manylinux: auto
           command: build
           sccache: true
-          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12
+          args: --release -o dist -i 3.9 3.10 3.11 3.12
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -50,7 +50,7 @@ jobs:
           target: aarch64-unknown-linux-gnu
           command: build
           sccache: true
-          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12
+          args: --release -o dist -i 3.9 3.10 3.11 3.12
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -71,7 +71,7 @@ jobs:
           target: armv7
           command: build
           sccache: true
-          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12
+          args: --release -o dist -i 3.9 3.10 3.11 3.12
           container: messense/manylinux_2_24-cross:armv7
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -92,7 +92,7 @@ jobs:
           target: x86_64
           command: build
           sccache: true
-          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12
+          args: --release -o dist -i 3.9 3.10 3.11 3.12
           manylinux: musllinux_1_1
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -113,7 +113,7 @@ jobs:
           target: aarch64
           command: build
           sccache: true
-          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12
+          args: --release -o dist -i 3.9 3.10 3.11 3.12
           manylinux: musllinux_1_1
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -133,7 +133,7 @@ jobs:
         with:
           command: build
           sccache: true
-          args: --release -o dist -i 3.8 3.9 3.10 3.11 3.12
+          args: --release -o dist -i 3.9 3.10 3.11 3.12
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -152,7 +152,7 @@ jobs:
         with:
           command: build
           sccache: true
-          args: --release -o dist --target universal2-apple-darwin -i 3.8 3.9 3.10 3.11 3.12
+          args: --release -o dist --target universal2-apple-darwin -i 3.9 3.10 3.11 3.12
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
