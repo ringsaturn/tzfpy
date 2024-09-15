@@ -14,28 +14,28 @@ jobs:
       BENCHER_TESTBED: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: bencherdev/bencher@main
 
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
-
+      - name: Set up uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.12
-
-      - name: Create virtual environment
-        run: |
-          python -m venv venv
-
-      - uses: bencherdev/bencher@main
+          python-version: ${{ matrix.python-version }}
+      - name: Restore uv cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.UV_CACHE_DIR }}
+          key: uv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('uv.lock') }}
+            uv-${{ runner.os }}
 
       - name: Install tzfpy and test
         shell: bash
         run: |
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements_dev.txt
-          maturin develop --release --extras=pytz
-          # pytest | tee benchmark_result.txt
+          uv sync
+          source .venv/bin/activate
           bencher run \
             --file results.json \
             --branch "$GITHUB_REF_NAME" \
