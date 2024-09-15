@@ -16,6 +16,8 @@ env:
 jobs:
   Testing:
     runs-on: ${{ matrix.os }}
+    env:
+      UV_CACHE_DIR: "/tmp/.uv-cache"
     strategy:
       fail-fast: false
       matrix:
@@ -23,42 +25,28 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions-rust-lang/setup-rust-toolchain@v1
 
+      - name: Set up uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Restore uv cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.UV_CACHE_DIR }}
+          key: uv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('uv.lock') }}
+            uv-${{ runner.os }}
 
-      - name: Create virtual environment
-        run: |
-          python -m venv venv
-
-      - name: "Test Rust"
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          cargo test
-
-      - name: Install tzfpy and test(Windows)
-        if: matrix.os == 'windows-latest'
+      - name: Install tzfpy and test
         shell: bash
         run: |
-          source venv/Scripts/activate
-          python -m pip install --upgrade pip
-          pip install -r requirements_dev.txt
-          maturin develop --release --extras=pytz
-          pytest | tee benchmark_result.txt
-
-      - name: Install tzfpy and test(Ubuntu&macoS)
-        if: matrix.os != 'windows-latest'
-        shell: bash
-        run: |
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements_dev.txt
-          maturin develop --release --extras=pytz
-          pytest | tee benchmark_result.txt
+          uv run ruff check .
+          uv run pytest | tee benchmark_result.txt
 
       - name: Setup benchmark file name
         id: gen-benchmark-file-name
@@ -80,6 +68,9 @@ jobs:
         with:
           name: "benchmark_result_as_md_${{ matrix.python-version }}_${{ matrix.os }}"
           path: ${{ steps.gen-benchmark-file-name.outputs.filename }}
+
+      - name: Minimize uv cache
+        run: uv cache prune --ci
 
   Report:
     needs: [Testing]

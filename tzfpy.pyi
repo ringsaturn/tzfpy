@@ -1,5 +1,5 @@
-"""Probably the fastest Python package to convert longitude/latitude to timezone name(s).
-"""
+"""Probably the fastest Python package to convert longitude/latitude to timezone name(s)."""
+
 from typing import List
 
 def get_tz(lng: float, lat: float) -> str:
