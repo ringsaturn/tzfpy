@@ -12,6 +12,12 @@ class TestCompatibility(TestCase):
         for tz in timezonenames():
             timezone(tz)
 
+    def test_with_tzdata(self):
+        from zoneinfo import ZoneInfo
+
+        for tz in timezonenames():
+            ZoneInfo(tz)
+
     def test_no_empty(self):
         for city in all_cities():
             tznames = get_tzs(city.lng, city.lat)
