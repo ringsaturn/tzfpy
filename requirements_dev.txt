@@ -1,8 +1,0 @@
-citiespy==0.6.3
-maturin==1.7.1
-pytest
-pytest-benchmark
-pytest-cov
-pytest-pretty
-pytz==2024.2
-tzdata==2024.1
