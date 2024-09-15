@@ -69,7 +69,7 @@ jobs:
 
       - name: Install
         run: |
-          uv build -v --config-setting profile==profiling
+          uv build --config-setting profile==profiling
 
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v3
