@@ -34,14 +34,14 @@ features = ["pyo3/extension-module"]
 
 [tool.uv]
 dev-dependencies = [
-    "ruff>=0.6.5",
-    "citiespy>=0.6.3",
-    "maturin>=1.7.1",
-    "pytest>=8.3.3",
-    "pytest-benchmark>=4.0.0",
-    "pytest-cov>=5.0.0",
-    "pytest-pretty>=1.2.0",
-    "pytz>=2024.2",
-    "tzdata>=2024.1",
-    "pytest-codspeed>=2.2.1",
+  "ruff>=0.6.5",
+  "citiespy>=0.6.3",
+  "maturin>=1.7.1",
+  "pytest>=8.3.3",
+  "pytest-benchmark>=4.0.0",
+  "pytest-cov>=5.0.0",
+  "pytest-pretty>=1.2.0",
+  "pytz>=2024.2",
+  "tzdata>=2024.1",
+  "pytest-codspeed>=2.2.1",
 ]
