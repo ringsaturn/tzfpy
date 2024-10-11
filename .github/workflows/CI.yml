@@ -23,13 +23,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
       - uses: messense/maturin-action@v1
         with:
           manylinux: auto
           command: build
           sccache: true
-          args: --release -o dist -i 3.9 3.10 3.11 3.12
+          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -44,13 +44,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
       - uses: messense/maturin-action@v1
         with:
           target: aarch64-unknown-linux-gnu
           command: build
           sccache: true
-          args: --release -o dist -i 3.9 3.10 3.11 3.12
+          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -65,13 +65,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
       - uses: messense/maturin-action@v1
         with:
           target: armv7
           command: build
           sccache: true
-          args: --release -o dist -i 3.9 3.10 3.11 3.12
+          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13
           container: messense/manylinux_2_24-cross:armv7
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -86,13 +86,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
       - uses: messense/maturin-action@v1
         with:
           target: x86_64
           command: build
           sccache: true
-          args: --release -o dist -i 3.9 3.10 3.11 3.12
+          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13
           manylinux: musllinux_1_1
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -107,7 +107,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
       - uses: messense/maturin-action@v1
         with:
           target: aarch64
@@ -128,12 +128,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
       - uses: messense/maturin-action@v1
         with:
           command: build
           sccache: true
-          args: --release -o dist -i 3.9 3.10 3.11 3.12
+          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -147,12 +147,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
       - uses: messense/maturin-action@v1
         with:
           command: build
           sccache: true
-          args: --release -o dist --target universal2-apple-darwin -i 3.9 3.10 3.11 3.12
+          args: --release -o dist --target universal2-apple-darwin -i 3.9 3.10 3.11 3.12 3.13
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -163,6 +163,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
       - name: Build sdist
         uses: PyO3/maturin-action@v1
         with:
