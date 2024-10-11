@@ -13,7 +13,7 @@ env:
 jobs:
   benchmark_with_codspeed:
     name: Continuous Benchmarking with CodSpeed
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
