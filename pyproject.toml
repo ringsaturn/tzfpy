@@ -21,7 +21,7 @@ requires-python = ">=3.9"
 
 [project.optional-dependencies]
 pytz = ["pytz>=2024.2"]
-tzdata = ["tzdata>=2024.1"]
+tzdata = ["tzdata>=2024.2"]
 
 [project.urls]
 Documentation = "https://github.com/ringsaturn/tzfpy"
