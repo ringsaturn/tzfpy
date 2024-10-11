@@ -13,7 +13,7 @@ env:
 jobs:
   benchmark_with_codspeed:
     name: Continuous Benchmarking with CodSpeed
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
@@ -25,7 +25,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.12
+          python-version: 3.13
       - name: Restore uv cache
         uses: actions/cache@v4
         with:
