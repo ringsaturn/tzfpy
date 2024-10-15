@@ -18,6 +18,7 @@ license = "MIT"
 description = "Probably the fastest Python package to convert longitude/latitude to timezone name"
 name = "tzfpy"
 requires-python = ">=3.9"
+authors = [{ name = "ringsaturn", email = "ringsaturn.me@gmail.com" }]
 
 [project.optional-dependencies]
 pytz = ["pytz>=2024.2"]
