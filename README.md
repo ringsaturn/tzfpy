@@ -18,6 +18,7 @@
 > 2. Rust use lazy init, so first calling will be a little slow.
 > 3. Use about 40MB memory.
 > 4. It's tested under Python 3.9+ but support 3.8+(noqa).
+> 5. Try it online: <https://ringsaturn.github.io/tzf-web/>
 
 ## Usage
 
