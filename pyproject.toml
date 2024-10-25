@@ -6,7 +6,6 @@ requires = ["maturin>=1,<2"]
 classifiers = [
   "Programming Language :: Rust",
   "Programming Language :: Python :: Implementation :: CPython",
-  "Programming Language :: Python :: Implementation :: PyPy",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -18,7 +17,18 @@ license = "MIT"
 description = "Probably the fastest Python package to convert longitude/latitude to timezone name"
 name = "tzfpy"
 requires-python = ">=3.9"
-authors = [{ name = "ringsaturn", email = "ringsaturn.me@gmail.com" }]
+maintainers = [{ name = "ringsaturn", email = "ringsaturn.me@gmail.com" }]
+keywords = [
+  "tzf",
+  "timezone",
+  "timezone-name",
+  "timezone-lookup",
+  "gps",
+  "gps-coordinates",
+  "gps-location",
+  "longitude",
+  "latitude",
+]
 
 [project.optional-dependencies]
 pytz = ["pytz>=2024.2"]
@@ -35,7 +45,7 @@ features = ["pyo3/extension-module"]
 
 [tool.uv]
 dev-dependencies = [
-  "ruff>=0.6.9",
+  "ruff>=0.7.1",
   "citiespy>=0.6.5",
   "maturin>=1.7.4",
   "pytest>=8.3.3",

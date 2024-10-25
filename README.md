@@ -118,6 +118,30 @@ I recommend to read timezonefinder's
 [Comparison to pytzwhere](https://timezonefinder.readthedocs.io/en/latest/3_about.html#comparison-to-pytzwhere)
 since it's very detailed.
 
+## Contributing
+
+Install:
+
+- [Rust](https://www.rust-lang.org/tools/install)
+- [Python](https://www.python.org/downloads/)
+- [uv](https://docs.astral.sh/uv/)
+
+```console
+Available commands:
+  build    - Build the project using uv
+  fmt      - Format the code using ruff
+  lint     - Lint the code using ruff
+  sync     - Sync and compile the project using uv
+  lock     - Lock dependencies using uv
+  upgrade  - Upgrade dependencies using uv
+  all      - Run lock, sync, fmt, lint, and test
+  test     - Run tests using pytest
+```
+
+```bash
+make all
+```
+
 ## LICENSE
 
 This project is licensed under the [MIT license](./LICENSE). The data is
