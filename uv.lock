@@ -482,6 +482,6 @@ dev = [
     { name = "pytest-cov", specifier = ">=5.0.0" },
     { name = "pytest-pretty", specifier = ">=1.2.0" },
     { name = "pytz", specifier = ">=2024.2" },
-    { name = "ruff", specifier = ">=0.6.9" },
+    { name = "ruff", specifier = ">=0.7.1" },
     { name = "tzdata", specifier = ">=2024.2" },
 ]
