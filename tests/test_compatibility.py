@@ -1,8 +1,7 @@
 from unittest import TestCase, main
 
 from citiespy import all_cities
-
-from tzfpy import get_tzs, timezonenames, data_version
+from tzfpy import data_version, get_tzs, timezonenames
 
 
 class TestCompatibility(TestCase):
