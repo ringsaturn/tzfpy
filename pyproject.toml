@@ -6,7 +6,6 @@ requires = ["maturin>=1,<2"]
 classifiers = [
   "Programming Language :: Rust",
   "Programming Language :: Python :: Implementation :: CPython",
-  "Programming Language :: Python :: Implementation :: PyPy",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -19,6 +18,17 @@ description = "Probably the fastest Python package to convert longitude/latitude
 name = "tzfpy"
 requires-python = ">=3.9"
 maintainers = [{ name = "ringsaturn", email = "ringsaturn.me@gmail.com" }]
+keywords = [
+  "tzf",
+  "timezone",
+  "timezone-name",
+  "timezone-lookup",
+  "gps",
+  "gps-coordinates",
+  "gps-location",
+  "longitude",
+  "latitude",
+]
 
 [project.optional-dependencies]
 pytz = ["pytz>=2024.2"]
