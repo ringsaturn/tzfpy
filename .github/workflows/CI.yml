@@ -23,13 +23,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version-file: "pyproject.toml"
       - uses: messense/maturin-action@v1
         with:
           manylinux: auto
           command: build
           sccache: true
-          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13
+          args: --release -o dist
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
