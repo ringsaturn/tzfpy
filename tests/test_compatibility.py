@@ -1,30 +1,26 @@
-from unittest import TestCase, main
-
 from citiespy import all_cities
 from tzfpy import data_version, get_tzs, timezonenames
 
 
-class TestCompatibility(TestCase):
-    def test_with_pytz(self):
-        from pytz import timezone
+def test_with_pytz():
+    from pytz import timezone
 
-        for tz in timezonenames():
-            timezone(tz)
-
-    def test_with_tzdata(self):
-        from zoneinfo import ZoneInfo
-
-        for tz in timezonenames():
-            ZoneInfo(tz)
-
-    def test_no_empty(self):
-        for city in all_cities():
-            tznames = get_tzs(city.lng, city.lat)
-            self.assertTrue(len(tznames) != 0)
-
-    def test_version_support(self):
-        self.assertTrue(data_version() not in [None, ""])
+    for tz in timezonenames():
+        timezone(tz)
 
 
-if __name__ == "__main___":
-    main()
+def test_with_tzdata():
+    from zoneinfo import ZoneInfo
+
+    for tz in timezonenames():
+        ZoneInfo(tz)
+
+
+def test_no_empty():
+    for city in all_cities():
+        tznames = get_tzs(city.lng, city.lat)
+        assert len(tznames) != 0
+
+
+def test_version_support():
+    assert data_version() not in [None, ""]
