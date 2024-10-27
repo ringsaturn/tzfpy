@@ -452,7 +452,7 @@ tzdata = [
     { name = "tzdata" },
 ]
 
-[package.dev-dependencies]
+[package.dependency-groups]
 dev = [
     { name = "citiespy" },
     { name = "maturin" },
@@ -472,7 +472,7 @@ requires-dist = [
     { name = "tzdata", marker = "extra == 'tzdata'", specifier = ">=2024.2" },
 ]
 
-[package.metadata.requires-dev]
+[package.metadata.dependency-groups]
 dev = [
     { name = "citiespy", specifier = ">=0.6.5" },
     { name = "maturin", specifier = ">=1.7.4" },
