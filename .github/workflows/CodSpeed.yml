@@ -33,7 +33,7 @@ jobs:
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v3
         with:
-          run: uv run pytest tests/ --codspeed
+          run: uv run pytest --benchmark-warmup=on --benchmark-warmup-iterations=100 --codspeed tests/test_bench.py
 
       - name: Minimize uv cache
         run: uv cache prune --ci

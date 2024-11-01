@@ -39,12 +39,8 @@ Documentation = "https://github.com/ringsaturn/tzfpy"
 Issues = "https://github.com/ringsaturn/tzfpy/issues"
 "Source Code" = "https://github.com/ringsaturn/tzfpy"
 
-[tool.maturin]
-# "extension-module" tells pyo3 we want to build an extension module (skips linking against libpython.so)
-features = ["pyo3/extension-module"]
-
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
   "ruff>=0.7.1",
   "citiespy>=0.6.5",
   "maturin>=1.7.4",
@@ -56,3 +52,7 @@ dev-dependencies = [
   "tzdata>=2024.2",
   "pytest-codspeed>=2.2.1",
 ]
+
+[tool.maturin]
+# "extension-module" tells pyo3 we want to build an extension module (skips linking against libpython.so)
+features = ["pyo3/extension-module"]

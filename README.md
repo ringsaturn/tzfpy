@@ -17,7 +17,7 @@
 >    borders.
 > 2. Rust use lazy init, so first calling will be a little slow.
 > 3. Use about 40MB memory.
-> 4. It's tested under Python 3.9+ but support 3.8+(noqa).
+> 4. It's tested under Python 3.9+.
 > 5. Try it online: <https://ringsaturn.github.io/tzf-web/>
 
 ## Usage
@@ -48,25 +48,25 @@ conda install -c conda-forge tzfpy
 ## Performance
 
 Benchmark runs under
-[`v0.15.3`](https://github.com/ringsaturn/tzfpy/releases/tag/v0.15.3) on my
+[`v0.16.0`](https://github.com/ringsaturn/tzfpy/releases/tag/v0.16.0) on my
 MacBook Pro with Apple M3 Max.
 
 ```bash
-pytest tests/test_bench.py
+pytest --benchmark-warmup=on --benchmark-warmup-iterations=100 tests/test_bench.py 
 ```
 
 ```
------------------------------------------------------------- benchmark: 1 tests ------------------------------------------------------------
-Name (time in ns)                 Min          Max        Mean    StdDev      Median         IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
---------------------------------------------------------------------------------------------------------------------------------------------
-test_tzfpy_random_cities     837.4918  11,183.2982  1,973.3456  833.9543  1,820.9103  1,066.7020  6422;511      506.7536   20000          10
---------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------- benchmark: 1 tests -----------------------------------------------------------
+Name (time in ns)                 Min         Max        Mean    StdDev      Median       IQR   Outliers  OPS (Kops/s)  Rounds  Iterations
+------------------------------------------------------------------------------------------------------------------------------------------
+test_tzfpy_random_cities     699.9937  7,175.0022  1,562.1433  646.9249  1,441.6990  833.3940  13716;984      640.1461   41026          10
+------------------------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-Results (1.95s):
-         4 passed
+Results (1.81s):
+         1 passed
 ```
 
 Or you can view more benchmark results on

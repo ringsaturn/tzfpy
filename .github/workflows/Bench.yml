@@ -37,4 +37,4 @@ jobs:
             --token "${{ secrets.BENCHER_API_TOKEN }}" \
             --adapter python_pytest \
             --err \
-            "pytest --benchmark-json results.json tests/test_bench.py"
+            "pytest --benchmark-json results.json --benchmark-warmup=on --benchmark-warmup-iterations=100 tests/test_bench.py"
