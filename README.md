@@ -23,15 +23,18 @@
 ## Usage
 
 Please note that new timezone names may be added to tzfpy, which could be
-incompatible with old version package like pytz. As an option, tzfpy supports
-install compatible version of those packages with extra params.
+incompatible with old version package like pytz or tzdata. As an option, tzfpy
+supports install compatible version of those packages with extra params.
 
 ```bash
 # Install just tzfpy
 pip install tzfpy
 
-# Install tzfpy with pytz
+# Install with pytz
 pip install "tzfpy[pytz]"
+
+# Install with tzdata. https://github.com/python/tzdata
+pip install "tzfpy[tzdata]"
 
 # Install via conda, see more in https://github.com/conda-forge/tzfpy-feedstock
 conda install -c conda-forge tzfpy
@@ -52,7 +55,7 @@ Benchmark runs under
 MacBook Pro with Apple M3 Max.
 
 ```bash
-pytest --benchmark-warmup=on --benchmark-warmup-iterations=100 tests/test_bench.py 
+pytest --benchmark-warmup=on --benchmark-warmup-iterations=100 tests/test_bench.py
 ```
 
 ```
