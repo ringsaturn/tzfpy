@@ -113,7 +113,7 @@ jobs:
           target: aarch64
           command: build
           sccache: true
-          args: --release -o dist -i 3.9 3.10 3.11 3.12
+          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13
           manylinux: musllinux_1_1
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -121,7 +121,7 @@ jobs:
           name: wheels-musllinux-aarch64
           path: dist
 
-  windows:
+  windows-x86_64:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -131,13 +131,34 @@ jobs:
           python-version: "3.13"
       - uses: messense/maturin-action@v1
         with:
+          target: x86_64-pc-windows-msvc
           command: build
           sccache: true
           args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: wheels-windows
+          name: wheels-x86_64-pc-windows-msvc
+          path: dist
+
+  windows-aarch64:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: messense/maturin-action@v1
+        with:
+          target: aarch64-pc-windows-msvc
+          command: build
+          sccache: true
+          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-aarch64-pc-windows-msvc
           path: dist
 
   macos:
@@ -190,7 +211,8 @@ jobs:
         sdist,
         macos,
         linux,
-        windows,
+        windows-x86_64,
+        windows-aarch64,
         manylinux-aarch64,
         armv7,
         musllinux-x86_64,
