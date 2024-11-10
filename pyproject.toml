@@ -56,3 +56,6 @@ dev = [
 [tool.maturin]
 # "extension-module" tells pyo3 we want to build an extension module (skips linking against libpython.so)
 features = ["pyo3/extension-module"]
+
+[tool.uv.workspace]
+members = ["lab"]

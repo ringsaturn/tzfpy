@@ -1,0 +1,13 @@
+[project]
+name = "lab"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = "==3.12.*"
+dependencies = [
+    "reflex>=0.6.4",
+    "tzfpy==0.16.0",
+]
+
+[tool.uv.sources]
+tzfpy = { workspace = true }
