@@ -18,7 +18,9 @@
 > 2. Rust use lazy init, so first calling will be a little slow.
 > 3. Use about 40MB memory.
 > 4. It's tested under Python 3.9+.
-> 5. Try it online: <https://ringsaturn.github.io/tzf-web/>
+> 5. Try it online:
+>     - <https://tzfpy-reflex.reflex.run>, powered by tzfpy and Reflex
+>     - <https://ringsaturn.github.io/tzf-web/>, powered by tzf-rs and WebAssembly
 
 ## Usage
 
