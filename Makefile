@@ -42,3 +42,6 @@ all: lock sync
 
 test: lint
 	uv run pytest -v .
+
+licences:
+	cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
