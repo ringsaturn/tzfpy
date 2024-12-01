@@ -92,7 +92,7 @@ jobs:
           target: x86_64
           command: build
           sccache: true
-          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13 python3.13t
+          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13
           manylinux: musllinux_1_1
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -113,7 +113,7 @@ jobs:
           target: aarch64
           command: build
           sccache: true
-          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13 python3.13t
+          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13
           manylinux: musllinux_1_1
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -134,7 +134,7 @@ jobs:
           target: x86_64-pc-windows-msvc
           command: build
           sccache: true
-          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13 python3.13t
+          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -154,7 +154,7 @@ jobs:
           target: aarch64-pc-windows-msvc
           command: build
           sccache: true
-          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13 python3.13t
+          args: --release -o dist -i 3.9 3.10 3.11 3.12 3.13
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
