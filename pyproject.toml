@@ -43,7 +43,7 @@ Issues = "https://github.com/ringsaturn/tzfpy/issues"
 dev = [
   "ruff==0.8.1",
   "citiespy>=0.6.6",
-  "maturin==1.7.6",
+  "maturin==1.7.7",
   "pytest>=8.3.3",
   "pytest-benchmark>=5.1.0",
   "pytest-cov>=6.0.0",
@@ -55,4 +55,4 @@ dev = [
 
 [tool.maturin]
 # "extension-module" tells pyo3 we want to build an extension module (skips linking against libpython.so)
-features = ["pyo3/extension-module"]
+features = ["pyo3/extension-module", "pyo3/generate-import-lib"]
