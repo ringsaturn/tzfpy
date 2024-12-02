@@ -459,7 +459,7 @@ wheels = [
 
 [[package]]
 name = "tzfpy"
-version = "0.16.0"
+version = "0.16.1"
 source = { editable = "." }
 
 [package.optional-dependencies]
