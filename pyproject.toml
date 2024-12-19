@@ -29,6 +29,8 @@ keywords = [
   "longitude",
   "latitude",
 ]
+dynamic = ["version", "dependencies", "optional-dependencies"]
+
 
 [project.optional-dependencies]
 pytz = ["pytz>=2024.2"]
