@@ -1,7 +1,7 @@
 [package]
 edition = "2021"
 name = "tzfpy"
-version = "0.16.2"
+version = "0.16.3"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -22,4 +22,4 @@ lazy_static = "1.5.0"
 pyo3 = {version = "0.23.4", features = ["extension-module", "generate-import-lib", "abi3-py39"]}
 
 # tzf-rs = { git =  "https://github.com/ringsaturn/tzf-rs", rev = "31b1730", default-features = false}
-tzf-rs = { version = "0.4.9", default-features = false }
+tzf-rs = { version = "0.4.10", default-features = false }

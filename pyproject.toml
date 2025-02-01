@@ -1,7 +1,3 @@
-[build-system]
-build-backend = "maturin"
-requires = ["maturin>=1,<2"]
-
 [project]
 classifiers = [
   "Programming Language :: Rust",
@@ -31,7 +27,6 @@ keywords = [
 ]
 dynamic = ["version", "dependencies", "optional-dependencies"]
 
-
 [project.optional-dependencies]
 pytz = ["pytz>=2024.2"]
 tzdata = ["tzdata>=2024.2"]
@@ -40,6 +35,10 @@ tzdata = ["tzdata>=2024.2"]
 Documentation = "https://github.com/ringsaturn/tzfpy"
 Issues = "https://github.com/ringsaturn/tzfpy/issues"
 "Source Code" = "https://github.com/ringsaturn/tzfpy"
+
+[build-system]
+build-backend = "maturin"
+requires = ["maturin>=1,<2"]
 
 [dependency-groups]
 dev = [
@@ -50,8 +49,8 @@ dev = [
   "pytest-benchmark>=5.1.0",
   "pytest-cov>=6.0.0",
   "pytest-pretty>=1.2.0",
-  "pytz>=2024.2",
-  "tzdata>=2024.2",
+  "pytz>=2025.1",
+  "tzdata>=2025.1",
   "pytest-codspeed>=3.0.0",
 ]
 
