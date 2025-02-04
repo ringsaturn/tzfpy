@@ -33,7 +33,9 @@ lock:
 	uv lock
 
 upgrade:
+	cargo update
 	uv lock --upgrade
+	make licences
 
 all: lock sync
 	make fmt
