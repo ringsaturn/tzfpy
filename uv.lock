@@ -459,7 +459,6 @@ wheels = [
 
 [[package]]
 name = "tzfpy"
-version = "0.16.3"
 source = { editable = "." }
 
 [package.optional-dependencies]
@@ -486,8 +485,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "pytz", marker = "extra == 'pytz'", specifier = ">=2024.2" },
-    { name = "tzdata", marker = "extra == 'tzdata'", specifier = ">=2024.2" },
+    { name = "pytz", marker = "extra == 'pytz'", specifier = ">=2025.1" },
+    { name = "tzdata", marker = "extra == 'tzdata'", specifier = ">=2025.1" },
 ]
 
 [package.metadata.requires-dev]

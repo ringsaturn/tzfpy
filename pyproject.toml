@@ -28,8 +28,8 @@ keywords = [
 dynamic = ["version", "dependencies", "optional-dependencies"]
 
 [project.optional-dependencies]
-pytz = ["pytz>=2024.2"]
-tzdata = ["tzdata>=2024.2"]
+pytz = ["pytz>=2025.1"]
+tzdata = ["tzdata>=2025.1"]
 
 [project.urls]
 Documentation = "https://github.com/ringsaturn/tzfpy"
