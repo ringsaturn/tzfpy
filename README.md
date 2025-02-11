@@ -19,7 +19,8 @@
 > 3. Use about 40MB memory.
 > 4. It's tested under Python 3.9+.
 > 5. Try it online:
->     - <https://ringsaturn.github.io/tzf-web/>, powered by tzf-rs and WebAssembly
+>    - <https://ringsaturn.github.io/tzf-web/>, powered by tzf-rs and
+>      WebAssembly
 
 ## Usage
 
@@ -75,6 +76,9 @@ Results (1.81s):
 
 Or you can view more benchmark results on
 [GitHub Action summary page](https://github.com/ringsaturn/tzfpy/actions/workflows/Test.yml).
+
+More benchmarks compared with other packages can be found in
+[ringsaturn/tz-benchmark](https://github.com/ringsaturn/tz-benchmark).
 
 ## Background
 
