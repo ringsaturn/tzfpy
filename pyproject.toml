@@ -28,8 +28,8 @@ keywords = [
 dynamic = ["version"]
 
 [project.optional-dependencies]
-pytz = ["pytz>=2025.1"]
-tzdata = ["tzdata>=2025.1"]
+pytz = ["pytz>=2025.2"]
+tzdata = ["tzdata>=2025.2"]
 
 [project.urls]
 Documentation = "https://github.com/ringsaturn/tzfpy"
@@ -49,8 +49,8 @@ dev = [
   "pytest-benchmark>=5.1.0",
   "pytest-cov>=6.0.0",
   "pytest-pretty>=1.2.0",
-  "pytz>=2025.1",
-  "tzdata>=2025.1",
+  "pytz>=2025.2",
+  "tzdata>=2025.2",
   "pytest-codspeed>=3.0.0",
 ]
 
