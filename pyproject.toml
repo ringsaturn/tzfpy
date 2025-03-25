@@ -44,7 +44,7 @@ requires = ["maturin>=1,<2"]
 dev = [
   "ruff==0.8.1",
   "citiespy>=0.6.6",
-  "maturin==1.8.2",
+  "maturin==1.8.3",
   "pytest>=8.3.3",
   "pytest-benchmark>=5.1.0",
   "pytest-cov>=6.0.0",
