@@ -53,7 +53,7 @@ conda install -c conda-forge tzfpy
 ## Performance
 
 Benchmark runs under
-[`v0.16.0`](https://github.com/ringsaturn/tzfpy/releases/tag/v0.16.0) on my
+[`v1.0.0`](https://github.com/ringsaturn/tzfpy/releases/tag/v1.0.0) on my
 MacBook Pro with Apple M3 Max.
 
 ```bash
@@ -61,16 +61,16 @@ pytest --benchmark-warmup=on --benchmark-warmup-iterations=100 tests/test_bench.
 ```
 
 ```
------------------------------------------------------------ benchmark: 1 tests -----------------------------------------------------------
-Name (time in ns)                 Min         Max        Mean    StdDev      Median       IQR   Outliers  OPS (Kops/s)  Rounds  Iterations
-------------------------------------------------------------------------------------------------------------------------------------------
-test_tzfpy_random_cities     699.9937  7,175.0022  1,562.1433  646.9249  1,441.6990  833.3940  13716;984      640.1461   41026          10
-------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------- benchmark: 1 tests --------------------------------------------------------------
+Name (time in ns)                 Min          Max        Mean      StdDev      Median         IQR    Outliers  OPS (Kops/s)  Rounds  Iterations
+------------------------------------------------------------------------------------------------------------------------------------------------
+test_tzfpy_random_cities     895.7926  11,420.8087  2,597.6093  1,331.8472  2,337.5032  1,587.5907  11611;1000      384.9694   33614          10
+------------------------------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-Results (1.81s):
+Results (2.03s):
          1 passed
 ```
 
@@ -92,17 +92,6 @@ port's Python binding; you can view it
 
 [tzf]: https://github.com/ringsaturn/tzf
 [tzf-rs]: https://github.com/ringsaturn/tzf-rs
-
-## Project status
-
-`tzfpy` is still under development and it has been deployed into
-[my current company](https://github.com/caiyunapp)'s production environment and
-it works well under high concurrency for weather API and location related data
-processed. So I think it's ready to be used in production with caution.
-
-I haven't release the v1.0.0 yet and I will try my best to keep current API as
-stable as possible(only 3 functions). I'm still working on performance
-improvements on Rust side, which is a release blocker for both tzf-rs and tzfpy.
 
 ## Compare with other packages
 
