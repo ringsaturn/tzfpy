@@ -52,19 +52,20 @@ conda install -c conda-forge tzfpy
 
 ### Best practices
 
-Use Python's tzdata package(`import zoneinfo`) to handle timezone names.
+1. Install tzfpy with `tzdata` extra.
+2. Use Python's tzdata package(`import zoneinfo`) to handle timezone names.
 
-```py
-from datetime import datetime
-from zoneinfo import ZoneInfo
+  ```py
+  from datetime import datetime
+  from zoneinfo import ZoneInfo
 
-from tzfpy import get_tz
+  from tzfpy import get_tz
 
-tz = get_tz(139.7744, 35.6812)  # Tokyo
+  tz = get_tz(139.7744, 35.6812)  # Tokyo
 
-now = datetime.now()
-now.replace(tzinfo=ZoneInfo(tz))
-```
+  now = datetime.now()
+  now.replace(tzinfo=ZoneInfo(tz))
+  ```
 
 ## Performance
 
