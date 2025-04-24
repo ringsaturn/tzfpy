@@ -50,6 +50,22 @@ conda install -c conda-forge tzfpy
 ['Asia/Shanghai', 'Asia/Urumqi']
 ```
 
+### Best practices
+
+Use Python's tzdata package(`import zoneinfo`) to handle timezone names.
+
+```py
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+from tzfpy import get_tz
+
+tz = get_tz(139.7744, 35.6812)  # Tokyo
+
+now = datetime.now()
+now.replace(tzinfo=ZoneInfo(tz))
+```
+
 ## Performance
 
 Benchmark runs under
