@@ -24,3 +24,12 @@ def test_no_empty():
 
 def test_version_support():
     assert data_version() not in [None, ""]
+
+
+def test_arrow_with_tzdata():
+    from zoneinfo import ZoneInfo
+
+    import arrow
+
+    for tz in timezonenames():
+        arrow.now(ZoneInfo(tz))
