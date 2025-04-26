@@ -52,22 +52,30 @@ conda install -c conda-forge tzfpy
 
 ### Best practices
 
-1. Install tzfpy with `tzdata` extra.
-2. Use Python's tzdata package(`import zoneinfo`) to handle timezone names, even
-   if you are using arrow.
+1. Always install tzfpy with `tzdata` extra: `pip install tzfpy[tzdata]`
+2. Use Python's zoneinfo package(`import zoneinfo`) to handle timezone names,
+   even if you are using arrow:
 
    ```py
    from datetime import UTC as DT_UTC
    from datetime import datetime
    from zoneinfo import ZoneInfo
 
-   import arrow
    from tzfpy import get_tz
 
    tz = get_tz(139.7744, 35.6812)  # Tokyo
 
    now = datetime.now(DT_UTC)
    now.replace(tzinfo=ZoneInfo(tz))
+   ```
+
+   ```py
+   from zoneinfo import ZoneInfo
+
+   import arrow
+   from tzfpy import get_tz
+
+   tz = get_tz(139.7744, 35.6812)  # Tokyo
 
    arrow_now = arrow.now(ZoneInfo(tz))
    print(arrow_now.format("YYYY-MM-DD HH:mm:ss ZZZ"))
