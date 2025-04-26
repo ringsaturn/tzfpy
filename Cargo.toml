@@ -22,7 +22,7 @@ doc = false
 
 [dependencies]
 lazy_static = "1.5.0"
-pyo3 = {version = "0.24.1", features = ["extension-module", "generate-import-lib", "abi3-py39"]}
+pyo3 = {version = "0.24.1", features = ["generate-import-lib", "abi3-py39"]}
 pyo3-stub-gen = "0.7.0"
 pyo3-stub-gen-derive = "0.7.0"
 
