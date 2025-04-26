@@ -16,6 +16,7 @@ help:
 	@echo "  test     - Run tests using pytest"
 
 build:
+	cargo run --bin stub_gen
 	uv build
 
 fmt:
@@ -43,6 +44,7 @@ all: lock sync
 	make test	
 
 test: lint
+	make build
 	uv run pytest -v .
 
 licences:
