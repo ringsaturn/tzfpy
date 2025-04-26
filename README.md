@@ -57,6 +57,8 @@ conda install -c conda-forge tzfpy
    [`tzdata` in PyPI](https://pypi.org/project/tzdata/)) to handle timezone
    names, even if you are using arrow:
 
+   [`examples/tzfpy_with_datetime.py`](examples/tzfpy_with_datetime.py):
+
    ```py
    from datetime import UTC as DT_UTC
    from datetime import datetime
@@ -67,8 +69,11 @@ conda install -c conda-forge tzfpy
    tz = get_tz(139.7744, 35.6812)  # Tokyo
 
    now = datetime.now(DT_UTC)
-   now.replace(tzinfo=ZoneInfo(tz))
+   now = now.replace(tzinfo=ZoneInfo(tz))
+   print(now)
    ```
+
+   [`examples/tzfpy_with_arrow.py`](examples/tzfpy_with_arrow.py):
 
    ```py
    from zoneinfo import ZoneInfo
