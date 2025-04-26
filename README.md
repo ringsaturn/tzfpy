@@ -53,8 +53,9 @@ conda install -c conda-forge tzfpy
 ### Best practices
 
 1. Always install tzfpy with `tzdata` extra: `pip install tzfpy[tzdata]`
-2. Use Python's zoneinfo package(`import zoneinfo`) to handle timezone names,
-   even if you are using arrow:
+2. Use Python's zoneinfo package(`import zoneinfo`, aka
+   [`tzdata` in PyPI](https://pypi.org/project/tzdata/)) to handle timezone
+   names, even if you are using arrow:
 
    ```py
    from datetime import UTC as DT_UTC
