@@ -1,8 +1,6 @@
 export PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1
 export CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_DEBUG=true
 
--include .env
-
 .PHONY: help build fmt lint sync lock upgrade all test
 
 help:
@@ -17,7 +15,7 @@ help:
 	@echo "  test     - Run tests using pytest"
 
 build:
-	cargo run --bin stub_gen
+	cargo run --bin stub_gen --release
 	uv build
 
 fmt:
