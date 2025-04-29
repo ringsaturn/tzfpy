@@ -59,7 +59,7 @@ conda install -c conda-forge tzfpy
 
    [`examples/tzfpy_with_datetime.py`](examples/tzfpy_with_datetime.py):
 
-   ```py
+   ```python
    from datetime import UTC as DT_UTC
    from datetime import datetime
    from zoneinfo import ZoneInfo
@@ -71,11 +71,12 @@ conda install -c conda-forge tzfpy
    now = datetime.now(DT_UTC)
    now = now.replace(tzinfo=ZoneInfo(tz))
    print(now)
+   # 2025-04-29 01:33:56.325194+09:00
    ```
 
    [`examples/tzfpy_with_arrow.py`](examples/tzfpy_with_arrow.py):
 
-   ```py
+   ```python
    from zoneinfo import ZoneInfo
 
    import arrow
@@ -85,6 +86,26 @@ conda install -c conda-forge tzfpy
 
    arrow_now = arrow.now(ZoneInfo(tz))
    print(arrow_now.format("YYYY-MM-DD HH:mm:ss ZZZ"))
+   # 2025-04-29 01:33:56.325194+09:00
+   ```
+
+   If you are using whenever, since whenever use tzdata internally, so it's
+   compatible with tzfpy:
+
+   [`examples/tzfpy_with_whenever.py`](examples/tzfpy_with_whenever.py):
+
+   ```python
+   from whenever import Instant
+   from tzfpy import get_tz
+
+   now = Instant.now()
+
+   tz = get_tz(139.7744, 35.6812)  # Tokyo
+
+   now = now.to_tz(tz)
+
+   print(now)
+   # 2025-04-29T10:33:28.427784+09:00[Asia/Tokyo]
    ```
 
 ## Performance
