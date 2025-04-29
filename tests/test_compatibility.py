@@ -33,3 +33,10 @@ def test_arrow_with_tzdata():
 
     for tz in timezonenames():
         arrow.now(ZoneInfo(tz))
+
+
+def test_whenever_with_tzdata():
+    from whenever import Instant
+
+    for tz in timezonenames():
+        Instant.now().to_tz(tz)
