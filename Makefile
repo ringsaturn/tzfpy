@@ -2,7 +2,7 @@
 export PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1
 export CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_DEBUG=true
 
-.PHONY: help build fmt lint sync lock upgrade all test
+.PHONY: help build fmt lint sync lock upgrade all test examples
 
 help:
 	@echo "Available commands:"
@@ -47,3 +47,6 @@ test: lint
 
 licences:
 	cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+
+examples:
+	find examples -name "*.py" -exec uv run python {} \;

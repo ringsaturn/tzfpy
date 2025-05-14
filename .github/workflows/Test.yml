@@ -42,6 +42,7 @@ jobs:
         run: |
           make lint
           make test | tee benchmark_result.txt
+          make examples
 
       - name: Setup benchmark file name
         id: gen-benchmark-file-name
