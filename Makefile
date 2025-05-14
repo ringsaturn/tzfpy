@@ -49,4 +49,7 @@ licences:
 	cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
 
 examples:
-	find examples -name "*.py" -print0 | sort -z | xargs -0 -I{} uv run python {}
+	@echo "Running examples:"
+	@find examples -name "*.py" -print0 | sort -z | while IFS= read -r -d '' file; do \
+		printf "%s: " "$$file"; uv run python "$$file"; \
+	done
