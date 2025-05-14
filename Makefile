@@ -49,4 +49,4 @@ licences:
 	cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
 
 examples:
-	find examples -name "*.py" -exec uv run python {} \;
+	find examples -name "*.py" -print0 | sort -z | xargs -0 -I{} uv run python {}
