@@ -198,7 +198,11 @@ make all
 
 ## LICENSE
 
-This project is licensed under the [MIT license](./LICENSE). The data is
-licensed under the
+This project is licensed under the [MIT license](./LICENSE) and
+[Anti CSDN License](./LICENSE_ANTI_CSDN.md)[^anti_csdn]. The data is licensed
+under the
 [ODbL license](https://github.com/ringsaturn/tzf-rel/blob/main/LICENSE), same as
 [`evansiroky/timezone-boundary-builder`](https://github.com/evansiroky/timezone-boundary-builder)
+
+[^anti_csdn]: This license is to prevent the use of this project by CSDN, has no
+    effect on other use cases.
