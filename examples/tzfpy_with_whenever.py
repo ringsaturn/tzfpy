@@ -1,5 +1,5 @@
-from whenever import Instant
 from tzfpy import get_tz
+from whenever import Instant
 
 now = Instant.now()
 
