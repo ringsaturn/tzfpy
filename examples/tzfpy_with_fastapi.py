@@ -1,22 +1,29 @@
 from fastapi import FastAPI, Query
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from tzfpy import data_version, get_tz, get_tzs, timezonenames
+
+# lazy init
+_ = get_tz(0, 0)
 
 
 class TimezoneResponse(BaseModel):
-    timezone: str
+    timezone: str = Field(..., description="Timezone", examples=["Asia/Tokyo"])
 
 
 class TimezonesResponse(BaseModel):
-    timezones: list[str]
+    timezones: list[str] = Field(
+        ..., description="Timezones", examples=[["Asia/Shanghai", "Asia/Urumqi"]]
+    )
 
 
 class TimezonenamesResponse(BaseModel):
-    timezonenames: list[str]
+    timezonenames: list[str] = Field(
+        ..., description="Timezonenames", examples=[["Etc/GMT+1", "Etc/GMT+2"]]
+    )
 
 
 class DataVersionResponse(BaseModel):
-    data_version: str
+    data_version: str = Field(..., description="Data version", examples=["2025b"])
 
 
 app = FastAPI(
