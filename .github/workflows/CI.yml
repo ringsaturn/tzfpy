@@ -23,13 +23,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: "3.x"
       - uses: messense/maturin-action@v1
         with:
           manylinux: auto
           command: build
           sccache: true
-          args: --release -o dist -i 3.10 3.11 3.12 3.13 python3.13t
+          args: --release -o dist --find-interpreter
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -50,7 +50,7 @@ jobs:
           target: aarch64-unknown-linux-gnu
           command: build
           sccache: true
-          args: --release -o dist -i 3.10 3.11 3.12 3.13 python3.13t
+          args: --release -o dist --find-interpreter
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -71,7 +71,7 @@ jobs:
           target: armv7
           command: build
           sccache: true
-          args: --release -o dist -i 3.10 3.11 3.12 3.13 python3.13t
+          args: --release -o dist --find-interpreter
           container: messense/manylinux_2_24-cross:armv7
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -92,7 +92,7 @@ jobs:
           target: x86_64
           command: build
           sccache: true
-          args: --release -o dist -i 3.10 3.11 3.12 3.13
+          args: --release -o dist --find-interpreter
           manylinux: musllinux_1_1
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -113,7 +113,7 @@ jobs:
           target: aarch64
           command: build
           sccache: true
-          args: --release -o dist -i 3.10 3.11 3.12 3.13
+          args: --release -o dist --find-interpreter
           manylinux: musllinux_1_1
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -134,7 +134,7 @@ jobs:
           target: x86_64-pc-windows-msvc
           command: build
           sccache: true
-          args: --release -o dist -i 3.10 3.11 3.12 3.13
+          args: --release -o dist --find-interpreter
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -154,7 +154,7 @@ jobs:
           target: aarch64-pc-windows-msvc
           command: build
           sccache: true
-          args: --release -o dist -i 3.11 3.12 3.13
+          args: --release -o dist --find-interpreter
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -173,7 +173,7 @@ jobs:
         with:
           command: build
           sccache: true
-          args: --release -o dist --target universal2-apple-darwin -i 3.10 3.11 3.12 3.13 python3.13t
+          args: --release -o dist --target universal2-apple-darwin --find-interpreter
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
@@ -198,6 +198,33 @@ jobs:
         with:
           name: wheels-sdist
           path: dist
+
+  merge-all:
+    runs-on: ubuntu-latest
+    needs:
+      [
+        sdist,
+        macos,
+        linux,
+        windows-x86_64,
+        manylinux-aarch64,
+        armv7,
+        musllinux-x86_64,
+        musllinux-aarch64,
+        windows-aarch64,
+      ]
+    permissions:
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@v4
+      - name: List files
+        run: |
+          pwd
+          ls -alh .
+      - uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: wheels-*/**/*
 
   release:
     name: Release
