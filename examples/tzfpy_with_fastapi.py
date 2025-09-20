@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Query
 from pydantic import BaseModel, Field
+
 from tzfpy import data_version, get_tz, get_tzs, timezonenames
 
 # lazy init

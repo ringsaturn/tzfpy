@@ -1,4 +1,5 @@
 from citiespy import random_city
+
 from tzfpy import get_tz
 
 # warmup lazy init
