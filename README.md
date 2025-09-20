@@ -207,6 +207,6 @@ under the
 [^anti_csdn]: This license is to prevent the use of this project by CSDN, has no
     effect on other use cases.
 
-## Other info
+<!-- ## Other info
 
-[![](https://ringsaturn.github.io/pypi-downloads-chart/tzfpy/download-trends.svg)](https://ringsaturn.github.io/pypi-downloads-chart/tzfpy/index.html)
+[![](https://ringsaturn.github.io/pypi-downloads-chart/tzfpy/download-trends.svg)](https://ringsaturn.github.io/pypi-downloads-chart/tzfpy/index.html) -->
