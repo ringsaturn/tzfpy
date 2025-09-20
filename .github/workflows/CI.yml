@@ -224,7 +224,7 @@ jobs:
           tree -L 3 .
       - uses: actions/attest-build-provenance@v3
         with:
-          subject-path: wheels-*/**/**/**
+          subject-path: "**/*.whl,**/*.tar.gz"
 
   release:
     name: Release
