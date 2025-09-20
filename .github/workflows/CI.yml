@@ -19,9 +19,9 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.x"
       - uses: messense/maturin-action@v1
@@ -40,9 +40,9 @@ jobs:
   manylinux-aarch64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
       - uses: messense/maturin-action@v1
@@ -61,9 +61,9 @@ jobs:
   armv7:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
       - uses: messense/maturin-action@v1
@@ -82,9 +82,9 @@ jobs:
   musllinux-x86_64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
       - uses: messense/maturin-action@v1
@@ -103,9 +103,9 @@ jobs:
   musllinux-aarch64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
       - uses: messense/maturin-action@v1
@@ -124,9 +124,9 @@ jobs:
   windows-x86_64:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
       - uses: messense/maturin-action@v1
@@ -144,9 +144,9 @@ jobs:
   windows-aarch64:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - uses: messense/maturin-action@v1
@@ -164,9 +164,9 @@ jobs:
   macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
       - uses: messense/maturin-action@v1
@@ -183,9 +183,9 @@ jobs:
   sdist:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
       - name: Build sdist
@@ -217,14 +217,14 @@ jobs:
       id-token: write
       attestations: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
       - name: List files
         run: |
           pwd
-          ls -alh .
+          tree -L 3 .
       - uses: actions/attest-build-provenance@v3
         with:
-          subject-path: wheels-*/**/*
+          subject-path: "**/*.whl,**/*.tar.gz"
 
   release:
     name: Release
@@ -246,7 +246,7 @@ jobs:
         windows-aarch64,
       ]
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
       - name: Publish to PyPI
         uses: messense/maturin-action@v1
         with:
@@ -259,7 +259,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
       - run: |
           pwd
           ls -alh .
