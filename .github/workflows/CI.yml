@@ -218,6 +218,10 @@ jobs:
       attestations: write
     steps:
       - uses: actions/download-artifact@v4
+      - name: List files
+        run: |
+          pwd
+          ls -alh .
       - uses: actions/attest-build-provenance@v3
         with:
           subject-path: '^wheels-.*'
