@@ -224,7 +224,7 @@ jobs:
           ls -alh .
       - uses: actions/attest-build-provenance@v3
         with:
-          subject-path: '^wheels-.*'
+          subject-path: wheels-*/**/*
 
   release:
     name: Release
