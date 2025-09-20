@@ -73,7 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download a Build Artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v5
         with:
           pattern: "benchmark_result_as_md*"
 

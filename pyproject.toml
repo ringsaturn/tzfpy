@@ -64,7 +64,7 @@ dev = [
   "whenever>=0.8.8",
   "pandas>=2.3.2",
   "polars>=1.33.1",
-  "numpy>=2.3.3",
+  "numpy>=2.2.6",
   "fastapi>=0.116.2",
   "uvicorn>=0.36.0",
 ]
