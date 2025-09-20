@@ -199,13 +199,8 @@ jobs:
           name: wheels-sdist
           path: dist
 
-  release:
-    name: Release
+  merge-all:
     runs-on: ubuntu-latest
-    environment: release
-    permissions:
-      id-token: write
-    if: startsWith(github.ref, 'refs/tags/')
     needs:
       [
         sdist,
@@ -218,6 +213,36 @@ jobs:
         musllinux-aarch64,
         windows-aarch64,
       ]
+    permissions:
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@v4
+      - run: |
+          mkdir wheels
+          mv wheels-* wheels/
+          pwd
+          ls -alh wheels
+      - name: Upload all wheels
+        uses: actions/upload-artifact@v4
+        id: upload
+        with:
+          name: wheels-all.zip
+          path: wheels
+
+      - uses: actions/attest-build-provenance@v3
+        with:
+          subject-name: wheels-all.zip
+          subject-digest: sha256:${{ steps.upload.outputs.artifact-digest }}
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: merge-all
     steps:
       - uses: actions/download-artifact@v4
       - name: Publish to PyPI
