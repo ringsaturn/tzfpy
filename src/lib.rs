@@ -14,17 +14,17 @@ pub fn get_tz(lng: f64, lat: f64) -> PyResult<String> {
 }
 
 #[pyfunction]
-pub fn get_tzs(_py: Python, lng: f64, lat: f64) -> PyResult<Vec<&str>> {
+pub fn get_tzs(lng: f64, lat: f64) -> PyResult<Vec<&'static str>> {
     Ok(FINDER.get_tz_names(lng, lat))
 }
 
 #[pyfunction]
-pub fn timezonenames(_py: Python) -> PyResult<Vec<&str>> {
+pub fn timezonenames() -> PyResult<Vec<&'static str>> {
     return Ok(FINDER.timezonenames());
 }
 
 #[pyfunction]
-pub fn data_version(_py: Python) -> PyResult<String> {
+pub fn data_version() -> PyResult<String> {
     return Ok(FINDER.data_version().to_string());
 }
 
