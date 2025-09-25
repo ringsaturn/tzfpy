@@ -72,3 +72,6 @@ dev = [
 [tool.maturin]
 # "extension-module" tells pyo3 we want to build an extension module (skips linking against libpython.so)
 features = ["pyo3/extension-module", "pyo3/generate-import-lib"]
+
+[tool.ruff]
+exclude = [".venv", "tzfpy.pyi"]
