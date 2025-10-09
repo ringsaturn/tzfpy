@@ -148,7 +148,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: "3.13"
       - uses: messense/maturin-action@v1
         with:
           target: aarch64-pc-windows-msvc
