@@ -50,6 +50,6 @@ licences:
 
 examples:
 	@echo "Running examples:"
-	@cd examples && find . -name "*.py" ! -name "*fastapi*" -print0 | sort -z | while IFS= read -r -d '' file; do \
+	@cd examples && for file in $$(find . -name "*.py" ! -name "*fastapi*" | sort); do \
 		printf "%s: " "$$file"; uv run python "$$file"; \
 	done
