@@ -103,15 +103,30 @@ wheels = [
 
 [[package]]
 name = "citiespy"
-version = "0.6.11"
+version = "0.6.13"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ec/45/06a2eb6b4afac0dc77b15ea165cc284072db5205249962ffa87753edce5c/citiespy-0.6.11.tar.gz", hash = "sha256:a5d83ff03ff6de221e5db292155577ce945f8a423e9f731646bca4b26c6634de", size = 2916811, upload-time = "2025-05-01T01:19:05.157Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8e/ba/952b3ad97e95c204c6e43eb99b7485b27559b736f090edb2307abc26cd47/citiespy-0.6.13.tar.gz", hash = "sha256:5d6e765aafcf2464851da5b3d5c743c9ab0b944ec01ef8f0ae298075874b57f4", size = 2920959, upload-time = "2025-10-10T14:21:31.809Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/10/f9/d4945de7693e58fae8770cf746f3fea819ceb5316a7971fd589a879a2c6a/citiespy-0.6.11-cp39-abi3-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl", hash = "sha256:becb8866d716b309d5cc6cd0cfb527783785558d3c9025c8a9c8172e52c1e840", size = 6552654, upload-time = "2025-05-01T01:18:59.223Z" },
-    { url = "https://files.pythonhosted.org/packages/c4/65/d2079be914e94c4f7b262769398e7916d1e7a6f279527ad7a1ce5b899475/citiespy-0.6.11-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dd71f7ae9901ebb40fd3e49c90da4a0cc25cabdf1627b62f475e58d93306841f", size = 3226093, upload-time = "2025-05-01T01:18:53.21Z" },
-    { url = "https://files.pythonhosted.org/packages/fc/58/930c5b103474e9bef940772ffa29d089c6ec967298427f0f4010ed5a22f1/citiespy-0.6.11-cp39-abi3-win_amd64.whl", hash = "sha256:47ff4f38d79f67fa358687312dfe592799b6afaf55a125d4c5a7f0766a671d4f", size = 3096136, upload-time = "2025-05-01T01:19:06.531Z" },
-    { url = "https://files.pythonhosted.org/packages/12/30/8a1673d06551c654f4da4bf19223834920c94af0957294599743427bc3f2/citiespy-0.6.11-pp310-pypy310_pp73-macosx_10_12_x86_64.macosx_11_0_arm64.macosx_10_12_universal2.whl", hash = "sha256:0ed25966f44bccafad30cc1bb50d071e38a1f839a1e9f97f935e85254303e0cc", size = 6551851, upload-time = "2025-05-01T01:19:00.901Z" },
-    { url = "https://files.pythonhosted.org/packages/10/cf/447ea3a67936a64eb31daddc739ad161f241aab28b6677ddfd31ae384bf0/citiespy-0.6.11-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:43c2fd6fd1ec055293039e57cf31d071fcf4b9a15c39484a5ac6494723d77ad1", size = 3225325, upload-time = "2025-05-01T01:18:55.22Z" },
+    { url = "https://files.pythonhosted.org/packages/2e/9f/4899ff48ce85e0119110ad61fdc214d4c758c65a11e5d93cd4e2ef7b9809/citiespy-0.6.13-cp310-abi3-macosx_10_12_x86_64.whl", hash = "sha256:e94312793aa1871fd32e0e395286dd1568961f45a71f33c53d12ee44f44f66cc", size = 3180881, upload-time = "2025-10-10T14:21:16.916Z" },
+    { url = "https://files.pythonhosted.org/packages/90/14/1fceae2ff2ee18492a053a2ec96836ffb86e37787967dcedc7189ca8d71e/citiespy-0.6.13-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:c6e7783b86308fc709cea4f886b38183cea093a572c0fc79e11c118c7ff9073f", size = 3349678, upload-time = "2025-10-10T14:21:13.372Z" },
+    { url = "https://files.pythonhosted.org/packages/aa/35/fd69b26c74053b7b943bc39d9126477afa1cc3a7197299a5cafa0d58a350/citiespy-0.6.13-cp310-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4aa8fe88f8cca328e926a47076a9b8a1119cf0b42b5c770a62b70ef7e2bd46ec", size = 3211373, upload-time = "2025-10-10T14:21:02.453Z" },
+    { url = "https://files.pythonhosted.org/packages/6e/8c/fb832f5b858f5f24aad3c6915c79403d700f9b4f59538622a2bf202df462/citiespy-0.6.13-cp310-abi3-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:1c14ce178fb222847a7f4e86658b964c2d8625a972a8b7865ef6f2ffac6e2166", size = 3220924, upload-time = "2025-10-10T14:21:05.927Z" },
+    { url = "https://files.pythonhosted.org/packages/0b/1a/b229df666372bd7da2607d04f29380c77cd45679b03ce5d217b23396c90f/citiespy-0.6.13-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3282c88ce554574a2a92f1f346fbf9a741c1f90f469a6590201670c243a5e601", size = 3227349, upload-time = "2025-10-10T14:21:09.625Z" },
+    { url = "https://files.pythonhosted.org/packages/cb/47/c6f4640fd7e76e78b518659ea25799b3b56d9e751911c119b10be1bcf895/citiespy-0.6.13-cp310-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:948c41f0e32109bd74aee357e600bbf4c445ec90aecb32251c9cfcba415e261b", size = 3392470, upload-time = "2025-10-10T14:21:20.466Z" },
+    { url = "https://files.pythonhosted.org/packages/8a/14/19e01fcb1f512a419f5fa7f464238c72795d1de71bdf6791d1cb90ae1553/citiespy-0.6.13-cp310-abi3-musllinux_1_2_armv7l.whl", hash = "sha256:65bbcac252d61c1cbc356bbcf2b73a273b318028c2fa4a5b3e33d128e96781ea", size = 3484376, upload-time = "2025-10-10T14:21:24.826Z" },
+    { url = "https://files.pythonhosted.org/packages/08/d4/ae663c1176160a361a81df04d6a14cd66b18727a4fb3063eebfbe222c065/citiespy-0.6.13-cp310-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:d72302b45edf34858f7fb81fad6e06cba86972ff725126d4b9cf7e70be863868", size = 3387912, upload-time = "2025-10-10T14:21:28.473Z" },
+    { url = "https://files.pythonhosted.org/packages/63/35/ec56131e3fe035bd64549f85f2fd8cdf633851dd1c5d0e704bfd5fd47db5/citiespy-0.6.13-cp310-abi3-win_amd64.whl", hash = "sha256:19c78b58e7b247109beca1fb0a30344a9c93f557fa7953e69130fa3aca4e13a9", size = 3090467, upload-time = "2025-10-10T14:21:37.067Z" },
+    { url = "https://files.pythonhosted.org/packages/30/39/d9f0bf74337074458964addc8744196c282713334a34cce311c446c0b42c/citiespy-0.6.13-cp310-abi3-win_arm64.whl", hash = "sha256:cf1b602d311a44adeb7664fac4b2e63e506d57dad688e353ccac720b9e44f186", size = 3080037, upload-time = "2025-10-10T14:21:33.331Z" },
+    { url = "https://files.pythonhosted.org/packages/9c/5d/c39b0d7fae22e5beb7ca9c5cfe449b57669610d39d7c44ce24d0f7158275/citiespy-0.6.13-cp314-cp314t-macosx_10_12_x86_64.whl", hash = "sha256:ff59bda14117154b3bc61c1518ebdc683229f04688a5c3e3335b9cf4d225a38b", size = 3176715, upload-time = "2025-10-10T14:21:18.571Z" },
+    { url = "https://files.pythonhosted.org/packages/dc/13/64d6d97a8a735d4f55636db6d2481850ea539abd67c401fdb726180e276b/citiespy-0.6.13-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:5ae055c432186894ce65d0178d0219966b8124cfb52b0f2c649a693f78dbf682", size = 3345701, upload-time = "2025-10-10T14:21:15.406Z" },
+    { url = "https://files.pythonhosted.org/packages/da/94/8bb2ce0ae3536a902291354b79b265ec93f9dd7b0df5e18a9d33c1580388/citiespy-0.6.13-cp314-cp314t-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:729059dd052909feac8f3c47059e546f9e90ae1f0d4641874cb95cde4fc7bde1", size = 3209287, upload-time = "2025-10-10T14:21:04.223Z" },
+    { url = "https://files.pythonhosted.org/packages/ef/b1/c5f7b3718e1248d5511383796c26107cd20466d3cb0d8074e6cb4a55c8ac/citiespy-0.6.13-cp314-cp314t-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:35cc20c1edbc0733497dd92efcba14410986a31a788da0474c3a49a7e44e1d3a", size = 3217765, upload-time = "2025-10-10T14:21:07.94Z" },
+    { url = "https://files.pythonhosted.org/packages/60/8a/0d83f70f0177e1187f22b922daaaa7ea33bad37b5918e2c6bfc38304a4c0/citiespy-0.6.13-cp314-cp314t-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a9caff1386af69730baf0cf6485b531437cf3b37fe6aa39a755e526b26ef3ef1", size = 3223574, upload-time = "2025-10-10T14:21:11.412Z" },
+    { url = "https://files.pythonhosted.org/packages/c6/79/bcfb9b19ff85219350a08e7d2713ab5160f964606cb874435b6ea5031d54/citiespy-0.6.13-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:93e32c0a33d552cb31863ba42530a9f7baa8788f81c87534a361f9145c7e580b", size = 3390314, upload-time = "2025-10-10T14:21:22.755Z" },
+    { url = "https://files.pythonhosted.org/packages/06/14/076a8b41f16ece24e23002c514326459b9b63a4d82b9ab6abf1a2f99e507/citiespy-0.6.13-cp314-cp314t-musllinux_1_2_armv7l.whl", hash = "sha256:5f71f46a5e4f470f4798c9bdf488d274edb7416721f1ee41b00c0fda8a9324b7", size = 3481469, upload-time = "2025-10-10T14:21:26.721Z" },
+    { url = "https://files.pythonhosted.org/packages/16/48/15ae13bf679f7541786a795b52d4ef5aa8ddd1c038df12f702d21bbe02ff/citiespy-0.6.13-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:2854d4cf4707c9753400d8452ab0cf5c89c958c86f234ccf4211794e8c4d6d2b", size = 3383817, upload-time = "2025-10-10T14:21:30.078Z" },
+    { url = "https://files.pythonhosted.org/packages/a2/a7/132b9dcd16f1ed0fe510e08994adcef8a104d0cd47b99b378ff389a4417b/citiespy-0.6.13-cp314-cp314t-win_amd64.whl", hash = "sha256:96280e95caabe40fa096b1ccbb13aeaf56eb81152081abd8e919b0515ca1a141", size = 3087962, upload-time = "2025-10-10T14:21:38.686Z" },
+    { url = "https://files.pythonhosted.org/packages/12/da/b2e8c0f2288528ce4e99d6d79115b02f14194c865594d96d2730763669df/citiespy-0.6.13-cp314-cp314t-win_arm64.whl", hash = "sha256:9849b863c42337584defca5dc5ccc853243d91921c9157d11fe0c32df46f62bc", size = 3076976, upload-time = "2025-10-10T14:21:35.213Z" },
 ]
 
 [[package]]
@@ -1003,7 +1018,7 @@ provides-extras = ["pytz", "tzdata"]
 [package.metadata.requires-dev]
 dev = [
     { name = "arrow", specifier = ">=1.3.0" },
-    { name = "citiespy", specifier = ">=0.6.6" },
+    { name = "citiespy", specifier = ">=0.6.13" },
     { name = "fastapi", specifier = ">=0.118.2" },
     { name = "maturin", specifier = "==1.9.6" },
     { name = "numpy", specifier = ">=2.2.6" },
