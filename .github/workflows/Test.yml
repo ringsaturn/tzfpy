@@ -44,7 +44,7 @@ jobs:
           make test | tee benchmark_result.txt
 
       - name: Build examples
-        if: ${{ (matrix.python-version == '3.14t' && matrix.os == 'ubuntu-latest') || (matrix.python-version != '3.10' && matrix.python-version != '3.14t') }}
+        if: matrix.python-version != 3.10 && matrix.python-version != '3.14' && matrix.python-version != '3.14t'
         run: |
           make examples
 
