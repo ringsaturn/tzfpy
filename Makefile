@@ -1,8 +1,11 @@
-# export UV_PYTHON_PREFERENCE=only-system
 export PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1
 export CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_DEBUG=true
 
-.PHONY: help build fmt lint sync lock upgrade all test examples
+PYTHON_LIB_DIR := $(shell uv run python -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR') or sysconfig.get_config_var('LIBPL') or '')")
+PYTHON_LIB_NAME := $(shell uv run python -c "import sysconfig, os; n = sysconfig.get_config_var('LDLIBRARY') or ''; n = os.path.splitext(n)[0]; print(n[3:] if n.startswith('lib') else n)")
+RUSTFLAGS="-L native=$(PYTHON_LIB_DIR) -l dylib=$(PYTHON_LIB_NAME) -C link-arg=-Wl,-rpath,$(PYTHON_LIB_DIR)"
+
+.PHONY: help build fmt lint sync lock upgrade all test examples stub_gen
 
 help:
 	@echo "Available commands:"
@@ -15,7 +18,11 @@ help:
 	@echo "  all      - Run lock, sync, fmt, lint, and test"
 	@echo "  test     - Run tests using pytest"
 
-build:
+stub_gen:
+	@RUSTFLAGS=$(RUSTFLAGS) cargo run --bin stub_gen
+	make fmt
+
+build: stub_gen
 	uv build
 
 fmt:
