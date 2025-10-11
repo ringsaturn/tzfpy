@@ -70,3 +70,9 @@ docs/_build/
 
 # Pyenv
 .python-version
+
+# Environment variables
+.env
+
+# Keep .env.example in version control
+!.env.example

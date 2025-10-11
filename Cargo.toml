@@ -14,11 +14,16 @@ name = "tzfpy"
 #
 # Downstream Rust code (including code in `bin/`, `examples/`, and `tests/`) will not be able
 # to `use string_sum;` unless the "rlib" or "lib" crate type is also included, e.g.:
-# crate-type = ["cdylib", "rlib"]
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "stub_gen"
+doc = false
 
 [dependencies]
 lazy_static = "1.5.0"
+pyo3-stub-gen = "0.14.1"
+pyo3-stub-gen-derive = "0.14.1"
 pyo3 = {version = "0.26.0", features = ["extension-module", "generate-import-lib", "abi3-py310"]}
 
 # tzf-rs = { git =  "https://github.com/ringsaturn/tzf-rs", rev = "31b1730", default-features = false}
