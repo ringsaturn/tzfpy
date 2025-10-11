@@ -28,7 +28,7 @@ jobs:
           uv build --config-setting profile==profiling
 
       - name: Run benchmarks
-        uses: CodSpeedHQ/action@v3
+        uses: CodSpeedHQ/action@v4
         with:
           run: uv run pytest --benchmark-warmup=on --benchmark-warmup-iterations=100 --codspeed tests/test_bench.py
 
