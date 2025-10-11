@@ -22,4 +22,4 @@ lazy_static = "1.5.0"
 pyo3 = {version = "0.26.0", features = ["extension-module", "generate-import-lib", "abi3-py310"]}
 
 # tzf-rs = { git =  "https://github.com/ringsaturn/tzf-rs", rev = "31b1730", default-features = false}
-tzf-rs = { version = "1.0.0", default-features = false }
+tzf-rs = { version = "1.0.1", default-features = false }
