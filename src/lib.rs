@@ -2,7 +2,7 @@
 
 use lazy_static::lazy_static;
 use pyo3::prelude::*;
-use tzf_rs::DefaultFinder;
+use tzf_rs::{DefaultFinder};
 
 lazy_static! {
     static ref FINDER: DefaultFinder = DefaultFinder::default();
@@ -28,11 +28,23 @@ pub fn data_version() -> PyResult<String> {
     return Ok(FINDER.data_version().to_string());
 }
 
+#[pyfunction]
+pub fn get_tz_geojson_from_polygonfinder(timezone_name: &str) -> PyResult<String> {
+    Ok(FINDER.finder.get_tz_geojson(timezone_name).unwrap().to_string())
+}
+
+#[pyfunction]
+pub fn get_tz_geojson_from_fuzzy(timezone_name: &str) -> PyResult<String> {
+    Ok(FINDER.fuzzy_finder.get_tz_geojson(timezone_name).unwrap().to_string())
+}
+
 #[pymodule]
 fn tzfpy(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(get_tz, m)?)?;
     m.add_function(wrap_pyfunction!(get_tzs, m)?)?;
     m.add_function(wrap_pyfunction!(timezonenames, m)?)?;
     m.add_function(wrap_pyfunction!(data_version, m)?)?;
+    m.add_function(wrap_pyfunction!(get_tz_geojson_from_polygonfinder, m)?)?;
+    m.add_function(wrap_pyfunction!(get_tz_geojson_from_fuzzy, m)?)?;
     Ok(())
 }

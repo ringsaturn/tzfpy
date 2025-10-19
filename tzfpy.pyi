@@ -23,3 +23,11 @@ def timezonenames() -> List[str]:
 def data_version() -> str:
     """Show current tzdata version"""
     ...
+
+def get_tz_geojson_from_polygonfinder(timezone_name: str) -> str:
+    """Get timezone polygon as GeoJSON string from PolygonFinder."""
+    ...
+
+def get_tz_geojson_from_fuzzy(timezone_name: str) -> str:
+    """Get timezone polygon as GeoJSON string from FuzzyFinder."""
+    ...
