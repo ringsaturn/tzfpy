@@ -19,4 +19,3 @@ def test_get_tz(lng, lat, tz):
     assert get_tz(lng, lat) == tz
     _ = get_tz_polygon_geojson(tz)
     _ = get_tz_index_geojson(tz)
-
