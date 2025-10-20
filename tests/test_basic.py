@@ -1,6 +1,6 @@
 from pytest import mark
 
-from tzfpy import get_tz
+from tzfpy import get_tz, get_tz_geojson_from_fuzzy, get_tz_geojson_from_polygonfinder
 
 
 @mark.parametrize(
@@ -17,3 +17,6 @@ from tzfpy import get_tz
 )
 def test_get_tz(lng, lat, tz):
     assert get_tz(lng, lat) == tz
+    _ = get_tz_geojson_from_polygonfinder(tz)
+    _ = get_tz_geojson_from_fuzzy(tz)
+
