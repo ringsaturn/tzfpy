@@ -29,12 +29,12 @@ pub fn data_version() -> PyResult<String> {
 }
 
 #[pyfunction]
-pub fn get_tz_geojson_from_polygonfinder(timezone_name: &str) -> PyResult<String> {
+pub fn get_tz_polygon_geojson(timezone_name: &str) -> PyResult<String> {
     Ok(FINDER.finder.get_tz_geojson(timezone_name).unwrap().to_string())
 }
 
 #[pyfunction]
-pub fn get_tz_geojson_from_fuzzy(timezone_name: &str) -> PyResult<String> {
+pub fn get_tz_index_geojson(timezone_name: &str) -> PyResult<String> {
     Ok(FINDER.fuzzy_finder.get_tz_geojson(timezone_name).unwrap().to_string())
 }
 
@@ -44,7 +44,7 @@ fn tzfpy(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(get_tzs, m)?)?;
     m.add_function(wrap_pyfunction!(timezonenames, m)?)?;
     m.add_function(wrap_pyfunction!(data_version, m)?)?;
-    m.add_function(wrap_pyfunction!(get_tz_geojson_from_polygonfinder, m)?)?;
-    m.add_function(wrap_pyfunction!(get_tz_geojson_from_fuzzy, m)?)?;
+    m.add_function(wrap_pyfunction!(get_tz_polygon_geojson, m)?)?;
+    m.add_function(wrap_pyfunction!(get_tz_index_geojson, m)?)?;
     Ok(())
 }
