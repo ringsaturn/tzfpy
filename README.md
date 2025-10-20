@@ -50,6 +50,25 @@ conda install -c conda-forge tzfpy
 ['Asia/Shanghai', 'Asia/Urumqi']
 ```
 
+For data visualization, you can get timezone polygon GeoJSON data from tzfpy:
+
+```python
+from tzfpy import get_tz, get_tz_index_geojson, get_tz_polygon_geojson
+
+lng = -74.0060
+lat = 40.7128
+tz = get_tz(lng, lat)
+print(f"Timezone for ({lng}, {lat}): {tz}")
+
+with open("tz_nyc_polygon.geojson", "w") as f:
+    geojson_data = get_tz_polygon_geojson(tz)
+    f.write(geojson_data)
+
+with open("tz_nyc_index.geojson", "w") as f:
+    geojson_data = get_tz_index_geojson(tz)
+    f.write(geojson_data)
+```
+
 ### Best practices
 
 1. Always install tzfpy with `tzdata` extra: `pip install tzfpy[tzdata]`
