@@ -50,7 +50,7 @@ requires = ["maturin>=1,<2"]
 
 [dependency-groups]
 dev = [
-  "ruff==0.13.1",
+  "ruff==0.14.2",
   "citiespy>=0.6.13",
   "maturin==1.9.6",
   "pytest>=8.4.2",
