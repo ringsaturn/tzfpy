@@ -64,7 +64,7 @@ jobs:
           echo '```' >> ${{ steps.gen-benchmark-file-name.outputs.filename }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: "benchmark_result_as_md_${{ matrix.python-version }}_${{ matrix.os }}"
           path: ${{ steps.gen-benchmark-file-name.outputs.filename }}
@@ -77,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download a Build Artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           pattern: "benchmark_result_as_md*"
 
