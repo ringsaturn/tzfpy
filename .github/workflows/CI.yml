@@ -11,7 +11,7 @@ on:
       - main
       - master
     tags:
-      - '*'
+      - "*"
   pull_request:
   workflow_dispatch:
 
@@ -110,51 +110,19 @@ jobs:
         platform:
           - runner: windows-latest
             target: x64
-          # - runner: windows-latest
-          #   target: aarch64-pc-windows-msvc
-          # - runner: windows-latest
-          #   target: x86
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with:
-          python-version: 3.x
-          architecture: ${{ matrix.platform.target }}
-      - name: Build wheels
-        uses: PyO3/maturin-action@v1
-        with:
-          target: ${{ matrix.platform.target }}
-          args: --release --out dist
-          sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
-      - uses: actions/setup-python@v6
-        with:
-          python-version: 3.14t
-          architecture: ${{ matrix.platform.target }}
-      - name: Build free-threaded wheels
-        uses: PyO3/maturin-action@v1
-        with:
-          target: ${{ matrix.platform.target }}
-          args: --release --out dist -i python3.14t
-          sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
-      - name: Upload wheels
-        uses: actions/upload-artifact@v6
-        with:
-          name: wheels-windows-${{ matrix.platform.target }}
-          path: dist
-
-  windows-arm:
-    runs-on: ${{ matrix.platform.runner }}
-    strategy:
-      matrix:
-        platform:
+            python_arch: x64
+          - runner: windows-latest
+            target: x86
+            python_arch: x86
           - runner: windows-11-arm
             target: aarch64
+            python_arch: arm64
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
-          python-version: 3.x
-          architecture: arm64
+          python-version: 3.13
+          architecture: ${{ matrix.platform.python_arch }}
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
@@ -164,7 +132,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: 3.14t
-          architecture: arm64
+          architecture: ${{ matrix.platform.python_arch }}
       - name: Build free-threaded wheels
         uses: PyO3/maturin-action@v1
         with:
@@ -172,7 +140,7 @@ jobs:
           args: --release --out dist -i python3.14t
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
       - name: Upload wheels
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v5
         with:
           name: wheels-windows-${{ matrix.platform.target }}
           path: dist
@@ -228,7 +196,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     if: ${{ startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch' }}
-    needs: [linux, musllinux, windows, windows-arm, macos, sdist]
+    needs: [linux, musllinux, windows, macos, sdist]
     environment: release
     permissions:
       # Use to sign the release artifacts
@@ -243,7 +211,7 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v3
         with:
-          subject-path: 'wheels-*/*'
+          subject-path: "wheels-*/*"
 
       - name: Publish to PyPI
         uses: PyO3/maturin-action@v1
