@@ -1,6 +1,7 @@
 # tzfpy
 
 - [![PyPI](https://img.shields.io/pypi/v/tzfpy)](https://pypi.org/project/tzfpy/)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fringsaturn%2Ftzfpy.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fringsaturn%2Ftzfpy?ref=badge_shield)
 - [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/tzfpy)](https://pypi.org/project/tzfpy/)
 - ![PyPI - Downloads](https://img.shields.io/pypi/dd/tzfpy)
 - [![Anaconda-Server Badge](https://anaconda.org/conda-forge/tzfpy/badges/version.svg)](https://anaconda.org/conda-forge/tzfpy)
@@ -229,3 +230,6 @@ under the
 <!-- ## Other info
 
 [![](https://ringsaturn.github.io/pypi-downloads-chart/tzfpy/download-trends.svg)](https://ringsaturn.github.io/pypi-downloads-chart/tzfpy/index.html) -->
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fringsaturn%2Ftzfpy.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fringsaturn%2Ftzfpy?ref=badge_large)
