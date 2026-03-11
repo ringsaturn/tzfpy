@@ -16,7 +16,6 @@ import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 
-
 CSV_FIELDNAMES = [
     "key",
     "release_tag",
@@ -76,7 +75,8 @@ class WheelAsset:
         if not self.is_for_package(package_name):
             return False
         if min_published_at and (
-            not self.release_published_at or self.release_published_at < min_published_at
+            not self.release_published_at
+            or self.release_published_at < min_published_at
         ):
             return False
         if uploader_login and self.uploader_login != uploader_login:
@@ -241,7 +241,7 @@ def render_html_page(title: str, body_lines: list[str]) -> str:
         "<!doctype html>\n"
         "<html>\n"
         "  <head>\n"
-        "    <meta charset=\"utf-8\" />\n"
+        '    <meta charset="utf-8" />\n'
         f"    <title>{escaped_title}</title>\n"
         "  </head>\n"
         "  <body>\n"
@@ -313,7 +313,9 @@ def write_site(
 
     simple_index = render_html_page(
         title="Simple index",
-        body_lines=[f'    <a href="{html.escape(normalized_package)}/">{html.escape(normalized_package)}</a>'],
+        body_lines=[
+            f'    <a href="{html.escape(normalized_package)}/">{html.escape(normalized_package)}</a>'
+        ],
     )
     (simple_dir / "index.html").write_text(simple_index, encoding="utf-8")
 
@@ -405,7 +407,11 @@ def main() -> int:
     latest_cached_published_at = ""
     if existing_wheels:
         latest_cached_published_at = max(
-            (wheel.release_published_at for wheel in existing_wheels.values() if wheel.release_published_at),
+            (
+                wheel.release_published_at
+                for wheel in existing_wheels.values()
+                if wheel.release_published_at
+            ),
             default="",
         )
 
