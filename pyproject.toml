@@ -16,6 +16,7 @@ classifiers = [
 dependencies = []
 license = "MIT"
 description = "Probably the fastest Python package to convert longitude/latitude to timezone name"
+readme = "README.md"
 name = "tzfpy"
 requires-python = ">=3.10"
 maintainers = [{ name = "ringsaturn", email = "ringsaturn.me@gmail.com" }]
