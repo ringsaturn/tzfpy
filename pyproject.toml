@@ -39,6 +39,7 @@ pytz = ["pytz>=2026.1.post1"]
 tzdata = ["tzdata>=2025.3"]
 
 [project.urls]
+Homepage = "https://github.com/ringsaturn/tzfpy"
 Documentation = "https://github.com/ringsaturn/tzfpy"
 Issues = "https://github.com/ringsaturn/tzfpy/issues"
 "Source Code" = "https://github.com/ringsaturn/tzfpy"
