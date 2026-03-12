@@ -22,7 +22,7 @@ docs/release_wheels.csv
 Update metadata and regenerate index (incremental mode):
 
 ```bash
-uv run .github/scripts/build_simple_index.py \
+uv run scripts/build_simple_index.py \
   --repository ringsaturn/tzfpy \
   --package tzfpy \
   --min-tag v1.0.0 \
@@ -33,7 +33,7 @@ uv run .github/scripts/build_simple_index.py \
 Force a full rebuild:
 
 ```bash
-uv run .github/scripts/build_simple_index.py \
+uv run scripts/build_simple_index.py \
   --repository ringsaturn/tzfpy \
   --package tzfpy \
   --min-tag v1.0.0 \

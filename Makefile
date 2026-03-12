@@ -53,3 +53,11 @@ examples:
 	@cd examples && for file in $$(find . -name "*.py" ! -name "*fastapi*" | sort); do \
 		printf "%s: " "$$file"; uv run python "$$file"; \
 	done
+
+simple-index:
+	uv run scripts/build_simple_index.py \
+		--repository ringsaturn/tzfpy \
+		--package tzfpy \
+		--min-tag v1.0.0 \
+		--csv docs/release_wheels.csv \
+		--output site/tzfpy-simple

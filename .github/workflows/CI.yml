@@ -423,7 +423,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail
-          python .github/scripts/build_simple_index.py \
+          python scripts/build_simple_index.py \
             --repository "$GITHUB_REPOSITORY" \
             --package tzfpy \
             --min-tag v1.0.0 \
