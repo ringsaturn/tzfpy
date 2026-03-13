@@ -7,7 +7,17 @@ on:
       - master
     tags:
       - "*"
+    paths:
+      - "src/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "pyproject.toml"
   pull_request:
+    paths:
+      - "src/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "pyproject.toml"
   workflow_dispatch:
 
 permissions:
