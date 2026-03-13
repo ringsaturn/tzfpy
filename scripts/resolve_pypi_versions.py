@@ -29,10 +29,6 @@ def unique_keep_order(items: list[str]) -> list[str]:
     return unique_items
 
 
-def all_yanked(files: list[dict]) -> bool:
-    return bool(files) and all(bool(item.get("yanked")) for item in files)
-
-
 def is_prerelease(version: str) -> bool:
     return bool(PRERELEASE_RE.search(version))
 
@@ -75,13 +71,11 @@ def resolve_versions(
         files = files or []
         if not files:
             continue
-        if all_yanked(files):
-            continue
         available_releases[version] = files
 
     if not available_releases:
         raise RuntimeError(
-            f"No non-yanked releases with files found on PyPI for package: {package}"
+            f"No releases with files found on PyPI for package: {package}"
         )
 
     if raw_versions.strip():
@@ -101,9 +95,6 @@ def resolve_versions(
             files = releases.get(version) or []
             if not files:
                 invalid_versions.append(f"{version} (no files)")
-                continue
-            if all_yanked(files):
-                invalid_versions.append(f"{version} (all files yanked)")
                 continue
             selected_versions.append(version)
 

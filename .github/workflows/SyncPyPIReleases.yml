@@ -72,8 +72,46 @@ jobs:
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Check tag existence
+        id: check_tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ inputs.tag_prefix }}${{ matrix.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if output="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$TAG_NAME" 2>&1)"; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            if echo "$output" | grep -qi "Not Found"; then
+              echo "exists=false" >> "$GITHUB_OUTPUT"
+              echo "Tag not found, skip release creation: $TAG_NAME"
+            else
+              echo "$output"
+              exit 1
+            fi
+          fi
+
+      - name: Fetch files from PyPI
+        id: fetch_files
+        if: ${{ steps.check_tag.outputs.exists == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/fetch_pypi_release_files.py \
+            --package "${{ inputs.package }}" \
+            --version "${{ matrix.version }}" \
+            --output-dir "dist/pypi/${{ matrix.version }}" \
+            --github-output "$GITHUB_OUTPUT"
+
       - name: Check release existence
-        id: check
+        id: check_release
+        if: ${{ steps.check_tag.outputs.exists == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG_NAME: ${{ inputs.tag_prefix }}${{ matrix.version }}
@@ -92,8 +130,27 @@ jobs:
             fi
           fi
 
+      - name: Select missing files for existing release
+        id: missing_files
+        if: ${{ steps.check_tag.outputs.exists == 'true' && steps.check_release.outputs.exists == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ inputs.tag_prefix }}${{ matrix.version }}
+          FETCHED_FILES: ${{ steps.fetch_files.outputs.files }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          files_file="$(mktemp)"
+          printf '%s\n' "$FETCHED_FILES" > "$files_file"
+          python3 scripts/filter_missing_release_files.py \
+            --repository "$GITHUB_REPOSITORY" \
+            --tag "$TAG_NAME" \
+            --files-file "$files_file" \
+            --github-output "$GITHUB_OUTPUT"
+
       - name: Detect prerelease flag
         id: meta
+        if: ${{ steps.check_tag.outputs.exists == 'true' && steps.check_release.outputs.exists == 'false' }}
         env:
           VERSION: ${{ matrix.version }}
         shell: bash
@@ -105,20 +162,37 @@ jobs:
             echo "prerelease=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Create GitHub release
-        if: ${{ steps.check.outputs.exists == 'false' }}
+      - name: Create new GitHub release with files
+        if: ${{ steps.check_tag.outputs.exists == 'true' && steps.check_release.outputs.exists == 'false' }}
         uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ inputs.tag_prefix }}${{ matrix.version }}
-          target_commitish: ${{ github.event.repository.default_branch }}
           name: ${{ inputs.package }} ${{ matrix.version }}
           body: |
             Synced from PyPI package `${{ inputs.package }}`.
             Version: `${{ matrix.version }}`
             PyPI: https://pypi.org/project/${{ inputs.package }}/${{ matrix.version }}/
+          files: ${{ steps.fetch_files.outputs.files }}
+          fail_on_unmatched_files: true
           draft: false
           prerelease: ${{ steps.meta.outputs.prerelease }}
           generate_release_notes: false
           make_latest: false
+
+      - name: Upload files to existing GitHub release
+        if: ${{ steps.check_tag.outputs.exists == 'true' && steps.check_release.outputs.exists == 'true' && steps.missing_files.outputs.missing_count != '0' }}
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ inputs.tag_prefix }}${{ matrix.version }}
+          files: ${{ steps.missing_files.outputs.missing_files }}
+          fail_on_unmatched_files: true
+          make_latest: false
+
+      - name: Skip upload when all files already exist
+        if: ${{ steps.check_tag.outputs.exists == 'true' && steps.check_release.outputs.exists == 'true' && steps.missing_files.outputs.missing_count == '0' }}
+        shell: bash
+        run: echo "All files already exist in release, skip upload."
