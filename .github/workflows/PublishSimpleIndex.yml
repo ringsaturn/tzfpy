@@ -25,9 +25,10 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
         with:
-          python-version: "3.12"
+          enable-cache: true
       - name: Seed metadata CSV from current Pages deployment
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -51,7 +52,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail
-          python scripts/build_simple_index.py \
+          uv run scripts/build_simple_index.py \
             --repository "$GITHUB_REPOSITORY" \
             --package tzfpy \
             --min-tag v1.0.0 \
@@ -65,8 +66,6 @@ jobs:
             exit 1
           fi
           test -f site/docs/release_wheels.csv
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
