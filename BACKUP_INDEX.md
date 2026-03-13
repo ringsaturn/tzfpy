@@ -13,6 +13,19 @@ uv pip install tzfpy \
   --extra-index-url https://pypi.org/simple
 ```
 
+Or
+
+```toml
+# pyproject.toml
+[[tool.uv.index]]
+name = "tzfpy-mirror"
+url = "https://ringsaturn.github.io/tzfpy/simple"
+explicit = true
+
+[tool.uv.sources]
+tzfpy = { index = "tzfpy-mirror" }
+```
+
 Raw wheel metadata is stored in:
 
 ```text
