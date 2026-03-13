@@ -34,11 +34,22 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "monthly"
+    exclude-paths:
+      - "examples/**"
     groups:
       # Specify a name for the group, which will be used in pull request titles
       # and branch names
-      dependencies:
+      root-dependencies:
         # Define patterns to include dependencies in the group (based on
         # dependency name)
         patterns:
           - "*" # A wildcard that matches all dependencies in the package
+  - package-ecosystem: "uv" # See documentation for possible values
+    directory: "/examples" # Location of package manifests
+    schedule:
+      interval: "monthly"
+    groups:
+      # Manage examples dependencies separately from the project root.
+      examples-dependencies:
+        patterns:
+          - "*"
