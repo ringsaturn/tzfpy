@@ -58,6 +58,6 @@ simple-index:
 	uv run scripts/build_simple_index.py \
 		--repository ringsaturn/tzfpy \
 		--package tzfpy \
-		--min-tag v0.11.0 \
+		--min-tag v0.6.0 \
 		--csv docs/release_wheels.csv \
-		--output site/tzfpy-simple
+		--output site/

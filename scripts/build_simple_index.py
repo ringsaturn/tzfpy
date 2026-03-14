@@ -10,16 +10,19 @@ import json
 import os
 import pathlib
 import re
+import subprocess
 import sys
 import urllib.error
 import urllib.parse
 import urllib.request
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from datetime import datetime, timezone
 
 CSV_FIELDNAMES = [
     "key",
     "release_tag",
     "release_published_at",
+    "release_commit_at",
     "release_prerelease",
     "asset_id",
     "asset_name",
@@ -54,6 +57,7 @@ class WheelAsset:
     key: str
     release_tag: str
     release_published_at: str
+    release_commit_at: str
     release_prerelease: bool
     asset_id: str
     name: str
@@ -94,6 +98,7 @@ class WheelAsset:
             "key": self.key,
             "release_tag": self.release_tag,
             "release_published_at": self.release_published_at,
+            "release_commit_at": self.release_commit_at,
             "release_prerelease": "true" if self.release_prerelease else "false",
             "asset_id": self.asset_id,
             "asset_name": self.name,
@@ -111,6 +116,7 @@ class WheelAsset:
             key=clean_text(row.get("key", "")),
             release_tag=clean_text(row.get("release_tag", "")),
             release_published_at=clean_text(row.get("release_published_at", "")),
+            release_commit_at=clean_text(row.get("release_commit_at", "")),
             release_prerelease=release_prerelease,
             asset_id=clean_text(row.get("asset_id", "")),
             name=clean_text(row.get("asset_name", "")),
@@ -121,7 +127,9 @@ class WheelAsset:
         )
 
     @staticmethod
-    def from_release_asset(release: dict, asset: dict) -> "WheelAsset":
+    def from_release_asset(
+        release: dict, asset: dict, release_commit_at: str = ""
+    ) -> "WheelAsset":
         asset_id = clean_text(asset.get("id", ""))
         url = clean_text(asset.get("browser_download_url", ""))
         name = clean_text(asset.get("name", ""))
@@ -137,6 +145,7 @@ class WheelAsset:
             key=key,
             release_tag=clean_text(release.get("tag_name", "")),
             release_published_at=clean_text(release.get("published_at", "")),
+            release_commit_at=clean_text(release_commit_at),
             release_prerelease=bool(release.get("prerelease", False)),
             asset_id=asset_id,
             name=name,
@@ -169,6 +178,93 @@ def fetch_release_by_tag(repository: str, tag: str, token: str | None) -> dict:
     if not isinstance(payload, dict):
         raise RuntimeError(f"Unexpected GitHub API response for {url}: {payload!r}")
     return payload
+
+
+def normalize_iso8601_utc(timestamp: str) -> str:
+    text = clean_text(timestamp)
+    if not text:
+        return ""
+    if text.endswith("Z"):
+        text = f"{text[:-1]}+00:00"
+    try:
+        dt = datetime.fromisoformat(text)
+    except ValueError:
+        return clean_text(timestamp)
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def get_local_tag_created_at(tag: str) -> str:
+    return collect_local_tag_created_at({tag}).get(tag, "")
+
+
+def collect_local_tag_created_at(tags: set[str]) -> dict[str, str]:
+    if not tags:
+        return {}
+
+    command = [
+        "git",
+        "for-each-ref",
+        "--format=%(refname:strip=2),%(creatordate:iso8601-strict)",
+        "refs/tags",
+    ]
+    result = subprocess.run(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        return {}
+
+    mapped: dict[str, str] = {}
+    for line in result.stdout.splitlines():
+        row = clean_text(line)
+        if not row:
+            continue
+        parts = row.split(",", maxsplit=1)
+        if len(parts) != 2:
+            continue
+        tag, created_at = parts
+        if tag not in tags:
+            continue
+        normalized = normalize_iso8601_utc(created_at)
+        if normalized:
+            mapped[tag] = normalized
+    return mapped
+
+
+def resolve_min_published_at(
+    repository: str, tag: str, token: str | None
+) -> tuple[str, str]:
+    candidates: list[tuple[str, str]] = []
+    local_tag_created_at = get_local_tag_created_at(tag)
+    if local_tag_created_at:
+        candidates.append(("local-tag", local_tag_created_at))
+
+    release_lookup_error = ""
+    try:
+        min_release = fetch_release_by_tag(repository=repository, tag=tag, token=token)
+        release_published_at = normalize_iso8601_utc(
+            str(min_release.get("published_at", "")).strip()
+        )
+        if release_published_at:
+            candidates.append(("release", release_published_at))
+    except RuntimeError as exc:
+        release_lookup_error = str(exc)
+
+    if not candidates:
+        suffix = (
+            f", release lookup failed: {release_lookup_error}"
+            if release_lookup_error
+            else ""
+        )
+        raise RuntimeError(f"Unable to resolve min-tag boundary for {tag}{suffix}")
+
+    source, min_published_at = min(candidates, key=lambda item: item[1])
+    return min_published_at, source
 
 
 def fetch_releases(
@@ -211,15 +307,23 @@ def collect_wheels(
     package_name: str,
     min_published_at: str | None = None,
     uploader_login: str | None = None,
+    tag_commit_dates: dict[str, str] | None = None,
 ) -> dict[str, WheelAsset]:
     wheels: dict[str, WheelAsset] = {}
+    normalized_tag_commit_dates = tag_commit_dates or {}
 
     for release in releases:
         if release.get("draft", False):
             continue
         release_published_at = str(release.get("published_at", "")).strip()
+        release_tag = clean_text(release.get("tag_name", ""))
+        release_commit_at = normalized_tag_commit_dates.get(release_tag, "")
         for asset in release.get("assets", []):
-            wheel = WheelAsset.from_release_asset(release=release, asset=asset)
+            wheel = WheelAsset.from_release_asset(
+                release=release,
+                asset=asset,
+                release_commit_at=release_commit_at,
+            )
 
             if not is_supported_distribution_file(wheel.name):
                 continue
@@ -260,7 +364,12 @@ def render_html_page(title: str, body_lines: list[str]) -> str:
 def sort_wheels(wheels: list[WheelAsset]) -> list[WheelAsset]:
     return sorted(
         wheels,
-        key=lambda item: (item.release_published_at, item.updated_at, item.name),
+        key=lambda item: (
+            item.release_commit_at or item.release_published_at,
+            item.release_published_at,
+            item.updated_at,
+            item.name,
+        ),
         reverse=True,
     )
 
@@ -364,7 +473,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--min-tag",
         default="",
-        help="Only include distribution files from releases published at or after this exact tag, for example v1.0.0.",
+        help=(
+            "Only include distribution files from releases published at or after a "
+            "timestamp resolved from this tag, for example v1.0.0."
+        ),
     )
     parser.add_argument(
         "--uploader-login",
@@ -400,15 +512,13 @@ def main() -> int:
         existing_wheels = load_wheels_csv(csv_path)
 
     min_published_at: str | None = None
+    min_published_at_source = ""
     if args.min_tag:
-        min_release = fetch_release_by_tag(
+        min_published_at, min_published_at_source = resolve_min_published_at(
             repository=args.repository,
             tag=args.min_tag,
             token=args.token or None,
         )
-        min_published_at = str(min_release.get("published_at", "")).strip()
-        if not min_published_at:
-            raise RuntimeError(f"Release tag has no published_at value: {args.min_tag}")
 
     latest_cached_published_at = ""
     if existing_wheels:
@@ -431,14 +541,34 @@ def main() -> int:
         stop_before_or_at_published_at=incremental_boundary or None,
     )
 
+    release_tags = {
+        clean_text(release.get("tag_name", ""))
+        for release in releases
+        if clean_text(release.get("tag_name", ""))
+    }
+    release_tags.update(
+        wheel.release_tag for wheel in existing_wheels.values() if wheel.release_tag
+    )
+    tag_commit_dates = collect_local_tag_created_at(release_tags)
+
     fetched_wheels = collect_wheels(
         releases=releases,
         package_name=args.package,
         min_published_at=min_published_at,
         uploader_login=args.uploader_login or None,
+        tag_commit_dates=tag_commit_dates,
     )
 
-    merged_wheels = dict(existing_wheels)
+    merged_wheels: dict[str, WheelAsset] = {}
+    for key, wheel in existing_wheels.items():
+        release_commit_at = wheel.release_commit_at or tag_commit_dates.get(
+            wheel.release_tag, ""
+        )
+        if release_commit_at == wheel.release_commit_at:
+            merged_wheels[key] = wheel
+            continue
+        merged_wheels[key] = replace(wheel, release_commit_at=release_commit_at)
+
     merged_wheels.update(fetched_wheels)
 
     filtered_wheels = [
@@ -466,7 +596,10 @@ def main() -> int:
     print(f"Cached assets loaded: {len(existing_wheels)}")
     print(f"New assets fetched this run: {len(fetched_wheels)}")
     if args.min_tag:
-        print(f"Minimum release tag: {args.min_tag} ({min_published_at})")
+        print(
+            "Minimum release tag: "
+            f"{args.min_tag} ({min_published_at}, source={min_published_at_source})"
+        )
     if args.uploader_login:
         print(f"Uploader filter: {args.uploader_login}")
     if incremental_boundary:
