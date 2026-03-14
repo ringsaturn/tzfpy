@@ -12,12 +12,14 @@ on:
       - "Cargo.toml"
       - "Cargo.lock"
       - "pyproject.toml"
+      - ".github/workflows/CI.yml"
   pull_request:
     paths:
       - "src/**"
       - "Cargo.toml"
       - "Cargo.lock"
       - "pyproject.toml"
+      - ".github/workflows/CI.yml"
   workflow_dispatch:
 
 permissions:
@@ -187,15 +189,14 @@ jobs:
           - runner: windows-latest
             target: x86
             python_arch: x86
-          # Help wanted: "Error: ModuleNotFoundError: No module named 'encodings'"
-          # - runner: windows-11-arm
-          #   target: aarch64
-          #   python_arch: arm64
+          - runner: windows-11-arm
+            target: aarch64
+            python_arch: arm64
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.10"
+          python-version: "3.11"  # Github Actions minimum Python version on Windows for ARM64 runners is 3.11
           architecture: ${{ matrix.platform.python_arch }}
       - name: Build wheels
         uses: PyO3/maturin-action@v1
