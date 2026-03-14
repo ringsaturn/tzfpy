@@ -5,10 +5,10 @@ from __future__ import annotations
 import argparse
 import json
 import os
-from pathlib import Path
 import urllib.error
 import urllib.parse
 import urllib.request
+from pathlib import Path
 
 
 def fetch_release_assets(repository: str, tag: str, token: str) -> set[str]:
