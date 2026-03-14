@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - docs/release_wheels.csv
+      - .github/workflows/PublishSimpleIndex.yml"
   release:
     types:
       - published
