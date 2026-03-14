@@ -7,6 +7,8 @@ import csv
 import re
 from pathlib import Path
 
+IGNORED_INSTALLERS = {"browser", "unknown"}
+
 
 def version_sort_key(version: str) -> list[tuple[int, object]]:
     key: list[tuple[int, object]] = []
@@ -48,17 +50,36 @@ def load_installer_downloads(path: Path) -> dict[str, dict[str, int]]:
 
 def aggregate_from_installer_downloads(
     downloads_by_installer: dict[str, dict[str, int]],
-) -> tuple[dict[str, int], dict[str, int], dict[str, int]]:
+) -> tuple[dict[str, int], dict[str, int], dict[str, int], dict[str, int], dict[str, int]]:
     downloads_all: dict[str, int] = {}
     downloads_pip: dict[str, int] = {}
     downloads_uv: dict[str, int] = {}
+    downloads_excluded_browser: dict[str, int] = {}
+    downloads_excluded_unknown: dict[str, int] = {}
 
     for filename, installer_map in downloads_by_installer.items():
-        downloads_all[filename] = sum(installer_map.values())
-        downloads_pip[filename] = installer_map.get("pip", 0)
-        downloads_uv[filename] = installer_map.get("uv", 0)
+        filtered = {
+            name: value
+            for name, value in installer_map.items()
+            if name.lower() not in IGNORED_INSTALLERS
+        }
+        downloads_all[filename] = sum(filtered.values())
+        downloads_pip[filename] = filtered.get("pip", 0)
+        downloads_uv[filename] = filtered.get("uv", 0)
+        downloads_excluded_browser[filename] = sum(
+            value for name, value in installer_map.items() if name.lower() == "browser"
+        )
+        downloads_excluded_unknown[filename] = sum(
+            value for name, value in installer_map.items() if name.lower() == "unknown"
+        )
 
-    return downloads_all, downloads_pip, downloads_uv
+    return (
+        downloads_all,
+        downloads_pip,
+        downloads_uv,
+        downloads_excluded_browser,
+        downloads_excluded_unknown,
+    )
 
 
 def detect_installer_file(root: Path) -> Path | None:
@@ -165,6 +186,8 @@ def main() -> int:
     downloads_all: dict[str, int]
     downloads_pip: dict[str, int]
     downloads_uv: dict[str, int]
+    downloads_excluded_browser: dict[str, int]
+    downloads_excluded_unknown: dict[str, int]
     installer_file = (
         Path(args.downloads_installer_file)
         if args.downloads_installer_file
@@ -175,19 +198,26 @@ def main() -> int:
     )
 
     if downloads_by_installer:
-        downloads_all, downloads_pip, downloads_uv = aggregate_from_installer_downloads(
-            downloads_by_installer
-        )
+        (
+            downloads_all,
+            downloads_pip,
+            downloads_uv,
+            downloads_excluded_browser,
+            downloads_excluded_unknown,
+        ) = aggregate_from_installer_downloads(downloads_by_installer)
     else:
         downloads_all = load_downloads(Path(args.downloads_all))
         downloads_pip = load_downloads(Path(args.downloads_pip))
         downloads_uv = load_downloads(Path(args.downloads_uv))
+        downloads_excluded_browser = {}
+        downloads_excluded_unknown = {}
 
     installer_names: list[str] = sorted(
         {
             installer
             for installer_map in downloads_by_installer.values()
             for installer in installer_map
+            if installer.lower() not in IGNORED_INSTALLERS
         }
     )
     installer_columns = [installer_col_name(installer) for installer in installer_names]
@@ -206,15 +236,27 @@ def main() -> int:
             d_pip = downloads_pip.get(filename, 0)
             d_uv = downloads_uv.get(filename, 0)
             d_other = d_all - d_pip - d_uv
+            excluded_browser = downloads_excluded_browser.get(filename, 0)
+            excluded_unknown = downloads_excluded_unknown.get(filename, 0)
             installer_map = downloads_by_installer.get(filename, {})
             if installer_map:
-                d_pip = installer_map.get("pip", d_pip)
-                d_uv = installer_map.get("uv", d_uv)
+                filtered_installer_map = {
+                    name: value
+                    for name, value in installer_map.items()
+                    if name.lower() not in IGNORED_INSTALLERS
+                }
+                d_pip = filtered_installer_map.get("pip", d_pip)
+                d_uv = filtered_installer_map.get("uv", d_uv)
                 d_other = d_all - d_pip - d_uv
-                top_installer, top_installer_downloads = max(
-                    installer_map.items(), key=lambda item: item[1]
-                )
+                if filtered_installer_map:
+                    top_installer, top_installer_downloads = max(
+                        filtered_installer_map.items(), key=lambda item: item[1]
+                    )
+                else:
+                    top_installer = ""
+                    top_installer_downloads = 0
             else:
+                filtered_installer_map = {}
                 top_installer = ""
                 top_installer_downloads = 0
 
@@ -235,11 +277,13 @@ def main() -> int:
                 "downloads_pip_30d": d_pip,
                 "downloads_uv_30d": d_uv,
                 "downloads_other_30d": d_other,
+                "downloads_excluded_browser_30d": excluded_browser,
+                "downloads_excluded_unknown_30d": excluded_unknown,
                 "downloads_top_installer": top_installer,
                 "downloads_top_installer_30d": top_installer_downloads,
             }
             for installer, col in installer_name_to_col.items():
-                record[col] = installer_map.get(installer, 0)
+                record[col] = filtered_installer_map.get(installer, 0)
             records.append(record)
 
     records.sort(
@@ -274,6 +318,8 @@ def main() -> int:
         "downloads_pip_30d",
         "downloads_uv_30d",
         "downloads_other_30d",
+        "downloads_excluded_browser_30d",
+        "downloads_excluded_unknown_30d",
         "downloads_top_installer",
         "downloads_top_installer_30d",
     ]
