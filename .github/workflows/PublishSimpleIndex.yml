@@ -35,26 +35,8 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-      - name: Seed metadata CSV from current Pages deployment
-        env:
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: |
-          set -euo pipefail
-          mkdir -p docs
-          owner="${GITHUB_REPOSITORY%/*}"
-          repo="${GITHUB_REPOSITORY#*/}"
-          url="https://${owner}.github.io/${repo}/docs/release_wheels.csv"
-          tmp_csv="$(mktemp)"
-          if curl --fail --location --silent --show-error "$url" -o "$tmp_csv"; then
-            mv "$tmp_csv" docs/release_wheels.csv
-            echo "Loaded metadata CSV from ${url}"
-          else
-            rm -f "$tmp_csv"
-            echo "No remote CSV found, keeping local docs/release_wheels.csv if present."
-          fi
       - name: Build simple index
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail
@@ -63,6 +45,7 @@ jobs:
             --package tzfpy \
             --min-tag v0.6.0 \
             --csv docs/release_wheels.csv \
+            --skip-fetch \
             --output site
       - name: Verify Pages artifact has no wheel files
         run: |

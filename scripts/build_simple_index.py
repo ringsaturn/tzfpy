@@ -526,6 +526,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Fetch all release pages instead of incremental fetch based on CSV cache.",
     )
+    parser.add_argument(
+        "--skip-fetch",
+        action="store_true",
+        help="Build index only from existing CSV metadata and do not call GitHub APIs.",
+    )
     return parser.parse_args()
 
 
@@ -538,6 +543,11 @@ def main() -> int:
     existing_wheels: dict[str, WheelAsset] = {}
     if csv_path:
         existing_wheels = load_wheels_csv(csv_path)
+    if args.skip_fetch:
+        if not csv_path:
+            raise RuntimeError("--skip-fetch requires --csv")
+        if not existing_wheels:
+            raise RuntimeError("--skip-fetch requires a non-empty CSV metadata file")
 
     min_release_tag = clean_text(args.min_tag) or None
 
@@ -553,14 +563,17 @@ def main() -> int:
         )
 
     incremental_boundary = ""
-    if not args.full_fetch and latest_cached_published_at:
-        incremental_boundary = latest_cached_published_at
+    releases: list[dict] = []
+    fetched_wheels: dict[str, WheelAsset] = {}
+    if not args.skip_fetch:
+        if not args.full_fetch and latest_cached_published_at:
+            incremental_boundary = latest_cached_published_at
 
-    releases = fetch_releases(
-        repository=args.repository,
-        token=args.token or None,
-        stop_before_or_at_published_at=incremental_boundary or None,
-    )
+        releases = fetch_releases(
+            repository=args.repository,
+            token=args.token or None,
+            stop_before_or_at_published_at=incremental_boundary or None,
+        )
 
     release_tags = {
         clean_text(release.get("tag_name", ""))
@@ -572,13 +585,14 @@ def main() -> int:
     )
     tag_commit_dates = collect_local_tag_created_at(release_tags)
 
-    fetched_wheels = collect_wheels(
-        releases=releases,
-        package_name=args.package,
-        min_release_tag=min_release_tag,
-        uploader_login=args.uploader_login or None,
-        tag_commit_dates=tag_commit_dates,
-    )
+    if releases:
+        fetched_wheels = collect_wheels(
+            releases=releases,
+            package_name=args.package,
+            min_release_tag=min_release_tag,
+            uploader_login=args.uploader_login or None,
+            tag_commit_dates=tag_commit_dates,
+        )
 
     merged_wheels: dict[str, WheelAsset] = {}
     for key, wheel in existing_wheels.items():
@@ -602,7 +616,7 @@ def main() -> int:
         )
     ]
 
-    if csv_path:
+    if csv_path and not args.skip_fetch:
         write_wheels_csv(csv_path, filtered_wheels)
 
     write_site(
@@ -616,6 +630,7 @@ def main() -> int:
     print(f"Releases fetched this run: {len(releases)}")
     print(f"Cached assets loaded: {len(existing_wheels)}")
     print(f"New assets fetched this run: {len(fetched_wheels)}")
+    print(f"Fetch skipped: {'yes' if args.skip_fetch else 'no'}")
     if min_release_tag:
         print(f"Minimum release tag: {min_release_tag}")
     if args.uploader_login:

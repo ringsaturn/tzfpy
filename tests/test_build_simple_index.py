@@ -1,6 +1,7 @@
 import importlib.util
 import pathlib
 import sys
+from argparse import Namespace
 
 import pytest
 
@@ -155,3 +156,77 @@ def test_matches_filters_uses_min_release_tag():
 
     assert not wheel.matches_filters(package_name="tzfpy", min_release_tag="v0.11.0")
     assert wheel.matches_filters(package_name="tzfpy", min_release_tag="v0.6.0")
+
+
+def test_main_skip_fetch_uses_existing_csv_without_api(monkeypatch, tmp_path):
+    csv_path = tmp_path / "release_wheels.csv"
+    csv_path.write_text(
+        (
+            "key,release_tag,release_published_at,release_commit_at,release_prerelease,"
+            "asset_id,asset_name,asset_url,asset_updated_at,asset_digest,uploader_login\n"
+            "1,v0.6.0,2026-03-14T09:03:14Z,2022-07-31T15:52:51Z,false,1,"
+            "tzfpy-0.6.0-cp310.whl,https://example.com/tzfpy-0.6.0-cp310.whl,"
+            "2026-03-14T09:03:13Z,sha256:abc,ci\n"
+        ),
+        encoding="utf-8",
+    )
+    out_dir = tmp_path / "site"
+
+    monkeypatch.setattr(
+        build_simple_index,
+        "parse_args",
+        lambda: Namespace(
+            repository="ringsaturn/tzfpy",
+            package="tzfpy",
+            output=str(out_dir),
+            token="",
+            min_tag="v0.6.0",
+            uploader_login="",
+            csv=str(csv_path),
+            csv_name="release_wheels.csv",
+            full_fetch=False,
+            skip_fetch=True,
+        ),
+    )
+
+    def _should_not_call_fetch(*_args, **_kwargs):
+        raise AssertionError("fetch_releases should not be called in skip-fetch mode")
+
+    monkeypatch.setattr(build_simple_index, "fetch_releases", _should_not_call_fetch)
+
+    code = build_simple_index.main()
+    assert code == 0
+    assert (out_dir / "simple" / "tzfpy" / "index.html").exists()
+    assert (out_dir / "docs" / "release_wheels.csv").exists()
+
+
+def test_main_skip_fetch_requires_non_empty_csv(monkeypatch, tmp_path):
+    csv_path = tmp_path / "release_wheels.csv"
+    csv_path.write_text(
+        (
+            "key,release_tag,release_published_at,release_commit_at,release_prerelease,"
+            "asset_id,asset_name,asset_url,asset_updated_at,asset_digest,uploader_login\n"
+        ),
+        encoding="utf-8",
+    )
+    out_dir = tmp_path / "site"
+
+    monkeypatch.setattr(
+        build_simple_index,
+        "parse_args",
+        lambda: Namespace(
+            repository="ringsaturn/tzfpy",
+            package="tzfpy",
+            output=str(out_dir),
+            token="",
+            min_tag="v0.6.0",
+            uploader_login="",
+            csv=str(csv_path),
+            csv_name="release_wheels.csv",
+            full_fetch=False,
+            skip_fetch=True,
+        ),
+    )
+
+    with pytest.raises(RuntimeError, match="non-empty CSV metadata file"):
+        build_simple_index.main()
