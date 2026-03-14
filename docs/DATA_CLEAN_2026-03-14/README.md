@@ -56,6 +56,25 @@ GROUP BY version, filename
 ORDER BY downloads_30d DESC, version, filename;
 ```
 
+[`script_job_81da1603e50b330166a12ee99b59069c_0.csv`](./script_job_81da1603e50b330166a12ee99b59069c_0.csv)
+
+```sql
+DECLARE package_name STRING DEFAULT 'tzfpy';
+DECLARE end_date DATE DEFAULT DATE '2026-03-13';
+DECLARE start_date DATE DEFAULT DATE_SUB(end_date, INTERVAL 30 DAY);
+
+SELECT
+  COALESCE(details.installer.name, 'unknown') AS installer,
+  file.version AS version,
+  file.filename AS filename,
+  COUNT(*) AS downloads_30d
+FROM `bigquery-public-data.pypi.file_downloads`
+WHERE file.project = package_name
+  AND DATE(timestamp) BETWEEN start_date AND end_date
+GROUP BY installer, version, filename
+ORDER BY installer, downloads_30d DESC, version, filename;
+```
+
 [`pypi_all_files.csv`](./pypi_all_files.csv), all files in PyPI.
 
 [`cleanup_ranked_list.csv`](./cleanup_ranked_list.csv), ranked list of files.
