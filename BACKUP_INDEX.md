@@ -1,3 +1,6 @@
+# Install via backup index
+
+## Usage
 
 For a self-hosted index built from GitHub Release distribution assets:
 
@@ -13,7 +16,7 @@ uv pip install tzfpy \
   --extra-index-url https://pypi.org/simple
 ```
 
-Or
+If using uv, you can also configure the index in `pyproject.toml`:
 
 ```toml
 # pyproject.toml
@@ -26,11 +29,9 @@ explicit = true
 tzfpy = { index = "tzfpy-mirror" }
 ```
 
-Raw distribution metadata is stored in:
+Raw distribution metadata is stored in: [docs/release_wheels.csv](docs/release_wheels.csv).
 
-```text
-docs/release_wheels.csv
-```
+## Development
 
 Update metadata and regenerate index (incremental mode):
 
@@ -38,7 +39,7 @@ Update metadata and regenerate index (incremental mode):
 uv run scripts/build_simple_index.py \
   --repository ringsaturn/tzfpy \
   --package tzfpy \
-  --min-tag v1.0.0 \
+  --min-tag v0.11.0 \
   --csv docs/release_wheels.csv \
   --output site
 ```
@@ -49,7 +50,7 @@ Force a full rebuild:
 uv run scripts/build_simple_index.py \
   --repository ringsaturn/tzfpy \
   --package tzfpy \
-  --min-tag v1.0.0 \
+  --min-tag v0.11.0 \
   --csv docs/release_wheels.csv \
   --full-fetch \
   --output site
