@@ -22,6 +22,8 @@ def version_sort_key(version: str) -> list[tuple[int, object]]:
 
 def load_downloads(path: Path) -> dict[str, int]:
     data: dict[str, int] = {}
+    if not path.exists():
+        return data
     with path.open(newline="", encoding="utf-8") as file:
         for row in csv.DictReader(file):
             data[row["filename"]] = int(row["downloads_30d"])
@@ -42,6 +44,21 @@ def load_installer_downloads(path: Path) -> dict[str, dict[str, int]]:
                 data[filename] = {}
             data[filename][installer] = data[filename].get(installer, 0) + downloads
     return data
+
+
+def aggregate_from_installer_downloads(
+    downloads_by_installer: dict[str, dict[str, int]],
+) -> tuple[dict[str, int], dict[str, int], dict[str, int]]:
+    downloads_all: dict[str, int] = {}
+    downloads_pip: dict[str, int] = {}
+    downloads_uv: dict[str, int] = {}
+
+    for filename, installer_map in downloads_by_installer.items():
+        downloads_all[filename] = sum(installer_map.values())
+        downloads_pip[filename] = installer_map.get("pip", 0)
+        downloads_uv[filename] = installer_map.get("uv", 0)
+
+    return downloads_all, downloads_pip, downloads_uv
 
 
 def detect_installer_file(root: Path) -> Path | None:
@@ -117,17 +134,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--downloads-all",
         default=str(root / "script_job_5c3854808754dd3102806a757c45cf6f_0.csv"),
-        help="Path to 30d all-installer download CSV.",
+        help="Path to 30d all-installer download CSV, legacy fallback.",
     )
     parser.add_argument(
         "--downloads-pip",
         default=str(root / "script_job_6a7f35f7e60dc30855f818b6187f836a_0.csv"),
-        help="Path to 30d pip download CSV.",
+        help="Path to 30d pip download CSV, legacy fallback.",
     )
     parser.add_argument(
         "--downloads-uv",
         default=str(root / "script_job_b7dcfb358f517da711bbf729a784c521_0.csv"),
-        help="Path to 30d uv download CSV.",
+        help="Path to 30d uv download CSV, legacy fallback.",
     )
     parser.add_argument(
         "--output",
@@ -145,13 +162,26 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     pypi_files_path = Path(args.pypi_files)
-    downloads_all = load_downloads(Path(args.downloads_all))
-    downloads_pip = load_downloads(Path(args.downloads_pip))
-    downloads_uv = load_downloads(Path(args.downloads_uv))
-    installer_file = Path(args.downloads_installer_file) if args.downloads_installer_file else detect_installer_file(pypi_files_path.parent)
+    downloads_all: dict[str, int]
+    downloads_pip: dict[str, int]
+    downloads_uv: dict[str, int]
+    installer_file = (
+        Path(args.downloads_installer_file)
+        if args.downloads_installer_file
+        else detect_installer_file(pypi_files_path.parent)
+    )
     downloads_by_installer = (
         load_installer_downloads(installer_file) if installer_file else {}
     )
+
+    if downloads_by_installer:
+        downloads_all, downloads_pip, downloads_uv = aggregate_from_installer_downloads(
+            downloads_by_installer
+        )
+    else:
+        downloads_all = load_downloads(Path(args.downloads_all))
+        downloads_pip = load_downloads(Path(args.downloads_pip))
+        downloads_uv = load_downloads(Path(args.downloads_uv))
 
     installer_names: list[str] = sorted(
         {
