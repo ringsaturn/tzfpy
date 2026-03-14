@@ -336,10 +336,43 @@ jobs:
       attestations: write
     steps:
       - uses: actions/checkout@v6
+      - name: Download linux wheels (x86_64, aarch64)
+        uses: actions/download-artifact@v8
+        with:
+          name: wheels-linux-x86_64
+          path: dist
       - uses: actions/download-artifact@v8
         with:
+          name: wheels-linux-aarch64
           path: dist
-          merge-multiple: true
+      - name: Download musllinux wheels (x86_64, aarch64)
+        uses: actions/download-artifact@v8
+        with:
+          name: wheels-musllinux-x86_64
+          path: dist
+      - uses: actions/download-artifact@v8
+        with:
+          name: wheels-musllinux-aarch64
+          path: dist
+      - name: Download windows wheel (x64)
+        uses: actions/download-artifact@v8
+        with:
+          name: wheels-windows-x64
+          path: dist
+      - name: Download macOS wheels (x86_64, aarch64)
+        uses: actions/download-artifact@v8
+        with:
+          name: wheels-macos-x86_64
+          path: dist
+      - uses: actions/download-artifact@v8
+        with:
+          name: wheels-macos-aarch64
+          path: dist
+      - name: Download sdist
+        uses: actions/download-artifact@v8
+        with:
+          name: wheels-sdist
+          path: dist
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v4
         with:
