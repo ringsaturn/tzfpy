@@ -9,6 +9,7 @@
 
 ## Build, Test, and Development Commands
 - `make sync` installs and compiles dependencies with `uv`.
+- Use `uv run` for Python commands in this repository, for example `uv run python <script.py>`.
 - `make fmt` runs import sorting and formatting via Ruff.
 - `make lint` checks Ruff lint and formatting compliance.
 - `make test` runs lint plus `pytest -v .`.
