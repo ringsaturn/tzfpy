@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a PEP 503 simple index from GitHub Release wheel assets."""
+"""Build a PEP 503 simple index from GitHub Release distribution assets."""
 
 from __future__ import annotations
 
@@ -29,6 +29,8 @@ CSV_FIELDNAMES = [
     "uploader_login",
 ]
 
+SUPPORTED_DIST_SUFFIXES = (".whl", ".tar.gz")
+
 
 def clean_text(value: object) -> str:
     if value is None:
@@ -41,6 +43,10 @@ def clean_text(value: object) -> str:
 
 def normalize_name(name: str) -> str:
     return re.sub(r"[-_.]+", "-", name).lower()
+
+
+def is_supported_distribution_file(filename: str) -> bool:
+    return filename.endswith(SUPPORTED_DIST_SUFFIXES)
 
 
 @dataclass(frozen=True)
@@ -215,7 +221,7 @@ def collect_wheels(
         for asset in release.get("assets", []):
             wheel = WheelAsset.from_release_asset(release=release, asset=asset)
 
-            if not wheel.name.endswith(".whl"):
+            if not is_supported_distribution_file(wheel.name):
                 continue
             if not wheel.url:
                 continue
@@ -343,7 +349,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--package",
         required=True,
-        help="Package name used in wheel filenames, for example tzfpy.",
+        help="Package name used in distribution filenames, for example tzfpy.",
     )
     parser.add_argument(
         "--output",
@@ -358,17 +364,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--min-tag",
         default="",
-        help="Only include wheels from releases published at or after this exact tag, for example v1.0.0.",
+        help="Only include distribution files from releases published at or after this exact tag, for example v1.0.0.",
     )
     parser.add_argument(
         "--uploader-login",
         default="",
-        help="If set, only include wheel assets uploaded by this GitHub login.",
+        help="If set, only include distribution assets uploaded by this GitHub login.",
     )
     parser.add_argument(
         "--csv",
         default="",
-        help="Optional CSV file path for raw wheel metadata cache.",
+        help="Optional CSV file path for raw distribution metadata cache.",
     )
     parser.add_argument(
         "--csv-name",
@@ -457,15 +463,15 @@ def main() -> int:
 
     print(f"Generated index for {args.package} in {output_dir}")
     print(f"Releases fetched this run: {len(releases)}")
-    print(f"Cached wheels loaded: {len(existing_wheels)}")
-    print(f"New wheels fetched this run: {len(fetched_wheels)}")
+    print(f"Cached assets loaded: {len(existing_wheels)}")
+    print(f"New assets fetched this run: {len(fetched_wheels)}")
     if args.min_tag:
         print(f"Minimum release tag: {args.min_tag} ({min_published_at})")
     if args.uploader_login:
         print(f"Uploader filter: {args.uploader_login}")
     if incremental_boundary:
         print(f"Incremental boundary: {incremental_boundary}")
-    print(f"Wheels indexed: {len(filtered_wheels)}")
+    print(f"Distribution files indexed: {len(filtered_wheels)}")
     return 0
 
 

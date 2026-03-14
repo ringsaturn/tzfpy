@@ -1,5 +1,5 @@
 
-For a self-hosted index built from GitHub Release wheel assets:
+For a self-hosted index built from GitHub Release distribution assets:
 
 ```bash
 # For pip
@@ -26,7 +26,7 @@ explicit = true
 tzfpy = { index = "tzfpy-mirror" }
 ```
 
-Raw wheel metadata is stored in:
+Raw distribution metadata is stored in:
 
 ```text
 docs/release_wheels.csv

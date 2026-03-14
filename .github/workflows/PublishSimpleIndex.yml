@@ -1,6 +1,9 @@
 name: Publish Simple Index
 
 on:
+  push:
+    paths:
+      - docs/release_wheels.csv
   release:
     types:
       - published
