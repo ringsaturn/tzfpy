@@ -33,6 +33,12 @@ CSV_FIELDNAMES = [
 ]
 
 SUPPORTED_DIST_SUFFIXES = (".whl", ".tar.gz")
+RELEASE_TAG_PATTERN = re.compile(
+    r"^v?(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)"
+    r"(?:(?:-?(?P<stage>alpha|beta|rc)[\.-]?(?P<stage_num>\d*)?)?)?$",
+    re.IGNORECASE,
+)
+RELEASE_STAGE_RANK = {"alpha": 0, "beta": 1, "rc": 2, "": 3}
 
 
 def clean_text(value: object) -> str:
@@ -50,6 +56,34 @@ def normalize_name(name: str) -> str:
 
 def is_supported_distribution_file(filename: str) -> bool:
     return filename.endswith(SUPPORTED_DIST_SUFFIXES)
+
+
+def parse_release_tag_key(tag: str) -> tuple[int, int, int, int, int] | None:
+    tag_text = clean_text(tag)
+    if not tag_text:
+        return None
+    match = RELEASE_TAG_PATTERN.fullmatch(tag_text)
+    if not match:
+        return None
+
+    major = int(match.group("major"))
+    minor = int(match.group("minor"))
+    patch = int(match.group("patch"))
+    stage = clean_text(match.group("stage")).lower()
+    stage_rank = RELEASE_STAGE_RANK.get(stage, -1)
+    if stage_rank < 0:
+        return None
+    stage_num_text = clean_text(match.group("stage_num"))
+    stage_num = int(stage_num_text) if stage_num_text else 0
+    return (major, minor, patch, stage_rank, stage_num)
+
+
+def is_release_tag_at_or_after(release_tag: str, min_release_tag: str) -> bool:
+    release_key = parse_release_tag_key(release_tag)
+    min_key = parse_release_tag_key(min_release_tag)
+    if release_key is not None and min_key is not None:
+        return release_key >= min_key
+    return clean_text(release_tag) >= clean_text(min_release_tag)
 
 
 @dataclass(frozen=True)
@@ -79,14 +113,13 @@ class WheelAsset:
     def matches_filters(
         self,
         package_name: str,
-        min_published_at: str | None = None,
+        min_release_tag: str | None = None,
         uploader_login: str | None = None,
     ) -> bool:
         if not self.is_for_package(package_name):
             return False
-        if min_published_at and (
-            not self.release_published_at
-            or self.release_published_at < min_published_at
+        if min_release_tag and not is_release_tag_at_or_after(
+            self.release_tag, min_release_tag
         ):
             return False
         if uploader_login and self.uploader_login != uploader_login:
@@ -305,7 +338,7 @@ def fetch_releases(
 def collect_wheels(
     releases: list[dict],
     package_name: str,
-    min_published_at: str | None = None,
+    min_release_tag: str | None = None,
     uploader_login: str | None = None,
     tag_commit_dates: dict[str, str] | None = None,
 ) -> dict[str, WheelAsset]:
@@ -315,7 +348,6 @@ def collect_wheels(
     for release in releases:
         if release.get("draft", False):
             continue
-        release_published_at = str(release.get("published_at", "")).strip()
         release_tag = clean_text(release.get("tag_name", ""))
         release_commit_at = normalized_tag_commit_dates.get(release_tag, "")
         for asset in release.get("assets", []):
@@ -329,13 +361,9 @@ def collect_wheels(
                 continue
             if not wheel.url:
                 continue
-            if min_published_at and (
-                not release_published_at or release_published_at < min_published_at
-            ):
-                continue
             if not wheel.matches_filters(
                 package_name=package_name,
-                min_published_at=min_published_at,
+                min_release_tag=min_release_tag,
                 uploader_login=uploader_login,
             ):
                 continue
@@ -474,8 +502,8 @@ def parse_args() -> argparse.Namespace:
         "--min-tag",
         default="",
         help=(
-            "Only include distribution files from releases published at or after a "
-            "timestamp resolved from this tag, for example v1.0.0."
+            "Only include distribution files from releases at or after this release "
+            "tag version, for example v1.0.0."
         ),
     )
     parser.add_argument(
@@ -511,14 +539,7 @@ def main() -> int:
     if csv_path:
         existing_wheels = load_wheels_csv(csv_path)
 
-    min_published_at: str | None = None
-    min_published_at_source = ""
-    if args.min_tag:
-        min_published_at, min_published_at_source = resolve_min_published_at(
-            repository=args.repository,
-            tag=args.min_tag,
-            token=args.token or None,
-        )
+    min_release_tag = clean_text(args.min_tag) or None
 
     latest_cached_published_at = ""
     if existing_wheels:
@@ -554,7 +575,7 @@ def main() -> int:
     fetched_wheels = collect_wheels(
         releases=releases,
         package_name=args.package,
-        min_published_at=min_published_at,
+        min_release_tag=min_release_tag,
         uploader_login=args.uploader_login or None,
         tag_commit_dates=tag_commit_dates,
     )
@@ -576,7 +597,7 @@ def main() -> int:
         for wheel in merged_wheels.values()
         if wheel.matches_filters(
             package_name=args.package,
-            min_published_at=min_published_at,
+            min_release_tag=min_release_tag,
             uploader_login=args.uploader_login or None,
         )
     ]
@@ -595,11 +616,8 @@ def main() -> int:
     print(f"Releases fetched this run: {len(releases)}")
     print(f"Cached assets loaded: {len(existing_wheels)}")
     print(f"New assets fetched this run: {len(fetched_wheels)}")
-    if args.min_tag:
-        print(
-            "Minimum release tag: "
-            f"{args.min_tag} ({min_published_at}, source={min_published_at_source})"
-        )
+    if min_release_tag:
+        print(f"Minimum release tag: {min_release_tag}")
     if args.uploader_login:
         print(f"Uploader filter: {args.uploader_login}")
     if incremental_boundary:
