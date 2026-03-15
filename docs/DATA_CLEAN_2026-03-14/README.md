@@ -25,11 +25,6 @@ ORDER BY installer, downloads_30d DESC, version, filename;
 - `downloads_pip_30d` from installer = `pip`
 - `downloads_uv_30d` from installer = `uv`
 
-Legacy files below are optional fallback inputs:
-- [`script_job_5c3854808754dd3102806a757c45cf6f_0.csv`](./script_job_5c3854808754dd3102806a757c45cf6f_0.csv)
-- [`script_job_6a7f35f7e60dc30855f818b6187f836a_0.csv`](./script_job_6a7f35f7e60dc30855f818b6187f836a_0.csv)
-- [`script_job_b7dcfb358f517da711bbf729a784c521_0.csv`](./script_job_b7dcfb358f517da711bbf729a784c521_0.csv)
-
 [`pypi_all_files.csv`](./pypi_all_files.csv), all files in PyPI.
 
 [`cleanup_ranked_list.csv`](./cleanup_ranked_list.csv), ranked list of files.
