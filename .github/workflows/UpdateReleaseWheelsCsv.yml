@@ -9,7 +9,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  group: update-release-wheels-csv-${{ github.ref || github.run_id }}
   cancel-in-progress: false
 
 jobs:
