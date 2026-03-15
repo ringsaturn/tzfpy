@@ -1,0 +1,85 @@
+name: Update Release Wheels CSV
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  update-release-wheels-csv:
+    runs-on: ubuntu-latest
+    outputs:
+      csv_changed: ${{ steps.commit_csv.outputs.csv_changed }}
+      default_branch: ${{ steps.repo_meta.outputs.default_branch }}
+    steps:
+      - name: Resolve repository defaults
+        id: repo_meta
+        run: |
+          set -euo pipefail
+          echo "default_branch=${{ github.event.repository.default_branch || 'main' }}" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.repo_meta.outputs.default_branch }}
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+      - name: Update release wheels csv
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          uv run scripts/build_simple_index.py \
+            --repository "$GITHUB_REPOSITORY" \
+            --package tzfpy \
+            --min-tag v0.6.0 \
+            --csv docs/release_wheels.csv \
+            --output /tmp/site
+      - name: Commit and push csv updates
+        id: commit_csv
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- docs/release_wheels.csv; then
+            echo "No CSV changes, skip commit."
+            echo "csv_changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/release_wheels.csv
+          git commit -m "Update release wheels csv"
+          git push origin "HEAD:${{ steps.repo_meta.outputs.default_branch }}"
+          echo "csv_changed=true" >> "$GITHUB_OUTPUT"
+
+  trigger-publish-simple-index:
+    runs-on: ubuntu-latest
+    needs: update-release-wheels-csv
+    if: ${{ needs.update-release-wheels-csv.outputs.csv_changed == 'true' }}
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Trigger Publish Simple Index on default branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BRANCH: ${{ needs.update-release-wheels-csv.outputs.default_branch }}
+        run: |
+          set -euo pipefail
+          curl -fsSL \
+            -X POST \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/PublishSimpleIndex.yml/dispatches" \
+            -d "{\"ref\":\"${DEFAULT_BRANCH}\"}"

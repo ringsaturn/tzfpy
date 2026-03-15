@@ -2,12 +2,11 @@ name: Publish Simple Index
 
 on:
   push:
+    branches:
+      - main
     paths:
       - docs/release_wheels.csv
-      - .github/workflows/PublishSimpleIndex.yml"
-  release:
-    types:
-      - published
+      - .github/workflows/PublishSimpleIndex.yml
   workflow_dispatch:
 
 permissions:

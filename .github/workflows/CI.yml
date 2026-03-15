@@ -432,3 +432,11 @@ jobs:
           files: ${{ steps.collect-assets.outputs.files }}
           generate_release_notes: true
           prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') }}
+
+  update-release-wheels-csv:
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    needs: upload-to-release
+    permissions:
+      contents: write
+      actions: write
+    uses: ./.github/workflows/UpdateReleaseWheelsCsv.yml
