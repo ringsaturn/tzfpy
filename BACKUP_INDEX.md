@@ -1,5 +1,13 @@
 # Install via backup index
 
+To reduce PyPI storage size([`ringsaturn/tzfpy#117`][issue_117]), many history
+whls, some platform specific whls will no nolonger be uploaded to PyPI. Instead,
+a backup index based on GitHub Release distribution assets is maintained at
+[this][index_url].
+
+[issue_117]: https://github.com/ringsaturn/tzfpy/issues/117
+[index_url]: https://ringsaturn.github.io/tzfpy/simple/
+
 ## Usage
 
 For a self-hosted index built from GitHub Release distribution assets:
@@ -29,9 +37,10 @@ explicit = true
 tzfpy = { index = "tzfpy-mirror" }
 ```
 
-Raw distribution metadata is stored in: [docs/release_wheels.csv](docs/release_wheels.csv).
-
 ## Development
+
+Raw distribution metadata is stored in:
+[docs/release_wheels.csv](docs/release_wheels.csv).
 
 Update metadata and regenerate index (incremental mode):
 
