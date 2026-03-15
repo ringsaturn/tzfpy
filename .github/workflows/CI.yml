@@ -388,7 +388,6 @@ jobs:
             --trusted-publishing always \
             --publish-url https://test.pypi.org/legacy/ \
             --check-url https://test.pypi.org/simple/ \
-            --skip-existing \
             dist/*
 
       - name: Publish to PyPI
@@ -396,7 +395,7 @@ jobs:
         run: |
           uv publish \
             --trusted-publishing always \
-            --skip-existing \
+            --check-url https://pypi.org/simple/ \
             dist/*
 
   upload-to-release:
