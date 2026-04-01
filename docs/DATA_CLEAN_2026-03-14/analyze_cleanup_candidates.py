@@ -50,7 +50,9 @@ def load_installer_downloads(path: Path) -> dict[str, dict[str, int]]:
 
 def aggregate_from_installer_downloads(
     downloads_by_installer: dict[str, dict[str, int]],
-) -> tuple[dict[str, int], dict[str, int], dict[str, int], dict[str, int], dict[str, int]]:
+) -> tuple[
+    dict[str, int], dict[str, int], dict[str, int], dict[str, int], dict[str, int]
+]:
     downloads_all: dict[str, int] = {}
     downloads_pip: dict[str, int] = {}
     downloads_uv: dict[str, int] = {}
@@ -119,7 +121,9 @@ def parse_filename(filename: str) -> tuple[str, str, str, str, str]:
 
     if filename.endswith(".whl.metadata"):
         base = filename[: -len(".metadata")]
-        file_type, python_tag, abi_tag, platform_tag, platform_family = parse_filename(base)
+        file_type, python_tag, abi_tag, platform_tag, platform_family = parse_filename(
+            base
+        )
         return "whl_metadata", python_tag, abi_tag, platform_tag, platform_family
 
     return "other", "", "", "", "other"
@@ -230,7 +234,9 @@ def main() -> int:
         for row in csv.DictReader(file):
             filename = row["filename"]
             version = row["version"]
-            file_type, python_tag, abi_tag, platform_tag, platform_family = parse_filename(filename)
+            file_type, python_tag, abi_tag, platform_tag, platform_family = (
+                parse_filename(filename)
+            )
 
             d_all = downloads_all.get(filename, 0)
             d_pip = downloads_pip.get(filename, 0)

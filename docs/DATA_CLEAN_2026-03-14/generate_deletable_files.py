@@ -172,13 +172,15 @@ def main() -> int:
         for row in version_rows:
             if whole_version_delete or is_file_deletable(row):
                 item = dict(row)
-                item["whole_version_delete"] = "true" if whole_version_delete else "false"
-                item["delete_reason"] = (
-                    reason
-                    if whole_version_delete
-                    else "file_effective_downloads_lt_10"
+                item["whole_version_delete"] = (
+                    "true" if whole_version_delete else "false"
                 )
-                item["version_effective_downloads_30d"] = str(version_effective_downloads)
+                item["delete_reason"] = (
+                    reason if whole_version_delete else "file_effective_downloads_lt_10"
+                )
+                item["version_effective_downloads_30d"] = str(
+                    version_effective_downloads
+                )
                 deletable.append(item)
 
     deletable.sort(
@@ -239,7 +241,9 @@ def main() -> int:
                 "whole_version_delete": "true"
                 if whole_version_delete_flags.get(version, False)
                 else "false",
-                "delete_reason": version_delete_reasons.get(version, "partial_file_cleanup"),
+                "delete_reason": version_delete_reasons.get(
+                    version, "partial_file_cleanup"
+                ),
                 "version_effective_downloads_30d": version_effective_downloads,
                 "total_size_bytes": total_bytes,
                 "total_size_mb": f"{total_mb:.3f}",
@@ -294,11 +298,15 @@ def main() -> int:
         )
         deletable_filenames = {row["filename"] for row in version_rows}
         keep_rows = [
-            row for row in all_version_rows if row["filename"] not in deletable_filenames
+            row
+            for row in all_version_rows
+            if row["filename"] not in deletable_filenames
         ]
         whole_version_delete = str(summary.get("whole_version_delete")) == "true"
         reason = str(summary.get("delete_reason", "partial_file_cleanup"))
-        version_effective_downloads = int(summary.get("version_effective_downloads_30d", 0))
+        version_effective_downloads = int(
+            summary.get("version_effective_downloads_30d", 0)
+        )
         file_count = int(summary["file_count"])
         total_file_count = int(summary.get("total_file_count", file_count))
         todo_lines.append(
