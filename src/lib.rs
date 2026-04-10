@@ -11,11 +11,6 @@ lazy_static! {
 }
 
 fn build_finder_from_env() -> DefaultFinder {
-    // print env value
-    println!(
-        "TZFPY_EXP_INDEX: {:?}",
-        env::var("_TZFPY_EXP_INDEX").ok().as_deref()
-    );
     match env::var("_TZFPY_EXP_INDEX").ok().as_deref() {
         Some("rtree") => DefaultFinder::new_with_index_options(PolygonBuildOptions {
             enable_rtree: true,

@@ -18,7 +18,7 @@ name = "tzfpy"
 crate-type = ["cdylib"]
 
 [dependencies]
-# geometry-rs = { git = "https://github.com/ringsaturn/geometry-rs", branch = "rtree-index" }
+geometry-rs = { git = "https://github.com/ringsaturn/geometry-rs", branch = "rtree-index" }
 lazy_static = "1.5.0"
 pyo3 = {version = "0.28.2", features = ["extension-module", "generate-import-lib", "abi3-py310"]}
 

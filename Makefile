@@ -50,21 +50,18 @@ all: lock sync
 	make test
 
 test: lint build-ext
-	uv run pytest -v -m "not benchmark" .
+	uv run --no-sync pytest -v -m "not benchmark" .
 
 test-all: lint build-ext
-	uv run pytest -v .
+	uv run --no-sync pytest -v .
 
-test-bench: build-ext
-	uv run pytest -q -s tests/test_bench.py
-
-test-bench-index: build-ext
+bench: build-ext
 	@echo "Benchmark with _TZFPY_EXP_INDEX unset"
-	@uv run pytest -q -s tests/test_bench.py
+	@uv run --no-sync pytest -q -s tests/test_bench.py
 	@echo "Benchmark with _TZFPY_EXP_INDEX=rtree"
-	@_TZFPY_EXP_INDEX=rtree uv run pytest -q -s tests/test_bench.py
+	@_TZFPY_EXP_INDEX=rtree uv run --no-sync pytest -q -s tests/test_bench.py
 	@echo "Benchmark with _TZFPY_EXP_INDEX=quadtree"
-	@_TZFPY_EXP_INDEX=quadtree uv run pytest -q -s tests/test_bench.py
+	@_TZFPY_EXP_INDEX=quadtree uv run --no-sync pytest -q -s tests/test_bench.py
 
 licences:
 	cargo-bundle-licenses --format yaml --output THIRDPARTY.yml

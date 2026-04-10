@@ -666,6 +666,7 @@ dependencies = [
 name = "tzfpy"
 version = "1.1.4-alpha.4"
 dependencies = [
+ "geometry-rs",
  "lazy_static",
  "pyo3",
  "tzf-rs",
