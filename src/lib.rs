@@ -1,10 +1,9 @@
 // #![allow(unused)]
 
-use geometry_rs::PolygonBuildOptions;
 use lazy_static::lazy_static;
 use pyo3::prelude::*;
 use std::env;
-use tzf_rs::DefaultFinder;
+use tzf_rs::{DefaultFinder, IndexMode};
 
 lazy_static! {
     static ref FINDER: DefaultFinder = build_finder_from_env();
@@ -12,21 +11,9 @@ lazy_static! {
 
 fn build_finder_from_env() -> DefaultFinder {
     match env::var("_TZFPY_EXP_INDEX").ok().as_deref() {
-        Some("rtree") => DefaultFinder::new_with_index_options(PolygonBuildOptions {
-            enable_rtree: true,
-            enable_compressed_quad: false,
-            rtree_min_segments: 64,
-        }),
-        Some("quadtree") => DefaultFinder::new_with_index_options(PolygonBuildOptions {
-            enable_rtree: false,
-            enable_compressed_quad: true,
-            rtree_min_segments: 64,
-        }),
-        _ => DefaultFinder::new_with_index_options(PolygonBuildOptions {
-            enable_rtree: false,
-            enable_compressed_quad: false,
-            rtree_min_segments: 64,
-        }),
+        Some("rtree") => DefaultFinder::new_with_index(IndexMode::RTree),
+        Some("quadtree") => DefaultFinder::new_with_index(IndexMode::QuadTree),
+        _ => DefaultFinder::new(),
     }
 }
 
