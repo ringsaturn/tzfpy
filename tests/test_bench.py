@@ -8,7 +8,7 @@ from tzfpy import get_tz
 
 EXP_INDEX = os.getenv("_TZFPY_EXP_INDEX")
 DATASET_SEED = 20260410
-DATASET_SIZE = 8192
+DATASET_SIZE = 16384
 
 _ALL_CITIES = list(all_cities())
 _RNG = random.Random(DATASET_SEED)
