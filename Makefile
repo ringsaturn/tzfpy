@@ -2,21 +2,28 @@
 export PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1
 export CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_DEBUG=true
 
-.PHONY: help build fmt lint sync lock upgrade all test examples
+.PHONY: help build build-ext fmt lint sync lock upgrade all test test-all test-bench test-bench-index examples
 
 help:
 	@echo "Available commands:"
 	@echo "  build    - Build the project using uv"
+	@echo "  build-ext - Rebuild and install local Rust extension into venv"
 	@echo "  fmt      - Format the code using ruff"
 	@echo "  lint     - Lint the code using ruff"
 	@echo "  sync     - Sync and compile the project using uv"
 	@echo "  lock     - Lock dependencies using uv"
 	@echo "  upgrade  - Upgrade dependencies using uv"
 	@echo "  all      - Run lock, sync, fmt, lint, and test"
-	@echo "  test     - Run tests using pytest"
+	@echo "  test     - Run non-benchmark tests"
+	@echo "  test-all - Run all tests including benchmark"
+	@echo "  test-bench - Run benchmark test with current env"
+	@echo "  test-bench-index - Run benchmark in none/rtree/quadtree modes"
 
 build:
 	uv build
+
+build-ext:
+	uv run maturin develop --release
 
 fmt:
 	uv run ruff check --select I --fix .
@@ -40,10 +47,24 @@ upgrade:
 all: lock sync
 	make fmt
 	make lint
-	make test	
+	make test
 
-test: lint
+test: lint build-ext
+	uv run pytest -v -m "not benchmark" .
+
+test-all: lint build-ext
 	uv run pytest -v .
+
+test-bench: build-ext
+	uv run pytest -q -s tests/test_bench.py
+
+test-bench-index: build-ext
+	@echo "Benchmark with _TZFPY_EXP_INDEX unset"
+	@uv run pytest -q -s tests/test_bench.py
+	@echo "Benchmark with _TZFPY_EXP_INDEX=rtree"
+	@_TZFPY_EXP_INDEX=rtree uv run pytest -q -s tests/test_bench.py
+	@echo "Benchmark with _TZFPY_EXP_INDEX=quadtree"
+	@_TZFPY_EXP_INDEX=quadtree uv run pytest -q -s tests/test_bench.py
 
 licences:
 	cargo-bundle-licenses --format yaml --output THIRDPARTY.yml

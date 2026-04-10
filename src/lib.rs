@@ -1,11 +1,38 @@
 // #![allow(unused)]
 
+use geometry_rs::PolygonBuildOptions;
 use lazy_static::lazy_static;
 use pyo3::prelude::*;
-use tzf_rs::{DefaultFinder};
+use std::env;
+use tzf_rs::DefaultFinder;
 
 lazy_static! {
-    static ref FINDER: DefaultFinder = DefaultFinder::default();
+    static ref FINDER: DefaultFinder = build_finder_from_env();
+}
+
+fn build_finder_from_env() -> DefaultFinder {
+    // print env value
+    println!(
+        "TZFPY_EXP_INDEX: {:?}",
+        env::var("_TZFPY_EXP_INDEX").ok().as_deref()
+    );
+    match env::var("_TZFPY_EXP_INDEX").ok().as_deref() {
+        Some("rtree") => DefaultFinder::new_with_index_options(PolygonBuildOptions {
+            enable_rtree: true,
+            enable_compressed_quad: false,
+            rtree_min_segments: 64,
+        }),
+        Some("quadtree") => DefaultFinder::new_with_index_options(PolygonBuildOptions {
+            enable_rtree: false,
+            enable_compressed_quad: true,
+            rtree_min_segments: 64,
+        }),
+        _ => DefaultFinder::new_with_index_options(PolygonBuildOptions {
+            enable_rtree: false,
+            enable_compressed_quad: false,
+            rtree_min_segments: 64,
+        }),
+    }
 }
 
 #[pyfunction]
@@ -30,12 +57,20 @@ pub fn data_version() -> PyResult<String> {
 
 #[pyfunction]
 pub fn get_tz_polygon_geojson(timezone_name: &str) -> PyResult<String> {
-    Ok(FINDER.finder.get_tz_geojson(timezone_name).unwrap().to_string())
+    Ok(FINDER
+        .finder
+        .get_tz_geojson(timezone_name)
+        .unwrap()
+        .to_string())
 }
 
 #[pyfunction]
 pub fn get_tz_index_geojson(timezone_name: &str) -> PyResult<String> {
-    Ok(FINDER.fuzzy_finder.get_tz_geojson(timezone_name).unwrap().to_string())
+    Ok(FINDER
+        .fuzzy_finder
+        .get_tz_geojson(timezone_name)
+        .unwrap()
+        .to_string())
 }
 
 #[pymodule]
