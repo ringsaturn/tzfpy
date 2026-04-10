@@ -6,6 +6,7 @@ from pytest import mark
 
 from tzfpy import get_tz
 
+# To make test data consistent across runs, use a fixed seed and a fixed dataset size.
 EXP_INDEX = os.getenv("_TZFPY_EXP_INDEX")
 DATASET_SEED = 20260410
 DATASET_SIZE = 16384
