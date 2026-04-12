@@ -8,17 +8,17 @@ BENCHMARK_ARGS=--benchmark-warmup=on --benchmark-warmup-iterations=500 --benchma
 
 help:
 	@echo "Available commands:"
-	@echo "  build    - Build the project using uv"
-	@echo "  build-ext - Rebuild and install local Rust extension into venv"
-	@echo "  fmt      - Format the code using ruff"
-	@echo "  lint     - Lint the code using ruff"
-	@echo "  sync     - Sync and compile the project using uv"
-	@echo "  lock     - Lock dependencies using uv"
-	@echo "  upgrade  - Upgrade dependencies using uv"
-	@echo "  all      - Run lock, sync, fmt, lint, and test"
-	@echo "  test     - Run non-benchmark tests"
-	@echo "  test-all - Run all tests including benchmark"
-	@echo "  test-bench - Run benchmark test with current env"
+	@echo "  build            - Build the project using uv"
+	@echo "  build-ext        - Rebuild and install local Rust extension into venv"
+	@echo "  fmt              - Format the code using ruff"
+	@echo "  lint             - Lint the code using ruff"
+	@echo "  sync             - Sync and compile the project using uv"
+	@echo "  lock             - Lock dependencies using uv"
+	@echo "  upgrade          - Upgrade dependencies using uv"
+	@echo "  all              - Run lock, sync, fmt, lint, and test"
+	@echo "  test             - Run non-benchmark tests"
+	@echo "  test-all         - Run all tests including benchmark"
+	@echo "  test-bench       - Run benchmark test with current env"
 	@echo "  test-bench-index - Run benchmark in default/disable-y-stripes modes"
 
 build:

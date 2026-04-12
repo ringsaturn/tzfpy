@@ -210,14 +210,18 @@ Install:
 
 ```console
 Available commands:
-  build    - Build the project using uv
-  fmt      - Format the code using ruff
-  lint     - Lint the code using ruff
-  sync     - Sync and compile the project using uv
-  lock     - Lock dependencies using uv
-  upgrade  - Upgrade dependencies using uv
-  all      - Run lock, sync, fmt, lint, and test
-  test     - Run tests using pytest
+  build            - Build the project using uv
+  build-ext        - Rebuild and install local Rust extension into venv
+  fmt              - Format the code using ruff
+  lint             - Lint the code using ruff
+  sync             - Sync and compile the project using uv
+  lock             - Lock dependencies using uv
+  upgrade          - Upgrade dependencies using uv
+  all              - Run lock, sync, fmt, lint, and test
+  test             - Run non-benchmark tests
+  test-all         - Run all tests including benchmark
+  test-bench       - Run benchmark test with current env
+  test-bench-index - Run benchmark in default/disable-y-stripes modes
 ```
 
 ```bash
