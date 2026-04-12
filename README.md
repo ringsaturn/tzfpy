@@ -59,6 +59,11 @@ by default. If you need to disable `y_stripes`, use this environment variable:
 export _TZFPY_DISABLE_Y_STRIPES=1
 ```
 
+The index requires about 40MB memory, but can speed up query missing from
+pre-index, especially around borders.
+
+### Export to GeoJSON
+
 For data visualization, you can get timezone polygon GeoJSON data from tzfpy:
 
 ```python
