@@ -190,8 +190,7 @@ checksum = "d9c4f5dac5e15c24eb999c26181a6ca40b39fe946cbe4c263c7209467bc83af2"
 [[package]]
 name = "geometry-rs"
 version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "89bc98687a1b725786e817765b99ae621e11634e4a0141ac550bb24c63afcc8b"
+source = "git+https://github.com/ringsaturn/geometry-rs?branch=main#25b0bbce71fe0f7c0be8e92a286c114f9e8e5242"
 dependencies = [
  "rtree_rs",
 ]
@@ -650,7 +649,7 @@ checksum = "437e15d8465333d008c53bcca87dc0d1be7e32030ae6eca25f180f2b90e1882e"
 [[package]]
 name = "tzf-rs"
 version = "1.2.0"
-source = "git+https://github.com/ringsaturn/tzf-rs?branch=main#9f4c3dd4e94036647db866125bf51790ca4c8bd0"
+source = "git+https://github.com/ringsaturn/tzf-rs?branch=main#342955a68cc2b157a14e3ec8696e64a5b0606c08"
 dependencies = [
  "anyhow",
  "bytes",

@@ -2,6 +2,8 @@
 export PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1
 export CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_DEBUG=true
 
+BENCHMARK_ARGS=--benchmark-warmup=on --benchmark-warmup-iterations=500 --benchmark-min-rounds=500 --benchmark-min-time=0.01
+
 .PHONY: help build build-ext fmt lint sync lock upgrade all test test-all test-bench test-bench-index examples
 
 help:
@@ -17,7 +19,7 @@ help:
 	@echo "  test     - Run non-benchmark tests"
 	@echo "  test-all - Run all tests including benchmark"
 	@echo "  test-bench - Run benchmark test with current env"
-	@echo "  test-bench-index - Run benchmark in none/rtree/quadtree modes"
+	@echo "  test-bench-index - Run benchmark in default/disable-y-stripes modes"
 
 build:
 	uv build
@@ -56,12 +58,10 @@ test-all: lint build-ext
 	uv run --no-sync pytest -v .
 
 bench: build-ext
-	@echo "Benchmark with _TZFPY_EXP_INDEX unset"
-	@uv run --no-sync pytest -q -s tests/test_bench.py
-	@echo "Benchmark with _TZFPY_EXP_INDEX=rtree"
-	@_TZFPY_EXP_INDEX=rtree uv run --no-sync pytest -q -s tests/test_bench.py
-	@echo "Benchmark with _TZFPY_EXP_INDEX=quadtree"
-	@_TZFPY_EXP_INDEX=quadtree uv run --no-sync pytest -q -s tests/test_bench.py
+	@echo "Benchmark with _TZFPY_DISABLE_Y_STRIPES=1"
+	@_TZFPY_DISABLE_Y_STRIPES=1 uv run --no-sync pytest -q -s tests/test_bench.py $(BENCHMARK_ARGS)
+	@echo "Benchmark with default index mode"
+	@uv run --no-sync pytest -q -s tests/test_bench.py $(BENCHMARK_ARGS)
 
 licences:
 	cargo-bundle-licenses --format yaml --output THIRDPARTY.yml

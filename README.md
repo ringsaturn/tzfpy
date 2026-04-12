@@ -50,6 +50,15 @@ conda install -c conda-forge tzfpy
 ['Asia/Shanghai', 'Asia/Urumqi']
 ```
 
+### Index mode env vars
+
+`tzfpy` follows current `tzf-rs` behavior: `DefaultFinder` enables `y_stripes` by default.
+If you need to disable `y_stripes`, use this environment variable:
+
+```bash
+export _TZFPY_DISABLE_Y_STRIPES=1
+```
+
 For data visualization, you can get timezone polygon GeoJSON data from tzfpy:
 
 ```python

@@ -5,12 +5,12 @@ import sys
 from pytest import mark
 
 
-def _run_import_and_query(exp_index: str | None) -> str:
+def _run_import_and_query(disable_y_stripes: str | None = None) -> str:
     env = os.environ.copy()
-    if exp_index is None:
-        env.pop("_TZFPY_EXP_INDEX", None)
+    if disable_y_stripes is None:
+        env.pop("_TZFPY_DISABLE_Y_STRIPES", None)
     else:
-        env["_TZFPY_EXP_INDEX"] = exp_index
+        env["_TZFPY_DISABLE_Y_STRIPES"] = disable_y_stripes
 
     proc = subprocess.run(
         [
@@ -26,6 +26,10 @@ def _run_import_and_query(exp_index: str | None) -> str:
     return proc.stdout.strip()
 
 
-@mark.parametrize("exp_index", [None, "rtree", "quadtree"])
-def test_exp_index_env_variants(exp_index):
-    assert _run_import_and_query(exp_index) == "Asia/Shanghai"
+def test_disable_y_stripes_env_unset():
+    assert _run_import_and_query() == "Asia/Shanghai"
+
+
+@mark.parametrize("disable_y_stripes", ["1", "true", "yes", "on"])
+def test_disable_y_stripes_env_variants(disable_y_stripes):
+    assert _run_import_and_query(disable_y_stripes) == "Asia/Shanghai"

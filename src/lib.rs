@@ -10,10 +10,16 @@ lazy_static! {
 }
 
 fn build_finder_from_env() -> DefaultFinder {
-    match env::var("_TZFPY_EXP_INDEX").ok().as_deref() {
-        Some("rtree") => DefaultFinder::new_with_options(FinderOptions::rtree()),
-        Some("quadtree") => DefaultFinder::new_with_options(FinderOptions::quad_tree()),
-        _ => DefaultFinder::new(),
+    if should_disable_y_stripes() {
+        return DefaultFinder::new_with_options(FinderOptions::no_index());
+    }
+    DefaultFinder::default()
+}
+
+fn should_disable_y_stripes() -> bool {
+    match env::var("_TZFPY_DISABLE_Y_STRIPES") {
+        Ok(v) => matches!(v.trim().to_ascii_lowercase().as_str(), "1" | "true" | "yes" | "on"),
+        Err(_) => false,
     }
 }
 
