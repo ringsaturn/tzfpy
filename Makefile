@@ -2,21 +2,30 @@
 export PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1
 export CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_DEBUG=true
 
-.PHONY: help build fmt lint sync lock upgrade all test examples
+BENCHMARK_ARGS=--benchmark-warmup=on --benchmark-warmup-iterations=500 --benchmark-min-rounds=500 --benchmark-min-time=0.01
+
+.PHONY: help build build-ext fmt lint sync lock upgrade all test test-all test-bench test-bench-index examples
 
 help:
 	@echo "Available commands:"
 	@echo "  build    - Build the project using uv"
+	@echo "  build-ext - Rebuild and install local Rust extension into venv"
 	@echo "  fmt      - Format the code using ruff"
 	@echo "  lint     - Lint the code using ruff"
 	@echo "  sync     - Sync and compile the project using uv"
 	@echo "  lock     - Lock dependencies using uv"
 	@echo "  upgrade  - Upgrade dependencies using uv"
 	@echo "  all      - Run lock, sync, fmt, lint, and test"
-	@echo "  test     - Run tests using pytest"
+	@echo "  test     - Run non-benchmark tests"
+	@echo "  test-all - Run all tests including benchmark"
+	@echo "  test-bench - Run benchmark test with current env"
+	@echo "  test-bench-index - Run benchmark in default/disable-y-stripes modes"
 
 build:
 	uv build
+
+build-ext:
+	uv run maturin develop --release
 
 fmt:
 	uv run ruff check --select I --fix .
@@ -40,10 +49,19 @@ upgrade:
 all: lock sync
 	make fmt
 	make lint
-	make test	
+	make test
 
-test: lint
-	uv run pytest -v .
+test: lint build-ext
+	uv run --no-sync pytest -v -m "not benchmark" .
+
+test-all: lint build-ext
+	uv run --no-sync pytest -v .
+
+bench: build-ext
+	@echo "Benchmark with _TZFPY_DISABLE_Y_STRIPES=1"
+	@_TZFPY_DISABLE_Y_STRIPES=1 uv run --no-sync pytest -q -s tests/test_bench.py $(BENCHMARK_ARGS)
+	@echo "Benchmark with default index mode"
+	@uv run --no-sync pytest -q -s tests/test_bench.py $(BENCHMARK_ARGS)
 
 licences:
 	cargo-bundle-licenses --format yaml --output THIRDPARTY.yml

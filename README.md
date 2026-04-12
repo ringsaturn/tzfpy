@@ -50,6 +50,15 @@ conda install -c conda-forge tzfpy
 ['Asia/Shanghai', 'Asia/Urumqi']
 ```
 
+### Index mode env vars
+
+`tzfpy` follows current `tzf-rs` behavior: `DefaultFinder` enables `y_stripes`
+by default. If you need to disable `y_stripes`, use this environment variable:
+
+```bash
+export _TZFPY_DISABLE_Y_STRIPES=1
+```
+
 For data visualization, you can get timezone polygon GeoJSON data from tzfpy:
 
 ```python
@@ -129,24 +138,24 @@ with open("tz_nyc_index.geojson", "w") as f:
 ## Performance
 
 Benchmark runs under
-[`v1.0.0`](https://github.com/ringsaturn/tzfpy/releases/tag/v1.0.0) on my
+[`v1.2.0`](https://github.com/ringsaturn/tzfpy/releases/tag/v1.2.0) on my
 MacBook Pro with Apple M3 Max.
 
 ```bash
-pytest --benchmark-warmup=on --benchmark-warmup-iterations=100 tests/test_bench.py
+pytest --benchmark-warmup-iterations=500 --benchmark-min-rounds=500  --benchmark-min-time=0.01 tests/test_bench.py
 ```
 
 ```
--------------------------------------------------------------- benchmark: 1 tests --------------------------------------------------------------
-Name (time in ns)                 Min          Max        Mean      StdDev      Median         IQR    Outliers  OPS (Kops/s)  Rounds  Iterations
-------------------------------------------------------------------------------------------------------------------------------------------------
-test_tzfpy_random_cities     895.7926  11,420.8087  2,597.6093  1,331.8472  2,337.5032  1,587.5907  11611;1000      384.9694   33614          10
-------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------- benchmark: 1 tests ----------------------------------------------
+Name (time in us)        Min     Max    Mean  StdDev  Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------
+test_tzfpy            1.7801  2.3277  1.8855  0.0759  1.8648  0.0483     68;52      530.3520     500       10000
+----------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-Results (2.03s):
+Results (10.62s):
          1 passed
 ```
 
