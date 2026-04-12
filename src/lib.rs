@@ -3,7 +3,7 @@
 use lazy_static::lazy_static;
 use pyo3::prelude::*;
 use std::env;
-use tzf_rs::{DefaultFinder, IndexMode};
+use tzf_rs::{DefaultFinder, FinderOptions};
 
 lazy_static! {
     static ref FINDER: DefaultFinder = build_finder_from_env();
@@ -11,8 +11,8 @@ lazy_static! {
 
 fn build_finder_from_env() -> DefaultFinder {
     match env::var("_TZFPY_EXP_INDEX").ok().as_deref() {
-        Some("rtree") => DefaultFinder::new_with_index(IndexMode::RTree),
-        Some("quadtree") => DefaultFinder::new_with_index(IndexMode::QuadTree),
+        Some("rtree") => DefaultFinder::new_with_options(FinderOptions::rtree()),
+        Some("quadtree") => DefaultFinder::new_with_options(FinderOptions::quad_tree()),
         _ => DefaultFinder::new(),
     }
 }

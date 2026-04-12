@@ -650,7 +650,7 @@ checksum = "437e15d8465333d008c53bcca87dc0d1be7e32030ae6eca25f180f2b90e1882e"
 [[package]]
 name = "tzf-rs"
 version = "1.2.0"
-source = "git+https://github.com/ringsaturn/tzf-rs?branch=update-index-api#0ea153ae007ebf76e065e4bfff3ab444af75ca73"
+source = "git+https://github.com/ringsaturn/tzf-rs?branch=main#9f4c3dd4e94036647db866125bf51790ca4c8bd0"
 dependencies = [
  "anyhow",
  "bytes",
