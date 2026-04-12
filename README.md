@@ -52,8 +52,8 @@ conda install -c conda-forge tzfpy
 
 ### Index mode env vars
 
-`tzfpy` follows current `tzf-rs` behavior: `DefaultFinder` enables `y_stripes` by default.
-If you need to disable `y_stripes`, use this environment variable:
+`tzfpy` follows current `tzf-rs` behavior: `DefaultFinder` enables `y_stripes`
+by default. If you need to disable `y_stripes`, use this environment variable:
 
 ```bash
 export _TZFPY_DISABLE_Y_STRIPES=1
