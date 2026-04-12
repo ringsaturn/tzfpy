@@ -4,6 +4,7 @@ from pytest import mark
 from tzfpy import get_tz
 
 # warmup lazy init
+_ = random_city()
 _ = get_tz(116.3883, 39.9289)
 
 

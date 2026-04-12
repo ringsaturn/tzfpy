@@ -138,24 +138,24 @@ with open("tz_nyc_index.geojson", "w") as f:
 ## Performance
 
 Benchmark runs under
-[`v1.0.0`](https://github.com/ringsaturn/tzfpy/releases/tag/v1.0.0) on my
+[`v1.2.0`](https://github.com/ringsaturn/tzfpy/releases/tag/v1.2.0) on my
 MacBook Pro with Apple M3 Max.
 
 ```bash
-pytest --benchmark-warmup=on --benchmark-warmup-iterations=100 tests/test_bench.py
+pytest --benchmark-warmup-iterations=500 --benchmark-min-rounds=500  --benchmark-min-time=0.01 tests/test_bench.py
 ```
 
 ```
-------------------------------------------------------------- benchmark: 1 tests ------------------------------------------------------------
-Name (time in ns)                 Min          Max        Mean      StdDev      Median       IQR   Outliers  OPS (Kops/s)  Rounds  Iterations
----------------------------------------------------------------------------------------------------------------------------------------------
-test_tzfpy_random_cities     666.9725  61,875.0055  2,131.7044  2,726.7310  1,083.0117  250.0310  5510;6433      469.1082   36420           1
----------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------- benchmark: 1 tests ----------------------------------------------
+Name (time in us)        Min     Max    Mean  StdDev  Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------
+test_tzfpy            1.7801  2.3277  1.8855  0.0759  1.8648  0.0483     68;52      530.3520     500       10000
+----------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-Results (1.84s):
+Results (10.62s):
          1 passed
 ```
 
