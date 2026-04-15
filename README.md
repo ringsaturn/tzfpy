@@ -146,21 +146,34 @@ Benchmark runs under
 [`v1.2.0`](https://github.com/ringsaturn/tzfpy/releases/tag/v1.2.0) on my
 MacBook Pro with Apple M3 Max.
 
-```bash
-pytest --benchmark-warmup-iterations=500 --benchmark-min-rounds=500  --benchmark-min-time=0.01 tests/test_bench.py
 ```
+Benchmark with _TZFPY_DISABLE_Y_STRIPES=1
+.
 
-```
 ---------------------------------------------- benchmark: 1 tests ----------------------------------------------
 Name (time in us)        Min     Max    Mean  StdDev  Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------
-test_tzfpy            1.7801  2.3277  1.8855  0.0759  1.8648  0.0483     68;52      530.3520     500       10000
+test_tzfpy            2.3709  2.9560  2.5338  0.0794  2.5213  0.0728     86;24      394.6709     500       10000
 ----------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-Results (10.62s):
+Results (14.42s):
+         1 passed
+Benchmark with default index mode
+.
+
+---------------------------------------------- benchmark: 1 tests ----------------------------------------------
+Name (time in us)        Min     Max    Mean  StdDev  Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------
+test_tzfpy            1.7190  2.4869  1.8321  0.1139  1.7934  0.0627     53;56      545.8076     500       10000
+----------------------------------------------------------------------------------------------------------------
+
+Legend:
+  Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
+  OPS: Operations Per Second, computed as 1 / Mean
+Results (10.35s):
          1 passed
 ```
 
