@@ -53,8 +53,16 @@ all: lock sync
 	make measure-memory
 
 measure-memory:
-	uv run --with psutil --no-sync scripts/measure_memory_tzfpy.py
-	uv run --with psutil --no-sync --with timezonefinder scripts/measure_memory_timezonefinder.py
+	@echo "Measuring memory usage with different index modes:"
+	@echo ""
+	@echo "Default index mode:"
+	@uv run --with psutil --no-sync scripts/measure_memory_tzfpy.py
+	@echo ""
+	@echo "Disable Y stripes mode:"
+	@_TZFPY_DISABLE_Y_STRIPES=1 uv run --with psutil --no-sync scripts/measure_memory_tzfpy.py
+	@echo ""
+	@echo "TimezoneFinder:"
+	@uv run --with psutil --no-sync --with timezonefinder scripts/measure_memory_timezonefinder.py
 
 test: lint build-ext
 	uv run --no-sync pytest -v -m "not benchmark" .
