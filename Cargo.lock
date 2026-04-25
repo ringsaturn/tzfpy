@@ -81,9 +81,9 @@ checksum = "1e748733b7cbc798e1434b6ac524f0c1ff2ab456fe201501e6497c8417a4fc33"
 
 [[package]]
 name = "cc"
-version = "1.2.60"
+version = "1.2.61"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "43c5703da9466b66a946814e1adf53ea2c90f10063b86290cc9eb67ce3478a20"
+checksum = "d16d90359e986641506914ba71350897565610e87ce0ad9e6f28569db3dd5c6d"
 dependencies = [
  "find-msvc-tools",
  "shlex",
@@ -644,12 +644,14 @@ dependencies = [
 [[package]]
 name = "tzf-dist"
 version = "0.0.2026-a"
-source = "git+https://github.com/ringsaturn/tzf-dist?branch=data#3f28b71675cfd4902f8cc90fd9c43f2868f1539d"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aaabcb56c88a84842adb19782a3900f0d029ad2cccee22ebf4a3c5bfef1b44d3"
 
 [[package]]
 name = "tzf-rs"
-version = "1.2.0"
-source = "git+https://github.com/ringsaturn/tzf-rs?branch=tzf-dist#da6467fe9e70a65881828173ca49c06d6b26e8a8"
+version = "1.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3f1a90913723267d0eaa76d81e3a7f6ef1903250cb98c82ff4d77b8fbb2d870c"
 dependencies = [
  "anyhow",
  "bytes",
@@ -664,7 +666,7 @@ dependencies = [
 
 [[package]]
 name = "tzfpy"
-version = "1.2.0"
+version = "1.3.0"
 dependencies = [
  "lazy_static",
  "pyo3",
