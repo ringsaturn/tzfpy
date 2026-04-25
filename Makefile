@@ -50,6 +50,11 @@ all: lock sync
 	make fmt
 	make lint
 	make test
+	make measure-memory
+
+measure-memory:
+	uv run --with psutil --no-sync scripts/measure_memory_tzfpy.py
+	uv run --with psutil --no-sync --with timezonefinder scripts/measure_memory_timezonefinder.py
 
 test: lint build-ext
 	uv run --no-sync pytest -v -m "not benchmark" .
