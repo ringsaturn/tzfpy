@@ -16,7 +16,7 @@
 > 1. This package use a simplified polygon data and not so accurate around
 >    borders.
 > 2. Rust use lazy init, so first calling will be a little slow.
-> 3. Use about 40MB memory.
+> 3. Use about 120MB memory.
 > 4. It's tested under Python 3.10+.
 > 5. Try it online:
 >    - <https://ringsaturn.github.io/tzf-web/>, powered by tzf-rs and
@@ -59,7 +59,7 @@ by default. If you need to disable `y_stripes`, use this environment variable:
 export _TZFPY_DISABLE_Y_STRIPES=1
 ```
 
-The index requires about 40MB memory, but can speed up query missing from
+The index requires about 120MB memory, but can speed up query missing from
 pre-index, especially around borders.
 
 ### Export to GeoJSON

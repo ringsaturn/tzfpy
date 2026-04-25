@@ -53,6 +53,7 @@ jobs:
           make lint
           make test
           make bench | tee benchmark_result.txt
+          make measure-memory
 
       - name: Build examples
         if: matrix.python-version != 3.10 && matrix.python-version != '3.14' && matrix.python-version != '3.14t'
