@@ -2,25 +2,26 @@
 
 use lazy_static::lazy_static;
 use pyo3::prelude::*;
-use tzf_rs::DefaultFinder;
+use std::env;
+use tzf_rs::{DefaultFinder, FinderOptions};
 
 lazy_static! {
     static ref FINDER: DefaultFinder = build_finder_from_env();
 }
 
 fn build_finder_from_env() -> DefaultFinder {
-    // if should_disable_y_stripes() {
-    //     return DefaultFinder::new_with_options(FinderOptions::no_index());
-    // }
-    DefaultFinder::new_full()
+    if should_disable_y_stripes() {
+        return DefaultFinder::new_with_options(FinderOptions::no_index());
+    }
+    DefaultFinder::default()
 }
 
-// fn should_disable_y_stripes() -> bool {
-//     match env::var("_TZFPY_DISABLE_Y_STRIPES") {
-//         Ok(v) => matches!(v.trim().to_ascii_lowercase().as_str(), "1" | "true" | "yes" | "on"),
-//         Err(_) => false,
-//     }
-// }
+fn should_disable_y_stripes() -> bool {
+    match env::var("_TZFPY_DISABLE_Y_STRIPES") {
+        Ok(v) => matches!(v.trim().to_ascii_lowercase().as_str(), "1" | "true" | "yes" | "on"),
+        Err(_) => false,
+    }
+}
 
 #[pyfunction]
 pub fn get_tz(lng: f64, lat: f64) -> PyResult<String> {

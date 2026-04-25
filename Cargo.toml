@@ -23,4 +23,4 @@ pyo3 = {version = "0.28.2", features = ["extension-module", "generate-import-lib
 
 # tzf-rs = { path = "../tzf-rs", features = ["export-geojson"]}
 # tzf-rs = { version = "1.2.0", features = ["export-geojson"]}
-tzf-rs = { git =  "https://github.com/ringsaturn/tzf-rs", branch = "tzf-dist", features = ["export-geojson", "full"], default-features = false }
+tzf-rs = { git =  "https://github.com/ringsaturn/tzf-rs", branch = "tzf-dist", features = ["export-geojson"]}
