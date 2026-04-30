@@ -649,9 +649,9 @@ checksum = "dd00715a173d8820c2cb658625140cdb044b58bd21d18ba3f61a6090f7ab5b49"
 
 [[package]]
 name = "tzf-rs"
-version = "1.3.1"
+version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9727bac3a09568ed5258957e9fc69303f42a480162d0e3aff7ca1d9683771d23"
+checksum = "04f9ff7d64c28f69759b8314959451dbb5c6590272bb3aedb279d20f4bc69074"
 dependencies = [
  "anyhow",
  "bytes",
