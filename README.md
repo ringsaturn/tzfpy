@@ -194,8 +194,11 @@ I have written an article about the history of tzf, its Rust port, and its Rust
 port's Python binding; you can view it
 [here](https://blog.ringsaturn.me/en/posts/2023-01-31-history-of-tzf/).
 
+Also, see [Project tzf][project-tzf] for more information.
+
 [tzf]: https://github.com/ringsaturn/tzf
 [tzf-rs]: https://github.com/ringsaturn/tzf-rs
+[project-tzf]: https://project-tzf.ringsaturn.me/docs/getting-started/
 
 ## Compare with other packages
 
