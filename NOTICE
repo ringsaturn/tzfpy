@@ -1,0 +1,219 @@
+NOTICE
+
+This product includes software developed by [github.com/ringsaturn/tzfpy].
+------------------------------------------------------------------------
+
+anstream (github.com/rust-cli/anstyle)
+License: MIT OR Apache-2.0
+Copyright (c) Individual contributors
+
+anstyle (github.com/rust-cli/anstyle)
+License: MIT OR Apache-2.0
+Copyright (c) Individual contributors
+
+anstyle-parse (github.com/rust-cli/anstyle)
+License: MIT OR Apache-2.0
+Copyright (c) Individual contributors
+
+anstyle-query (github.com/rust-cli/anstyle)
+License: MIT OR Apache-2.0
+Copyright (c) Individual contributors
+
+anstyle-wincon (github.com/rust-cli/anstyle)
+License: MIT OR Apache-2.0
+Copyright (c) Individual contributors
+
+anyhow (github.com/dtolnay/anyhow)
+License: MIT OR Apache-2.0
+Author: dtolnay
+
+bytes (github.com/tokio-rs/bytes)
+License: MIT
+Copyright (c) 2018 Carl Lerche
+
+cc (github.com/rust-lang/cc-rs)
+License: MIT OR Apache-2.0
+Copyright (c) 2014 Alex Crichton
+
+clap (github.com/clap-rs/clap)
+License: MIT OR Apache-2.0
+Copyright (c) Individual contributors
+
+clap_builder (github.com/clap-rs/clap)
+License: MIT OR Apache-2.0
+Copyright (c) Individual contributors
+
+clap_derive (github.com/clap-rs/clap)
+License: MIT OR Apache-2.0
+Copyright (c) Individual contributors
+
+clap_lex (github.com/clap-rs/clap)
+License: MIT OR Apache-2.0
+Copyright (c) Individual contributors
+
+colorchoice (github.com/rust-cli/anstyle)
+License: MIT OR Apache-2.0
+Copyright (c) Individual contributors
+
+either (github.com/rayon-rs/either)
+License: MIT OR Apache-2.0
+Copyright (c) 2015; Author: rayon-rs
+
+find-msvc-tools (github.com/rust-lang/cc-rs)
+License: MIT OR Apache-2.0
+Copyright (c) 2014 Alex Crichton
+
+geometry-rs (github.com/ringsaturn/geometry-rs)
+License: MIT
+Copyright (c) 2022 ringsaturn
+
+heck (github.com/withoutboats/heck)
+License: MIT OR Apache-2.0
+Copyright (c) 2015 The Rust Project Developers
+
+is_terminal_polyfill (github.com/polyfill-rs/is_terminal_polyfill)
+License: MIT OR Apache-2.0
+Copyright (c) Individual contributors
+
+itertools (github.com/rust-itertools/itertools)
+License: MIT OR Apache-2.0
+Copyright (c) 2015; Author: rust-itertools
+
+itoa (github.com/dtolnay/itoa)
+License: MIT OR Apache-2.0
+Author: dtolnay
+
+lazy_static (github.com/rust-lang-nursery/lazy-static.rs)
+License: MIT OR Apache-2.0
+Copyright (c) 2010 The Rust Project Developers
+
+libc (github.com/rust-lang/libc)
+License: MIT OR Apache-2.0
+Copyright (c) The Rust Project Developers
+
+memchr (github.com/BurntSushi/memchr)
+License: Unlicense OR MIT
+Copyright (c) 2015 Andrew Gallant
+
+once_cell (github.com/matklad/once_cell)
+License: MIT OR Apache-2.0
+Author: matklad
+
+once_cell_polyfill (github.com/polyfill-rs/once_cell_polyfill)
+License: MIT OR Apache-2.0
+Copyright (c) Individual contributors
+
+portable-atomic (github.com/taiki-e/portable-atomic)
+License: Apache-2.0 OR MIT
+Author: taiki-e
+
+pqueue (github.com/tidwall/pqueue)
+License: MIT
+Copyright (c) 2022 Josh Baker
+
+proc-macro2 (github.com/dtolnay/proc-macro2)
+License: MIT OR Apache-2.0
+Author: dtolnay
+
+prost (github.com/tokio-rs/prost)
+License: Apache-2.0
+Author: tokio-rs
+
+prost-derive (github.com/tokio-rs/prost)
+License: Apache-2.0
+Author: tokio-rs
+
+pyo3 (github.com/pyo3/pyo3)
+License: MIT OR Apache-2.0
+Copyright (c) 2023-present PyO3 Project and Contributors. https://github.com/PyO3; Copyright (c) 2017-present PyO3 Project and Contributors. https://github.com/PyO3
+
+pyo3-build-config (github.com/pyo3/pyo3)
+License: MIT OR Apache-2.0
+Copyright (c) 2023-present PyO3 Project and Contributors. https://github.com/PyO3; Copyright (c) 2017-present PyO3 Project and Contributors. https://github.com/PyO3
+
+pyo3-ffi (github.com/pyo3/pyo3)
+License: MIT OR Apache-2.0
+Copyright (c) 2023-present PyO3 Project and Contributors. https://github.com/PyO3; Copyright (c) 2017-present PyO3 Project and Contributors. https://github.com/PyO3
+
+pyo3-macros (github.com/pyo3/pyo3)
+License: MIT OR Apache-2.0
+Copyright (c) 2023-present PyO3 Project and Contributors. https://github.com/PyO3; Copyright (c) 2017-present PyO3 Project and Contributors. https://github.com/PyO3
+
+pyo3-macros-backend (github.com/pyo3/pyo3)
+License: MIT OR Apache-2.0
+Copyright (c) 2023-present PyO3 Project and Contributors. https://github.com/PyO3; Copyright (c) 2017-present PyO3 Project and Contributors. https://github.com/PyO3
+
+python3-dll-a (github.com/PyO3/python3-dll-a)
+License: MIT
+Copyright (c) 2022 Sergey Kvachonok, Adam Reichold, messense <messense@icloud.com>
+
+quote (github.com/dtolnay/quote)
+License: MIT OR Apache-2.0
+Author: dtolnay
+
+rtree_rs (github.com/tidwall/rtree.rs)
+License: MIT
+Copyright (c) 2022 Josh Baker
+
+serde (github.com/serde-rs/serde)
+License: MIT OR Apache-2.0
+Author: serde-rs
+
+serde_core (github.com/serde-rs/serde)
+License: MIT OR Apache-2.0
+Author: serde-rs
+
+serde_derive (github.com/serde-rs/serde)
+License: MIT OR Apache-2.0
+Author: serde-rs
+
+serde_json (github.com/serde-rs/json)
+License: MIT OR Apache-2.0
+Author: serde-rs
+
+shlex (github.com/comex/rust-shlex)
+License: MIT OR Apache-2.0
+Copyright (c) 2015 Nicholas Allegra (comex); Copyright 2015 Nicholas Allegra (comex)
+
+strsim (github.com/rapidfuzz/strsim-rs)
+License: MIT
+Copyright (c) 2015 Danny Guo; Copyright (c) 2016 Titus Wormer <tituswormer@gmail.com>; Copyright (c) 2018 Akash Kurdekar
+
+syn (github.com/dtolnay/syn)
+License: MIT OR Apache-2.0
+Author: dtolnay
+
+target-lexicon (github.com/bytecodealliance/target-lexicon)
+License: Apache-2.0 WITH LLVM-exception
+Author: bytecodealliance
+
+tzf-dist (github.com/ringsaturn/tzf-dist)
+License: MIT
+Copyright (c) 2026 Han Xiao
+
+tzf-dist (github.com/ringsaturn/tzf-dist) (data)
+License: ODbL-1.0
+
+tzf-rs (github.com/ringsaturn/tzf-rs)
+License: MIT
+Copyright (c) 2022 ringsaturn
+
+unicode-ident (github.com/dtolnay/unicode-ident)
+License: (MIT OR Apache-2.0) AND Unicode-3.0
+Author: dtolnay
+
+utf8parse (github.com/alacritty/vte)
+License: Apache-2.0 OR MIT
+Copyright (c) 2016 Joe Wilm
+
+windows-link (github.com/microsoft/windows-rs)
+License: MIT OR Apache-2.0
+Copyright (c) Microsoft Corporation
+
+windows-sys (github.com/microsoft/windows-rs)
+License: MIT OR Apache-2.0
+Copyright (c) Microsoft Corporation
+
+zmij (github.com/dtolnay/zmij)
+License: MIT
+Author: dtolnay

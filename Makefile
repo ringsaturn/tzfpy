@@ -1,6 +1,7 @@
 # export UV_PYTHON_PREFERENCE=only-system
 export PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1
 export CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_DEBUG=true
+export UV_NO_SYNC=1
 
 BENCHMARK_ARGS=--benchmark-warmup=on --benchmark-warmup-iterations=500 --benchmark-min-rounds=500 --benchmark-min-time=0.01
 
@@ -44,7 +45,7 @@ lock:
 upgrade:
 	cargo update
 	uv lock --upgrade
-	make licences
+	make THIRDPARTY.yml NOTICE
 
 all: lock sync
 	make fmt
@@ -56,28 +57,31 @@ measure-memory:
 	@echo "Measuring memory usage with different index modes:"
 	@echo ""
 	@echo "Default index mode:"
-	@uv run --with psutil --no-sync scripts/measure_memory_tzfpy.py
+	@uv run --with psutil scripts/measure_memory_tzfpy.py
 	@echo ""
 	@echo "Disable Y stripes mode:"
-	@_TZFPY_DISABLE_Y_STRIPES=1 uv run --with psutil --no-sync scripts/measure_memory_tzfpy.py
+	@_TZFPY_DISABLE_Y_STRIPES=1 uv run --with psutil scripts/measure_memory_tzfpy.py
 	@echo ""
 	@echo "TimezoneFinder:"
-	@uv run --with psutil --no-sync --with timezonefinder scripts/measure_memory_timezonefinder.py
+	@uv run --with psutil --with timezonefinder scripts/measure_memory_timezonefinder.py
 
 test: lint build-ext
-	uv run --no-sync pytest -v -m "not benchmark" .
+	uv run pytest -v -m "not benchmark" .
 
 test-all: lint build-ext
-	uv run --no-sync pytest -v .
+	uv run pytest -v .
 
 bench: build-ext
 	@echo "Benchmark with _TZFPY_DISABLE_Y_STRIPES=1"
-	@_TZFPY_DISABLE_Y_STRIPES=1 uv run --no-sync pytest -q -s tests/test_bench.py $(BENCHMARK_ARGS)
+	@_TZFPY_DISABLE_Y_STRIPES=1 uv run pytest -q -s tests/test_bench.py $(BENCHMARK_ARGS)
 	@echo "Benchmark with default index mode"
-	@uv run --no-sync pytest -q -s tests/test_bench.py $(BENCHMARK_ARGS)
+	@uv run pytest -q -s tests/test_bench.py $(BENCHMARK_ARGS)
 
-licences:
+THIRDPARTY.yml: Cargo.lock Cargo.toml
 	cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+
+NOTICE: THIRDPARTY.yml scripts/build_notice.py
+	python3 scripts/build_notice.py
 
 examples:
 	@echo "Running examples:"

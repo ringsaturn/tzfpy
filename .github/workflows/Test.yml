@@ -50,6 +50,7 @@ jobs:
       - name: Install tzfpy and test
         shell: bash
         run: |
+          make sync
           make lint
           make test
           make bench | tee benchmark_result.txt
