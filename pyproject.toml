@@ -48,13 +48,13 @@ Issues = "https://github.com/ringsaturn/tzfpy/issues"
 
 [build-system]
 build-backend = "maturin"
-requires = ["maturin>=1,<2"]
+requires = ["maturin<2,>=1"]
 
 [dependency-groups]
 dev = [
-  "ruff==0.15.12",
+  "ruff==0.15.15",
   "citiespy>=0.6.13",
-  "maturin==1.13.1",
+  "maturin==1.13.3",
   "pytest>=9.0.2",
   "pytest-benchmark>=5.2.3",
   "pytest-cov>=7.0.0",
