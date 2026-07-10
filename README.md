@@ -51,6 +51,13 @@ conda install -c conda-forge tzfpy
 ['Asia/Shanghai', 'Asia/Urumqi']
 ```
 
+Or you can try it via `uvx`:
+
+```bash
+uvx --with tzfpy python -c "from tzfpy import get_tz;tz = get_tz(116.3883,39.9289);print(tz)"
+Asia/Shanghai
+```
+
 ### Index mode env vars
 
 `tzfpy` follows current `tzf-rs` behavior: `DefaultFinder` enables `y_stripes`
