@@ -17,7 +17,7 @@
 > 1. This package use a simplified polygon data and not so accurate around
 >    borders.
 > 2. Rust use lazy init, so first calling will be a little slow.
-> 3. Use about 120MB memory.
+> 3. Use about 70MB memory.
 > 4. It's tested under Python 3.10+.
 > 5. Try it online:
 >    - <https://ringsaturn.github.io/tzf-web/>, powered by tzf-rs and
@@ -67,7 +67,7 @@ by default. If you need to disable `y_stripes`, use this environment variable:
 export _TZFPY_DISABLE_Y_STRIPES=1
 ```
 
-The index requires about 120MB memory, but can speed up query missing from
+The index requires about 5MB memory, but can speed up query missing from
 pre-index, especially around borders.
 
 ### Export to GeoJSON
@@ -151,7 +151,7 @@ with open("tz_nyc_index.geojson", "w") as f:
 ## Performance
 
 Benchmark runs under
-[`v1.2.0`](https://github.com/ringsaturn/tzfpy/releases/tag/v1.2.0) on my
+[`v1.3.2`](https://github.com/ringsaturn/tzfpy/releases/tag/v1.3.2) on my
 MacBook Pro with Apple M3 Max.
 
 ```
@@ -161,27 +161,27 @@ Benchmark with _TZFPY_DISABLE_Y_STRIPES=1
 ---------------------------------------------- benchmark: 1 tests ----------------------------------------------
 Name (time in us)        Min     Max    Mean  StdDev  Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
 ----------------------------------------------------------------------------------------------------------------
-test_tzfpy            2.3709  2.9560  2.5338  0.0794  2.5213  0.0728     86;24      394.6709     500       10000
+test_tzfpy            1.2447  1.6922  1.3719  0.0555  1.3669  0.0643    133;11      728.9229     500       10000
 ----------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-Results (14.42s):
+Results (8.51s):
          1 passed
 Benchmark with default index mode
 .
 
----------------------------------------------- benchmark: 1 tests ----------------------------------------------
-Name (time in us)        Min     Max    Mean  StdDev  Median     IQR  Outliers  OPS (Kops/s)  Rounds  Iterations
-----------------------------------------------------------------------------------------------------------------
-test_tzfpy            1.7190  2.4869  1.8321  0.1139  1.7934  0.0627     53;56      545.8076     500       10000
-----------------------------------------------------------------------------------------------------------------
+---------------------------------------------------- benchmark: 1 tests ----------------------------------------------------
+Name (time in ns)          Min         Max      Mean   StdDev    Median      IQR  Outliers  OPS (Mops/s)  Rounds  Iterations
+----------------------------------------------------------------------------------------------------------------------------
+test_tzfpy            564.2528  1,250.2377  662.9543  87.4857  636.0787  70.2642     86;52        1.5084     500       16129
+----------------------------------------------------------------------------------------------------------------------------
 
 Legend:
   Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
   OPS: Operations Per Second, computed as 1 / Mean
-Results (10.35s):
+Results (6.63s):
          1 passed
 ```
 
