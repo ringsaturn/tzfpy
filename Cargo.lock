@@ -564,15 +564,15 @@ dependencies = [
 
 [[package]]
 name = "tzf-dist"
-version = "0.0.2026-c"
+version = "0.0.2026-c-fix1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3cd777fed6bf2bb56d9edeb0fe686f15db0c1330b1652f2641484350cb956104"
+checksum = "6bf8976fc0b988b1c95b4b8b07d16b4b7567c346d7f50a8f5fd850be6efd5699"
 
 [[package]]
 name = "tzf-rs"
-version = "1.3.5"
+version = "1.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6b0b417be5714578c2ea2674f5ca928120558954e8aebe766160e3d92fc9cc9c"
+checksum = "f187c19e512eaeefd1c450670006970b8dcac4af4c1ded36934342c673c8610b"
 dependencies = [
  "anyhow",
  "bytes",
@@ -587,7 +587,7 @@ dependencies = [
 
 [[package]]
 name = "tzfpy"
-version = "1.3.2"
+version = "1.3.3"
 dependencies = [
  "lazy_static",
  "pyo3",
