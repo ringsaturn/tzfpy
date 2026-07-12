@@ -65,6 +65,7 @@ dev = [
   "arrow>=1.4.0",
   "whenever>=0.9.5",
   "tzfpy", # If without it, uv will use most recent tagged version instead of local version.
+  "psutil>=7.2.2",
 ]
 
 [tool.uv.sources]
