@@ -14,8 +14,9 @@
 >
 > 0. It's probably the fastest Python package to convert longitude/latitude to
 >    timezone name.
-> 1. This package use a simplified polygon data and not so accurate around
->    borders.
+> 1. This package uses simplified polygon data. The error around borders is
+>    small and bounded: every simplified boundary stays within about 111 m of
+>    the full-precision border. See [Accuracy](#accuracy) for measured numbers.
 > 2. Rust use lazy init, so first calling will be a little slow.
 > 3. Use about 70MB memory.
 > 4. It's tested under Python 3.10+.
@@ -147,6 +148,26 @@ with open("tz_nyc_index.geojson", "w") as f:
    print(now)
    # 2025-04-29T10:33:28.427784+09:00[Asia/Tokyo]
    ```
+
+## Accuracy
+
+The Douglas-Peucker simplification uses an epsilon of 0.001 degrees, which
+caps boundary displacement at roughly 111 m by construction. Measured against
+the full-precision 2026c dataset with `tzf`'s `internal/cmd/borderchange`
+(spherical model, certified via Lipschitz interval subdivision):
+
+| Metric                                            |                        Result |
+| ------------------------------------------------- | ----------------------------: |
+| Certified maximum boundary displacement           | 111.2 m (+1.0 m tolerance)    |
+| Boundary length displaced more than 100 m         | 0.41%                         |
+| Boundary length displaced more than 500 m         | 0%                            |
+| Total mis-assigned area                           | 16,828 km² (~0.003% of Earth) |
+| Mis-assigned area within 100 m of the true border | 92.8%                         |
+
+Only queries within about 111 m of a timezone border can differ from the
+full-precision result, and most of that band is much narrower. See
+[`BORDER_CHANGE.md`](https://github.com/ringsaturn/tzf/blob/main/BORDER_CHANGE.md)
+in the `tzf` repository for the complete evaluation results.
 
 ## Performance
 
