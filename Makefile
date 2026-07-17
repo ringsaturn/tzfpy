@@ -5,7 +5,7 @@ export UV_NO_SYNC=1
 
 BENCHMARK_ARGS=--benchmark-warmup=on --benchmark-warmup-iterations=500 --benchmark-min-rounds=500 --benchmark-min-time=0.01
 
-.PHONY: help build build-ext fmt lint sync lock upgrade all test test-all test-bench test-bench-index examples
+.PHONY: help build build-ext fmt lint sync lock upgrade all test test-all bench measure-memory examples
 
 help:
 	@echo "Available commands:"
@@ -19,8 +19,8 @@ help:
 	@echo "  all              - Run lock, sync, fmt, lint, and test"
 	@echo "  test             - Run non-benchmark tests"
 	@echo "  test-all         - Run all tests including benchmark"
-	@echo "  test-bench       - Run benchmark test with current env"
-	@echo "  test-bench-index - Run benchmark in default/disable-y-stripes modes"
+	@echo "  bench            - Compare index modes in a Markdown benchmark table"
+	@echo "  measure-memory   - Measure memory usage for index modes and TimezoneFinder"
 
 build:
 	uv build
@@ -72,10 +72,7 @@ test-all: lint build-ext
 	uv run pytest -v .
 
 bench: build-ext
-	@echo "Benchmark with _TZFPY_DISABLE_Y_STRIPES=1"
-	@_TZFPY_DISABLE_Y_STRIPES=1 uv run pytest -q -s tests/test_bench.py $(BENCHMARK_ARGS)
-	@echo "Benchmark with default index mode"
-	@uv run pytest -q -s tests/test_bench.py $(BENCHMARK_ARGS)
+	@uv run python scripts/benchmark_index_modes.py $(BENCHMARK_ARGS)
 
 THIRDPARTY.yml: Cargo.lock Cargo.toml
 	cargo-bundle-licenses --format yaml --output THIRDPARTY.yml

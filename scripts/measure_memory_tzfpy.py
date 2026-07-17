@@ -1,5 +1,7 @@
 """Measure memory usage of tzfpy."""
 
+import argparse
+import json
 import os
 import tracemalloc
 
@@ -22,11 +24,32 @@ def measure():
 
     rss_after = proc.memory_info().rss
 
-    print(f"tracemalloc current : {current / 1024 / 1024:.2f} MB")
-    print(f"tracemalloc peak    : {peak / 1024 / 1024:.2f} MB")
-    print(f"RSS delta (psutil)  : {(rss_after - rss_before) / 1024 / 1024:.2f} MB")
-    print(f"RSS total (psutil)  : {rss_after / 1024 / 1024:.2f} MB")
+    return {
+        "tracemalloc_current_bytes": current,
+        "tracemalloc_peak_bytes": peak,
+        "rss_delta_bytes": rss_after - rss_before,
+        "rss_total_bytes": rss_after,
+    }
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--json", action="store_true", help="Print machine-readable JSON"
+    )
+    args = parser.parse_args()
+    result = measure()
+
+    if args.json:
+        print(json.dumps(result))
+        return
+
+    mib = 1024 * 1024
+    print(f"tracemalloc current : {result['tracemalloc_current_bytes'] / mib:.2f} MB")
+    print(f"tracemalloc peak    : {result['tracemalloc_peak_bytes'] / mib:.2f} MB")
+    print(f"RSS delta (psutil)  : {result['rss_delta_bytes'] / mib:.2f} MB")
+    print(f"RSS total (psutil)  : {result['rss_total_bytes'] / mib:.2f} MB")
 
 
 if __name__ == "__main__":
-    measure()
+    main()
