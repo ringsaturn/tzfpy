@@ -49,7 +49,7 @@ jobs:
           #   target: ppc64le
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.10"
       - name: Build wheels
@@ -79,7 +79,7 @@ jobs:
           args: --release --out dist -i python3.14t
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
           manylinux: auto
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         if: ${{ matrix.platform.target == 'x86_64' }}
         with:
           python-version: 3.14t
@@ -117,7 +117,7 @@ jobs:
             target: armv7
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.10"
       - name: Build wheels
@@ -194,7 +194,7 @@ jobs:
             python_arch: arm64
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.11"  # Github Actions minimum Python version on Windows for ARM64 runners is 3.11
           architecture: ${{ matrix.platform.python_arch }}
@@ -216,7 +216,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --force-reinstall --no-deps "$wheel"
           python tests/test_smock.py
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         if: ${{ matrix.platform.target != 'aarch64' }}
         with:
           python-version: 3.14t
@@ -258,7 +258,7 @@ jobs:
             target: aarch64
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.10"
       - name: Build wheels
@@ -286,7 +286,7 @@ jobs:
           target: ${{ matrix.platform.target }}
           args: --release --out dist -i python3.14t
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         if: ${{ matrix.platform.target == 'aarch64' }}
         with:
           python-version: 3.14t
