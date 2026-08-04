@@ -73,8 +73,7 @@ def write_github_output(path: str, missing_files: list[Path]) -> None:
     with open(path, "a", encoding="utf-8") as output:
         output.write(f"missing_count={len(missing_files)}\n")
         output.write("missing_files<<EOF\n")
-        for file_path in missing_files:
-            output.write(f"{file_path.as_posix()}\n")
+        output.writelines(f"{file_path.as_posix()}\n" for file_path in missing_files)
         output.write("EOF\n")
 
 

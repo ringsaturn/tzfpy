@@ -122,9 +122,7 @@ class WheelAsset:
             self.release_tag, min_release_tag
         ):
             return False
-        if uploader_login and self.uploader_login != uploader_login:
-            return False
-        return True
+        return not uploader_login or self.uploader_login == uploader_login
 
     def to_csv_row(self) -> dict[str, str]:
         return {
@@ -142,7 +140,7 @@ class WheelAsset:
         }
 
     @staticmethod
-    def from_csv_row(row: dict[str, str]) -> "WheelAsset":
+    def from_csv_row(row: dict[str, str]) -> WheelAsset:
         prerelease_text = clean_text(row.get("release_prerelease", "")).lower()
         release_prerelease = prerelease_text in {"1", "true", "yes"}
         return WheelAsset(
@@ -162,7 +160,7 @@ class WheelAsset:
     @staticmethod
     def from_release_asset(
         release: dict, asset: dict, release_commit_at: str = ""
-    ) -> "WheelAsset":
+    ) -> WheelAsset:
         asset_id = clean_text(asset.get("id", ""))
         url = clean_text(asset.get("browser_download_url", ""))
         name = clean_text(asset.get("name", ""))
@@ -209,7 +207,7 @@ def fetch_release_by_tag(repository: str, tag: str, token: str | None) -> dict:
     url = f"https://api.github.com/repos/{repository}/releases/tags/{encoded_tag}"
     payload = _request_json(url, token)
     if not isinstance(payload, dict):
-        raise RuntimeError(f"Unexpected GitHub API response for {url}: {payload!r}")
+        raise TypeError(f"Unexpected GitHub API response for {url}: {payload!r}")
     return payload
 
 
@@ -316,7 +314,7 @@ def fetch_releases(
         if not payload:
             break
         if not isinstance(payload, list):
-            raise RuntimeError(f"Unexpected GitHub API response for {url}: {payload!r}")
+            raise TypeError(f"Unexpected GitHub API response for {url}: {payload!r}")
 
         releases.extend(payload)
 

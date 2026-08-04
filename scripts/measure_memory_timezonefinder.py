@@ -12,7 +12,7 @@ def measure():
     rss_before = proc.memory_info().rss
     tracemalloc.start()
 
-    from timezonefinder import TimezoneFinder  # noqa: F401
+    from timezonefinder import TimezoneFinder
 
     # trigger lazy init
     tf = TimezoneFinder(in_memory=True)

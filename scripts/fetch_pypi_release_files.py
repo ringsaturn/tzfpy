@@ -85,8 +85,7 @@ def write_github_output(path: str, files: list[Path]) -> None:
     with open(path, "a", encoding="utf-8") as output:
         output.write(f"count={len(files)}\n")
         output.write("files<<EOF\n")
-        for file_path in files:
-            output.write(f"{file_path.as_posix()}\n")
+        output.writelines(f"{file_path.as_posix()}\n" for file_path in files)
         output.write("EOF\n")
 
 

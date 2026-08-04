@@ -14,7 +14,7 @@ def measure():
     rss_before = proc.memory_info().rss
     tracemalloc.start()
 
-    import tzfpy  # noqa: F401
+    import tzfpy
 
     # trigger lazy init
     _ = tzfpy.get_tz(116.3883, 39.9289)

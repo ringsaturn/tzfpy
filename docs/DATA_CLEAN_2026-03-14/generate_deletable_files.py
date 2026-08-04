@@ -6,7 +6,7 @@ import argparse
 import csv
 import re
 from collections import defaultdict
-from datetime import date
+from datetime import datetime, timezone
 from pathlib import Path
 
 MIRROR_INSTALLERS = {"nexus", "bandersnatch", "devpi"}
@@ -274,7 +274,7 @@ def main() -> int:
     todo_lines: list[str] = [
         "# PyPI Cleanup TODO by Version",
         "",
-        f"Generated on: {date.today().isoformat()}",
+        f"Generated on: {datetime.now(tz=timezone.utc).date().isoformat()}",
         "",
         "Rule:",
         "- Effective downloads exclude mirror installers (nexus, bandersnatch, devpi)",

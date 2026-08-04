@@ -9,7 +9,6 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parent.parent
 DISABLE_Y_STRIPES = "_TZFPY_DISABLE_Y_STRIPES"
 MIB = 1024 * 1024
@@ -53,6 +52,7 @@ def run_command(command: list[str], env: dict[str, str]) -> str:
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
+        check=False,
     )
     if process.returncode != 0:
         sys.stderr.write(process.stdout)
