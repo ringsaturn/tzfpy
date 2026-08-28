@@ -19,7 +19,7 @@ def data_version() -> str:
     """Show current tzdata version"""
 
 def get_tz_polygon_geojson(timezone_name: str) -> str:
-    """Get timezone polygon as GeoJSON string from PolygonFinder."""
+    """Get timezone boundary polygons as a GeoJSON string."""
 
 def get_tz_index_geojson(timezone_name: str) -> str:
-    """Get timezone polygon as GeoJSON string from FuzzyFinder."""
+    """Get the timezone's FUZZY preindex tiles as a GeoJSON string."""
