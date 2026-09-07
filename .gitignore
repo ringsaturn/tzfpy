@@ -73,7 +73,3 @@ docs/_build/
 
 tmp/
 site/
-
-# Transient manifest backups from `make build-full`.
-.Cargo.toml.orig
-.Cargo.lock.orig

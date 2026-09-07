@@ -44,9 +44,6 @@ pip install "tzfpy[tzdata]"
 conda install -c conda-forge tzfpy
 ```
 
-Full-precision wheels are distributed separately, outside PyPI — see
-[Full-precision wheels](#full-precision-wheels).
-
 ```python
 >>> from tzfpy import get_tz, get_tzs
 >>> get_tz(116.3883, 39.9289)  # in (longitude, latitude) order.
@@ -171,65 +168,6 @@ Only queries within about 111 m of a timezone border can differ from the
 full-precision result, and most of that band is much narrower. See
 [`BORDER_CHANGE.md`](https://github.com/ringsaturn/tzf/blob/main/BORDER_CHANGE.md)
 in the `tzf` repository for the complete evaluation results.
-
-### Full-precision wheels
-
-If that ~111 m band matters for your use case, full-precision wheels embed the
-unsimplified dataset. Same package, same API, no extra knobs — they are built
-from the ~14 MB `full.tzb` instead of the ~4 MB `lite.tzb` and carry a `+full`
-[PEP 440 local version](https://packaging.python.org/en/latest/specifications/version-specifiers/#local-version-identifiers):
-
-```bash
-pip install tzfpy --index-url https://ringsaturn.github.io/tzfpy/full/simple/
-```
-
-```python
->>> import importlib.metadata
->>> importlib.metadata.version("tzfpy")
-'2.0.0+full'
-```
-
-`data_version()` reports the same tzdata release for both variants, so the
-distribution version above is how you tell them apart at runtime.
-
-The trade is memory, not speed. Measured on an Apple M3 Max with Python 3.10
-over all 154,694 cities in [citiespy](https://github.com/ringsaturn/citiespy):
-
-| Metric                            |    Lite |     Full |
-| --------------------------------- | ------: | -------: |
-| Wheel size (macOS arm64)          |  2.9 MB |  10.8 MB |
-| Loaded extension                  |  4.7 MB |  14.6 MB |
-| Resident memory after first query | 40.3 MB | 203.3 MB |
-| Cold start (first query)          | 28.1 ms |  91.6 ms |
-| `get_tz` median                   |  251 ns |   280 ns |
-| `get_tzs` median (polygon scan)   |  457 ns |   521 ns |
-
-Query cost barely moves: the FUZZY preindex answers most lookups regardless of
-how detailed the polygons behind it are, so the fast path costs 11% more and
-the exact polygon scan 14% more. Resident memory is the number to budget for —
-about 5x, roughly +160 MB. The lite build on PyPI stays the right default;
-reach for the full wheels when you query near borders and can afford that
-footprint.
-
-These wheels are published only to
-[GitHub Releases](https://github.com/ringsaturn/tzfpy/releases) and the index
-above, never to PyPI: the full dataset is git-only in
-[tzf-dist](https://github.com/ringsaturn/tzf-dist) because it exceeds the
-crates.io size limit, and PyPI rejects local versions by design.
-
-The two variants sit on separate index paths on purpose — `2.0.0+full` sorts
-above `2.0.0`, so sharing one page would make pip silently prefer the full
-wheel. With uv, pin the index explicitly:
-
-```toml
-[[tool.uv.index]]
-name = "tzfpy-full"
-url = "https://ringsaturn.github.io/tzfpy/full/simple/"
-explicit = true
-
-[tool.uv.sources]
-tzfpy = { index = "tzfpy-full" }
-```
 
 ## Performance
 

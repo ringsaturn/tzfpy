@@ -106,22 +106,6 @@ class WheelAsset:
             return f"{self.url}#sha256={self.digest.split(':', maxsplit=1)[1]}"
         return self.url
 
-    @property
-    def version(self) -> str:
-        stem = self.name
-        for suffix in SUPPORTED_DIST_SUFFIXES:
-            if stem.endswith(suffix):
-                stem = stem[: -len(suffix)]
-                break
-        parts = stem.split("-")
-        return parts[1] if len(parts) > 1 else ""
-
-    @property
-    def local_version(self) -> str:
-        """PEP 440 local version label, for example "full" in 2.0.0+full."""
-        _, separator, local = self.version.partition("+")
-        return local if separator else ""
-
     def is_for_package(self, package_name: str) -> bool:
         dist_name = self.name.split("-", maxsplit=1)[0]
         return normalize_name(dist_name) == normalize_name(package_name)
@@ -131,15 +115,12 @@ class WheelAsset:
         package_name: str,
         min_release_tag: str | None = None,
         uploader_login: str | None = None,
-        local_version: str | None = None,
     ) -> bool:
         if not self.is_for_package(package_name):
             return False
         if min_release_tag and not is_release_tag_at_or_after(
             self.release_tag, min_release_tag
         ):
-            return False
-        if local_version is not None and self.local_version != local_version:
             return False
         return not uploader_login or self.uploader_login == uploader_login
 
@@ -448,8 +429,6 @@ def write_site(
     package_name: str,
     wheels: list[WheelAsset],
     csv_name: str,
-    title_suffix: str = "",
-    root_links: list[tuple[str, str]] | None = None,
 ) -> None:
     normalized_package = normalize_name(package_name)
     simple_dir = output_dir / "simple"
@@ -468,31 +447,25 @@ def write_site(
         package_body.append("    <p>No wheel assets found.</p>")
 
     package_index = render_html_page(
-        title=f"Simple index for {package_name}{title_suffix}",
+        title=f"Simple index for {package_name}",
         body_lines=package_body,
     )
     (package_dir / "index.html").write_text(package_index, encoding="utf-8")
 
     simple_index = render_html_page(
-        title=f"Simple index{title_suffix}",
+        title="Simple index",
         body_lines=[
             f'    <a href="{html.escape(normalized_package)}/">{html.escape(normalized_package)}</a>'
         ],
     )
     (simple_dir / "index.html").write_text(simple_index, encoding="utf-8")
 
-    site_body = [
-        '    <a href="simple/">simple/</a><br />',
-        f'    <a href="docs/{html.escape(csv_name)}">docs/{html.escape(csv_name)}</a><br />',
-    ]
-    for text, href in root_links or []:
-        site_body.append(
-            f'    <a href="{html.escape(href, quote=True)}">{html.escape(text)}</a><br />'
-        )
-
     site_index = render_html_page(
-        title=f"Package index{title_suffix}",
-        body_lines=site_body,
+        title="Package index",
+        body_lines=[
+            '    <a href="simple/">simple/</a><br />',
+            f'    <a href="docs/{html.escape(csv_name)}">docs/{html.escape(csv_name)}</a>',
+        ],
     )
     (output_dir / "index.html").write_text(site_index, encoding="utf-8")
 
@@ -547,24 +520,6 @@ def parse_args() -> argparse.Namespace:
         help="CSV filename written under <output>/docs/.",
     )
     parser.add_argument(
-        "--local-version",
-        default="any",
-        help=(
-            "PEP 440 local version filter. 'any' keeps every distribution file, "
-            "'none' keeps only plain versions such as 2.0.0, and any other value "
-            "keeps only that label, for example 'full' for 2.0.0+full. Variants "
-            "must never share a simple index page: 2.0.0+full sorts above 2.0.0, "
-            "so pip would silently prefer it."
-        ),
-    )
-    parser.add_argument(
-        "--root-link",
-        action="append",
-        default=[],
-        metavar="TEXT=HREF",
-        help="Extra link added to the generated root index.html. Repeatable.",
-    )
-    parser.add_argument(
         "--full-fetch",
         action="store_true",
         help="Fetch all release pages instead of incremental fetch based on CSV cache.",
@@ -593,21 +548,6 @@ def main() -> int:
             raise RuntimeError("--skip-fetch requires a non-empty CSV metadata file")
 
     min_release_tag = clean_text(args.min_tag) or None
-
-    local_version_arg = clean_text(args.local_version) or "any"
-    if local_version_arg == "any":
-        local_version: str | None = None
-    elif local_version_arg == "none":
-        local_version = ""
-    else:
-        local_version = local_version_arg
-
-    root_links: list[tuple[str, str]] = []
-    for entry in args.root_link:
-        text, separator, href = clean_text(entry).partition("=")
-        if not separator or not text or not href:
-            raise RuntimeError(f"--root-link expects TEXT=HREF, got {entry!r}")
-        root_links.append((text, href))
 
     latest_cached_published_at = ""
     if existing_wheels:
@@ -664,7 +604,7 @@ def main() -> int:
 
     merged_wheels.update(fetched_wheels)
 
-    package_wheels = [
+    filtered_wheels = [
         wheel
         for wheel in merged_wheels.values()
         if wheel.matches_filters(
@@ -674,28 +614,14 @@ def main() -> int:
         )
     ]
 
-    # The CSV cache stays variant-agnostic so one fetch can feed every
-    # per-variant index build; only the rendered site is filtered.
     if csv_path and not args.skip_fetch:
-        write_wheels_csv(csv_path, package_wheels)
-
-    filtered_wheels = [
-        wheel
-        for wheel in package_wheels
-        if local_version is None or wheel.local_version == local_version
-    ]
-
-    # Only a named variant gets a title suffix; "any" and "none" both render
-    # the main index.
-    title_suffix = f" ({local_version})" if local_version else ""
+        write_wheels_csv(csv_path, filtered_wheels)
 
     write_site(
         output_dir=output_dir,
         package_name=args.package,
         wheels=filtered_wheels,
         csv_name=args.csv_name,
-        title_suffix=title_suffix,
-        root_links=root_links,
     )
 
     print(f"Generated index for {args.package} in {output_dir}")
@@ -707,7 +633,6 @@ def main() -> int:
         print(f"Minimum release tag: {min_release_tag}")
     if args.uploader_login:
         print(f"Uploader filter: {args.uploader_login}")
-    print(f"Local version filter: {local_version_arg}")
     if incremental_boundary:
         print(f"Incremental boundary: {incremental_boundary}")
     print(f"Distribution files indexed: {len(filtered_wheels)}")

@@ -184,8 +184,6 @@ def test_main_skip_fetch_uses_existing_csv_without_api(monkeypatch, tmp_path):
             uploader_login="",
             csv=str(csv_path),
             csv_name="release_wheels.csv",
-            local_version="any",
-            root_link=[],
             full_fetch=False,
             skip_fetch=True,
         ),
@@ -225,166 +223,10 @@ def test_main_skip_fetch_requires_non_empty_csv(monkeypatch, tmp_path):
             uploader_login="",
             csv=str(csv_path),
             csv_name="release_wheels.csv",
-            local_version="any",
-            root_link=[],
             full_fetch=False,
             skip_fetch=True,
         ),
     )
 
     with pytest.raises(RuntimeError, match="non-empty CSV metadata file"):
-        build_simple_index.main()
-
-
-def _asset(name: str, key: str = "1") -> "build_simple_index.WheelAsset":
-    return build_simple_index.WheelAsset(
-        key=key,
-        release_tag="v2.0.0",
-        release_published_at="2026-09-01T00:00:00Z",
-        release_commit_at="2026-09-01T00:00:00Z",
-        release_prerelease=False,
-        asset_id=key,
-        name=name,
-        url=f"https://example.com/{name}",
-        updated_at="2026-09-01T00:00:00Z",
-        digest="",
-        uploader_login="github-actions[bot]",
-    )
-
-
-@pytest.mark.parametrize(
-    ("name", "version", "local_version"),
-    [
-        ("tzfpy-2.0.0-cp310-abi3-manylinux_2_17_x86_64.whl", "2.0.0", ""),
-        ("tzfpy-2.0.0+full-cp310-abi3-manylinux_2_17_x86_64.whl", "2.0.0+full", "full"),
-        ("tzfpy-2.0.0.tar.gz", "2.0.0", ""),
-        ("tzfpy-2.0.0b3-cp310-abi3-win_amd64.whl", "2.0.0b3", ""),
-    ],
-)
-def test_local_version_is_parsed_from_filename(name, version, local_version):
-    wheel = _asset(name)
-
-    assert wheel.version == version
-    assert wheel.local_version == local_version
-
-
-def test_matches_filters_uses_local_version():
-    lite = _asset("tzfpy-2.0.0-cp310-abi3-manylinux_2_17_x86_64.whl")
-    full = _asset("tzfpy-2.0.0+full-cp310-abi3-manylinux_2_17_x86_64.whl")
-
-    # None keeps every variant, "" keeps only plain releases.
-    assert lite.matches_filters(package_name="tzfpy", local_version=None)
-    assert full.matches_filters(package_name="tzfpy", local_version=None)
-    assert lite.matches_filters(package_name="tzfpy", local_version="")
-    assert not full.matches_filters(package_name="tzfpy", local_version="")
-    assert not lite.matches_filters(package_name="tzfpy", local_version="full")
-    assert full.matches_filters(package_name="tzfpy", local_version="full")
-
-
-def _write_mixed_csv(csv_path: pathlib.Path) -> None:
-    csv_path.write_text(
-        (
-            "key,release_tag,release_published_at,release_commit_at,release_prerelease,"
-            "asset_id,asset_name,asset_url,asset_updated_at,asset_digest,uploader_login\n"
-            "1,v2.0.0,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,false,1,"
-            "tzfpy-2.0.0-cp310-abi3-win_amd64.whl,"
-            "https://example.com/tzfpy-2.0.0-cp310-abi3-win_amd64.whl,"
-            "2026-09-01T00:00:00Z,sha256:abc,ci\n"
-            "2,v2.0.0,2026-09-01T00:00:00Z,2026-09-01T00:00:00Z,false,2,"
-            "tzfpy-2.0.0+full-cp310-abi3-win_amd64.whl,"
-            "https://example.com/tzfpy-2.0.0%2Bfull-cp310-abi3-win_amd64.whl,"
-            "2026-09-01T00:00:00Z,sha256:def,ci\n"
-        ),
-        encoding="utf-8",
-    )
-
-
-def _run_main(monkeypatch, csv_path, out_dir, local_version, root_link=None):
-    monkeypatch.setattr(
-        build_simple_index,
-        "parse_args",
-        lambda: Namespace(
-            repository="ringsaturn/tzfpy",
-            package="tzfpy",
-            output=str(out_dir),
-            token="",
-            min_tag="v0.6.0",
-            uploader_login="",
-            csv=str(csv_path),
-            csv_name="release_wheels.csv",
-            local_version=local_version,
-            root_link=list(root_link or []),
-            full_fetch=False,
-            skip_fetch=True,
-        ),
-    )
-    assert build_simple_index.main() == 0
-
-
-def test_variant_indexes_never_share_a_page(monkeypatch, tmp_path):
-    """A `+full` local version outranks the plain release in pip's ordering.
-
-    Listing both on one simple page would make `pip install tzfpy` silently
-    resolve to the full-precision wheel, so each variant gets its own path.
-    """
-    csv_path = tmp_path / "release_wheels.csv"
-    _write_mixed_csv(csv_path)
-    out_dir = tmp_path / "site"
-
-    _run_main(monkeypatch, csv_path, out_dir, "none", root_link=["full=full/"])
-    _run_main(monkeypatch, csv_path, out_dir / "full", "full")
-
-    main_index = (out_dir / "simple" / "tzfpy" / "index.html").read_text(
-        encoding="utf-8"
-    )
-    full_index = (out_dir / "full" / "simple" / "tzfpy" / "index.html").read_text(
-        encoding="utf-8"
-    )
-
-    assert "tzfpy-2.0.0-cp310-abi3-win_amd64.whl" in main_index
-    assert "+full" not in main_index
-    assert "tzfpy-2.0.0+full-cp310-abi3-win_amd64.whl" in full_index
-    assert "tzfpy-2.0.0-cp310-abi3-win_amd64.whl" not in full_index
-    assert '<a href="full/">full</a>' in (out_dir / "index.html").read_text(
-        encoding="utf-8"
-    )
-
-
-def test_csv_cache_keeps_every_variant(monkeypatch, tmp_path):
-    """One fetch feeds every per-variant index build, so the CSV stays unfiltered."""
-    csv_path = tmp_path / "release_wheels.csv"
-    _write_mixed_csv(csv_path)
-    out_dir = tmp_path / "site"
-
-    _run_main(monkeypatch, csv_path, out_dir, "any")
-
-    written = (out_dir / "docs" / "release_wheels.csv").read_text(encoding="utf-8")
-    assert "tzfpy-2.0.0-cp310-abi3-win_amd64.whl" in written
-    assert "tzfpy-2.0.0+full-cp310-abi3-win_amd64.whl" in written
-
-
-def test_root_link_requires_text_and_href(monkeypatch, tmp_path):
-    csv_path = tmp_path / "release_wheels.csv"
-    _write_mixed_csv(csv_path)
-
-    monkeypatch.setattr(
-        build_simple_index,
-        "parse_args",
-        lambda: Namespace(
-            repository="ringsaturn/tzfpy",
-            package="tzfpy",
-            output=str(tmp_path / "site"),
-            token="",
-            min_tag="v0.6.0",
-            uploader_login="",
-            csv=str(csv_path),
-            csv_name="release_wheels.csv",
-            local_version="any",
-            root_link=["missing-separator"],
-            full_fetch=False,
-            skip_fetch=True,
-        ),
-    )
-
-    with pytest.raises(RuntimeError, match="TEXT=HREF"):
         build_simple_index.main()

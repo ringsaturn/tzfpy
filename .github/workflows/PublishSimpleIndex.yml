@@ -35,11 +35,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-      # Two indexes from one CSV. They must stay on separate paths: the
-      # full-precision wheels carry a `+full` local version, which sorts above
-      # the plain release, so pip would silently prefer them if both variants
-      # shared a page.
-      - name: Build simple index (lite, mirrors PyPI)
+      - name: Build simple index
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
@@ -50,23 +46,7 @@ jobs:
             --min-tag v0.6.0 \
             --csv docs/release_wheels.csv \
             --skip-fetch \
-            --local-version none \
-            --root-link "full-precision wheels=full/" \
             --output site
-      - name: Build simple index (full precision)
-        env:
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: |
-          set -euo pipefail
-          uv run scripts/build_simple_index.py \
-            --repository "$GITHUB_REPOSITORY" \
-            --package tzfpy \
-            --min-tag v0.6.0 \
-            --csv docs/release_wheels.csv \
-            --skip-fetch \
-            --local-version full \
-            --root-link "main index=../" \
-            --output site/full
       - name: Verify Pages artifact has no wheel files
         run: |
           set -euo pipefail
@@ -75,22 +55,6 @@ jobs:
             exit 1
           fi
           test -f site/docs/release_wheels.csv
-      - name: Verify variant indexes stay separated
-        run: |
-          set -euo pipefail
-          main_index=site/simple/tzfpy/index.html
-          full_index=site/full/simple/tzfpy/index.html
-          test -f "$main_index"
-          test -f "$full_index"
-
-          if grep -qF '+full' "$main_index"; then
-            echo "Main index lists +full wheels; pip would prefer them over plain releases."
-            exit 1
-          fi
-          if grep -oE '>tzfpy-[^<]+' "$full_index" | grep -vF '+full' | grep -q .; then
-            echo "Full-precision index lists non-+full wheels."
-            exit 1
-          fi
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
