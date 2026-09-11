@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Benchmark tzfpy index modes and print a Markdown summary table."""
+"""Benchmark tzfpy and print a Markdown summary table.
+
+tzfpy 2.0 has a single index mode: tzf-rs 2 removed `FinderOptions`, so the
+YStripes index is always enabled and the `_TZFPY_DISABLE_Y_STRIPES` switch is
+gone. The table therefore has one row; it is kept as a table so CI summaries
+and release notes stay comparable across versions.
+"""
 
 import json
 import os
@@ -10,14 +16,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DISABLE_Y_STRIPES = "_TZFPY_DISABLE_Y_STRIPES"
 MIB = 1024 * 1024
-
-
-@dataclass(frozen=True)
-class IndexMode:
-    label: str
-    disable_y_stripes: bool
+LABEL = "Default (pre-index + YStripes)"
 
 
 @dataclass(frozen=True)
@@ -29,26 +29,11 @@ class Result:
     memory_mib: float
 
 
-INDEX_MODES = (
-    IndexMode("Default (YStripes enabled)", False),
-    IndexMode("No YStripes (`_TZFPY_DISABLE_Y_STRIPES=1`)", True),
-)
-
-
-def mode_environment(mode: IndexMode) -> dict[str, str]:
-    env = os.environ.copy()
-    if mode.disable_y_stripes:
-        env[DISABLE_Y_STRIPES] = "1"
-    else:
-        env.pop(DISABLE_Y_STRIPES, None)
-    return env
-
-
-def run_command(command: list[str], env: dict[str, str]) -> str:
+def run_command(command: list[str]) -> str:
     process = subprocess.run(
         command,
         cwd=ROOT,
-        env=env,
+        env=os.environ.copy(),
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -69,7 +54,7 @@ def read_benchmark_stats(path: Path) -> tuple[float, float]:
     return stats["median"], stats["mean"]
 
 
-def benchmark(mode: IndexMode, benchmark_args: list[str]) -> tuple[float, float]:
+def benchmark(benchmark_args: list[str]) -> tuple[float, float]:
     with tempfile.TemporaryDirectory(prefix="tzfpy-benchmark-") as directory:
         output_path = Path(directory) / "benchmark.json"
         command = [
@@ -81,24 +66,24 @@ def benchmark(mode: IndexMode, benchmark_args: list[str]) -> tuple[float, float]
             *benchmark_args,
             f"--benchmark-json={output_path}",
         ]
-        run_command(command, mode_environment(mode))
+        run_command(command)
         return read_benchmark_stats(output_path)
 
 
-def measure_memory(mode: IndexMode) -> float:
+def measure_memory() -> float:
     command = [sys.executable, "scripts/measure_memory_tzfpy.py", "--json"]
-    result = json.loads(run_command(command, mode_environment(mode)))
+    result = json.loads(run_command(command))
     return result["rss_delta_bytes"] / MIB
 
 
-def collect_result(mode: IndexMode, benchmark_args: list[str]) -> Result:
-    median, mean = benchmark(mode, benchmark_args)
+def collect_result(benchmark_args: list[str]) -> Result:
+    median, mean = benchmark(benchmark_args)
     return Result(
-        label=mode.label,
+        label=LABEL,
         median_us=median * 1_000_000,
         mean_us=mean * 1_000_000,
         throughput_kops=1 / mean / 1_000,
-        memory_mib=measure_memory(mode),
+        memory_mib=measure_memory(),
     )
 
 
@@ -116,7 +101,7 @@ def format_table(results: list[Result]) -> str:
 
 
 def main() -> None:
-    results = [collect_result(mode, sys.argv[1:]) for mode in INDEX_MODES]
+    results = [collect_result(sys.argv[1:])]
     print("Memory is the RSS increase after import and lazy initialization.")
     print()
     print(format_table(results))

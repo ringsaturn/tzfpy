@@ -19,8 +19,8 @@ help:
 	@echo "  all              - Run lock, sync, fmt, lint, and test"
 	@echo "  test             - Run non-benchmark tests"
 	@echo "  test-all         - Run all tests including benchmark"
-	@echo "  bench            - Compare index modes in a Markdown benchmark table"
-	@echo "  measure-memory   - Measure memory usage for index modes and TimezoneFinder"
+	@echo "  bench            - Run the query benchmark and print a Markdown table"
+	@echo "  measure-memory   - Measure memory usage of tzfpy and TimezoneFinder"
 
 build:
 	uv build
@@ -54,13 +54,10 @@ all: lock sync
 	make measure-memory
 
 measure-memory:
-	@echo "Measuring memory usage with different index modes:"
+	@echo "Measuring memory usage:"
 	@echo ""
-	@echo "Default index mode:"
+	@echo "tzfpy:"
 	@uv run --with psutil scripts/measure_memory_tzfpy.py
-	@echo ""
-	@echo "Disable Y stripes mode:"
-	@_TZFPY_DISABLE_Y_STRIPES=1 uv run --with psutil scripts/measure_memory_tzfpy.py
 	@echo ""
 	@echo "TimezoneFinder:"
 	@uv run --with psutil --with timezonefinder scripts/measure_memory_timezonefinder.py

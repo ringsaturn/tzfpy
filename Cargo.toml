@@ -2,7 +2,7 @@
 edition = "2024"
 name = "tzfpy"
 repository = "https://github.com/ringsaturn/tzfpy"
-version = "1.3.3"
+version = "2.0.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -22,6 +22,11 @@ crate-type = ["cdylib"]
 lazy_static = "1.5.0"
 pyo3 = {version = "0.29.0", features = ["extension-module", "generate-import-lib", "abi3-py310"]}
 
-tzf-rs = { path = "../tzf-rs", features = ["export-geojson"]}
-# tzf-rs = { version = "1.3.7", features = ["export-geojson"]}
-# tzf-rs = { git =  "https://github.com/ringsaturn/tzf-rs", branch = "tzf-dist", features = ["export-geojson"]}
+# RELEASE SWITCH (see release-runbook-v2.md, step "switch dep"):
+# once tzf-rs 2.0.0 is on crates.io, comment out the `path` line below and
+# uncomment the `version` line, then run `cargo update -p tzf-rs`.
+# A path dependency MUST NOT be published: it makes the crates.io/conda-forge
+# vendoring path unbuildable and bloats the sdist with a copy of tzf-rs+tzf-dist.
+# tzf-rs = { path = "../tzf-rs", default-features = false, features = ["bundled", "export-geojson"] }
+tzf-rs = { version = "2.0.0", default-features = false, features = ["bundled", "export-geojson"] }
+# tzf-rs = { git =  "https://github.com/ringsaturn/tzf-rs", branch = "v2", default-features = false, features = ["bundled", "export-geojson"] }

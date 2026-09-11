@@ -57,6 +57,9 @@ dev = [
   "maturin==1.15.0",
   "pytest>=9.0.2",
   "pytest-benchmark>=5.2.3",
+  # pytest-benchmark 5.3 made py-cpuinfo optional, but --benchmark-json
+  # (used by scripts/benchmark_index_modes.py and `make bench`) still needs it.
+  "py-cpuinfo>=9.0.0",
   "pytest-cov>=7.0.0",
   "pytest-pretty>=1.3.0",
   "pytest-codspeed>=4.3.0",
@@ -87,6 +90,11 @@ cache-keys = [
 # 
 # Reference: https://github.com/PyO3/maturin/issues/2314
 features = ["pyo3/extension-module", "pyo3/generate-import-lib"]
+# Keep the sdist small: benchmark CSVs and the license inventory are not build inputs.
+exclude = [
+    { path = "docs/**/*.csv", format = "sdist" },
+    { path = "THIRDPARTY.yml", format = "sdist" },
+]
 
 [tool.uv.workspace]
 members = [
