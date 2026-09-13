@@ -3,7 +3,12 @@
 Release notes for `1.3.3` and earlier live in
 [GitHub Releases](https://github.com/ringsaturn/tzfpy/releases).
 
-## Unreleased
+## 2.1.0b1 (unreleased)
+
+A pre-release: the lite wheels go to
+[TestPyPI](https://test.pypi.org/project/tzfpy/) and GitHub Releases, not
+PyPI. The point of the tag is to put the experimental full-precision wheels
+on tzfpy's own index.
 
 ### Added
 
@@ -19,7 +24,7 @@ Release notes for `1.3.3` and earlier live in
   `get_tz` ~1.8x and `get_tzs` ~14x slower per call. See README
   "Full-precision wheels" for the measurements and install instructions.
 
-## 2.0.0 (unreleased)
+## 2.0.0
 
 Rust core upgraded from [`tzf-rs`](https://github.com/ringsaturn/tzf-rs) 1.3.7
 to 2.0.0, which is protobuf-free: boundary data now ships as the TZF embedded

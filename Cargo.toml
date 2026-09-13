@@ -2,7 +2,7 @@
 edition = "2024"
 name = "tzfpy"
 repository = "https://github.com/ringsaturn/tzfpy"
-version = "2.0.0"
+version = "2.1.0-beta.1"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

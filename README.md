@@ -222,7 +222,9 @@ in the `tzf` repository for the complete evaluation results.
 
 ### Full-precision wheels
 
-> **Experimental.** The full-precision variant is new to the Python binding
+> [!WARNING]
+>
+> The full-precision variant is new to the Python binding
 > and its performance profile is still being evaluated. It is not published to
 > PyPI; it ships only through tzfpy's own package index and GitHub Releases,
 > so opting in is always an explicit choice. The build, the index layout and
@@ -234,14 +236,20 @@ from the ~14 MB `full.tzb` instead of the ~4 MB `lite.tzb` and carry a `+full`
 [PEP 440 local version](https://packaging.python.org/en/latest/specifications/version-specifiers/#local-version-identifiers):
 
 ```bash
-pip install tzfpy --index-url https://ringsaturn.github.io/tzfpy/full/simple/
+pip install --pre tzfpy --index-url https://ringsaturn.github.io/tzfpy/full/simple/
 ```
 
 ```python
 >>> import importlib.metadata
 >>> importlib.metadata.version("tzfpy")
-'2.0.0+full'
+'2.1.0b1+full'
 ```
+
+While the variant is experimental it is cut only from pre-release tags
+(`2.1.0b1+full`, not `2.1.0+full`). pip and uv fall back to pre-releases when
+an index offers nothing else, so the plain command works today; `--pre` (or
+`prerelease = "allow"` under `[tool.uv]`) keeps it working once a stable
+release lands on the same index.
 
 `data_version()` reports the same tzdata release for both variants, so the
 distribution version above is how you tell them apart at runtime.
@@ -272,11 +280,13 @@ and the extra microseconds are cheaper than the ~111 m band.
 
 These wheels are published only to
 [GitHub Releases](https://github.com/ringsaturn/tzfpy/releases) and the index
-above, never to PyPI. Keeping an experimental variant off PyPI means nobody
-gets it without asking for it, and the mechanics line up with that policy: the
-full dataset is git-only in [tzf-dist](https://github.com/ringsaturn/tzf-dist)
-because it exceeds the crates.io size limit, and PyPI rejects local versions
-by design. If the variant graduates, it will be announced in the changelog.
+above, never to PyPI (the pre-release tags that carry them publish the lite
+wheels to TestPyPI, not PyPI). Keeping an experimental variant off PyPI means
+nobody gets it without asking for it, and the mechanics line up with that
+policy: the full dataset is git-only in
+[tzf-dist](https://github.com/ringsaturn/tzf-dist) because it exceeds the
+crates.io size limit, and PyPI rejects local versions by design. If the
+variant graduates, it will be announced in the changelog.
 
 The two variants sit on separate index paths on purpose — `2.0.0+full` sorts
 above `2.0.0`, so sharing one page would make pip silently prefer the full

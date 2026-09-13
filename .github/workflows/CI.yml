@@ -530,7 +530,7 @@ jobs:
 
       - name: Publish to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        if: ${{ startsWith(github.ref, 'refs/tags/') && (contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta')) }}
+        if: ${{ startsWith(github.ref, 'refs/tags/') && (contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, '-rc')) }}
         with:
           repository-url: https://test.pypi.org/legacy/
           packages-dir: dist
@@ -538,7 +538,7 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        if: ${{ startsWith(github.ref, 'refs/tags/') && !contains(github.ref_name, 'alpha') && !contains(github.ref_name, 'beta') }}
+        if: ${{ startsWith(github.ref, 'refs/tags/') && !contains(github.ref_name, 'alpha') && !contains(github.ref_name, 'beta') && !contains(github.ref_name, '-rc') }}
         with:
           packages-dir: dist
           skip-existing: true
@@ -577,7 +577,7 @@ jobs:
           files: ${{ steps.collect-assets.outputs.files }}
           draft: true
           generate_release_notes: true
-          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') }}
+          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, '-rc') }}
       - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
