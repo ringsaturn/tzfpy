@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `src/lib.rs` contains the PyO3 extension module and the exported Python-callable functions.
+- `src/lib.rs` contains the PyO3 extension module and the exported Python-callable functions. The mutually exclusive `lite` (default) and `full` Cargo features pick which tzf-dist dataset is embedded and which tzf-rs finder serves it (`DefaultFinder` for lite, the in-place `EmbeddedFinder` for full); the Python API is identical either way.
 - `tests/` holds runtime, compatibility, benchmark, and smoke tests (`test_basic.py`, `test_compatibility.py`, `test_bench.py`, `test_smock.py`).
 - `examples/` contains integration samples for `datetime`, `arrow`, `pandas`, `polars`, `numpy`, and `fastapi`.
 - `scripts/` includes release and index automation helpers.
@@ -15,6 +15,7 @@
 - `make test` runs lint plus `pytest -v .`.
 - `make all` runs lock, sync, format, lint, and test in sequence.
 - `uv build` builds distribution artifacts.
+- `make build-full` builds the full-precision `+full` wheel (`--no-default-features --features full`). The variant is experimental and ships only via GitHub Releases and the project's own simple index; never publish it to PyPI.
 - `make examples` runs example scripts except the FastAPI sample.
 
 ## Coding Style & Naming Conventions

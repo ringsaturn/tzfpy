@@ -3,6 +3,22 @@
 Release notes for `1.3.3` and earlier live in
 [GitHub Releases](https://github.com/ringsaturn/tzfpy/releases).
 
+## Unreleased
+
+### Added
+
+- Experimental full-precision wheels, built from tzf-dist's unsimplified
+  `full.tzb` (~14 MB) instead of the ~4 MB `lite.tzb`, via the new mutually
+  exclusive `lite` (default) / `full` Cargo features. They carry a `+full` PEP
+  440 local version and, being experimental, are published only to GitHub
+  Releases and tzfpy's own index at
+  `https://ringsaturn.github.io/tzfpy/full/simple/` — never to PyPI, which
+  rejects local versions by design. The PyPI and conda-forge builds are
+  unchanged. The full variant runs on tzf-rs's `EmbeddedFinder`, which queries
+  the data in place: about 13.5 MB resident against lite's 40 MB, with
+  `get_tz` ~1.8x and `get_tzs` ~14x slower per call. See README
+  "Full-precision wheels" for the measurements and install instructions.
+
 ## 2.0.0 (unreleased)
 
 Rust core upgraded from [`tzf-rs`](https://github.com/ringsaturn/tzf-rs) 1.3.7

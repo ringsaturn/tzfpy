@@ -14,6 +14,7 @@ on:
       - "pyproject.toml"
       - "uv.lock"
       - ".github/workflows/CI.yml"
+      - "scripts/set_local_version.py"
   pull_request:
     paths:
       - "src/**"
@@ -22,6 +23,7 @@ on:
       - "pyproject.toml"
       - "uv.lock"
       - ".github/workflows/CI.yml"
+      - "scripts/set_local_version.py"
   workflow_dispatch:
 
 permissions:
@@ -374,6 +376,84 @@ jobs:
           name: wheels-emscripten-py${{ matrix.python-version }}
           path: dist
 
+  # Full-precision variant (~14 MB full.tzb instead of the ~4 MB lite.tzb).
+  # Experimental in the Python binding, so it is distributed only through
+  # GitHub Releases and the GitHub Pages index. Built as a PEP 440 local
+  # version (`X.Y.Z+full`), which PyPI rejects by design, so the wheels cannot
+  # reach PyPI even by accident. The `release` job deliberately does not
+  # download this artifact.
+  full:
+    runs-on: ${{ matrix.platform.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Each of these embeds a ~14 MB dataset, so only tags and manual runs
+        # pay for the whole matrix; pull requests build one platform as a
+        # smoke check.
+        platform: >-
+          ${{ fromJSON((startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch')
+          && '[{"runner":"ubuntu-22.04","target":"x86_64","manylinux":"auto","suffix":"manylinux"},{"runner":"ubuntu-22.04","target":"aarch64","manylinux":"auto","suffix":"manylinux"},{"runner":"ubuntu-22.04","target":"x86_64","manylinux":"musllinux_1_2","suffix":"musllinux"},{"runner":"ubuntu-22.04","target":"aarch64","manylinux":"musllinux_1_2","suffix":"musllinux"},{"runner":"macos-15","target":"x86_64","manylinux":"auto","suffix":"macos"},{"runner":"macos-15","target":"aarch64","manylinux":"auto","suffix":"macos"},{"runner":"windows-latest","target":"x64","manylinux":"auto","suffix":"windows"}]'
+          || '[{"runner":"ubuntu-22.04","target":"x86_64","manylinux":"auto","suffix":"manylinux"}]') }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.10"
+      - name: Tag the crate version as a `+full` local version
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/set_local_version.py full
+      - name: Build full-precision wheels
+        uses: PyO3/maturin-action@v1
+        with:
+          target: ${{ matrix.platform.target }}
+          args: --release --out dist -i python3.10 --no-default-features --features full
+          sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
+          manylinux: ${{ matrix.platform.manylinux }}
+      - name: Validate the wheel carries the full dataset
+        if: ${{ matrix.platform.target == 'x86_64' && matrix.platform.suffix == 'manylinux' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          wheel="$(find dist -maxdepth 1 -type f -name '*+full*cp310*.whl' | head -n 1)"
+          if [ -z "$wheel" ]; then
+            echo "Missing +full cp310 wheel in dist"
+            find dist -maxdepth 1 -type f
+            exit 1
+          fi
+          python -m pip install --upgrade pip
+          python -m pip install --force-reinstall --no-deps "$wheel"
+          python tests/test_smock.py
+          python - <<'EOF'
+          import importlib.metadata
+          import pathlib
+
+          import tzfpy
+
+          version = importlib.metadata.version("tzfpy")
+          assert version.endswith("+full"), version
+
+          # data_version() reports the same tzdata release for both variants, so
+          # the only proof the full dataset got linked in is the size of the
+          # extension: full.tzb is ~14 MB embedded against ~4 MB for lite.tzb,
+          # which builds out to roughly 14.6 MB vs 4.7 MB.
+          extensions = [
+              path
+              for path in pathlib.Path(tzfpy.__file__).parent.iterdir()
+              if path.suffix in {".so", ".pyd"}
+          ]
+          assert len(extensions) == 1, extensions
+          size = extensions[0].stat().st_size
+          assert size > 10_000_000, f"{extensions[0].name} is {size} bytes, looks like lite data"
+          print(f"{version}: {extensions[0].name} {size} bytes")
+          EOF
+      - name: Upload wheels
+        uses: actions/upload-artifact@v7
+        with:
+          name: wheels-full-${{ matrix.platform.suffix }}-${{ matrix.platform.target }}
+          path: dist
+
   sdist:
     runs-on: ubuntu-latest
     steps:
@@ -465,7 +545,7 @@ jobs:
 
   upload-to-release:
     runs-on: ubuntu-latest
-    needs: release
+    needs: [release, full]
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
     permissions:
       contents: write

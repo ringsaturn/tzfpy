@@ -5,12 +5,13 @@ export UV_NO_SYNC=1
 
 BENCHMARK_ARGS=--benchmark-warmup=on --benchmark-warmup-iterations=500 --benchmark-min-rounds=500 --benchmark-min-time=0.01
 
-.PHONY: help build build-ext fmt lint sync lock upgrade all test test-all bench measure-memory examples
+.PHONY: help build build-ext build-full fmt lint sync lock upgrade all test test-all bench measure-memory examples
 
 help:
 	@echo "Available commands:"
 	@echo "  build            - Build the project using uv"
 	@echo "  build-ext        - Rebuild and install local Rust extension into venv"
+	@echo "  build-full       - Build the full-precision (+full) wheel into dist/"
 	@echo "  fmt              - Format the code using ruff"
 	@echo "  lint             - Lint the code using ruff"
 	@echo "  sync             - Sync and compile the project using uv"
@@ -27,6 +28,18 @@ build:
 
 build-ext:
 	uv run maturin develop --release
+
+# Full-precision variant, experimental. Never published to PyPI, only to
+# GitHub Releases and the project's own simple index: the `+full` local version
+# is rejected by PyPI by design, and tzf-dist keeps full.tzb git-only because
+# it is too large for crates.io. See README "Full-precision wheels".
+#
+# The Cargo.toml/Cargo.lock rewrite is transient and restored on any exit path.
+build-full:
+	@cp Cargo.toml .Cargo.toml.orig && cp Cargo.lock .Cargo.lock.orig && \
+		trap 'mv .Cargo.toml.orig Cargo.toml; mv .Cargo.lock.orig Cargo.lock' EXIT INT TERM; \
+		uv run --no-sync scripts/set_local_version.py full && \
+		uv run --no-sync maturin build --release --no-default-features --features full --out dist
 
 fmt:
 	uv run ruff check --select I --fix .

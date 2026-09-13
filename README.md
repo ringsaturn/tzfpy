@@ -89,6 +89,10 @@ pip install "tzfpy[tzdata]"
 conda install -c conda-forge tzfpy
 ```
 
+Experimental full-precision wheels are distributed separately, from this
+repository's own index rather than PyPI — see
+[Full-precision wheels](#full-precision-wheels).
+
 ```python
 >>> from tzfpy import get_tz, get_tzs
 >>> get_tz(116.3883, 39.9289)  # in (longitude, latitude) order.
@@ -215,6 +219,78 @@ Only queries within about 111 m of a timezone border can differ from the
 full-precision result, and most of that band is much narrower. See
 [`BORDER_CHANGE.md`](https://github.com/ringsaturn/tzf/blob/main/BORDER_CHANGE.md)
 in the `tzf` repository for the complete evaluation results.
+
+### Full-precision wheels
+
+> **Experimental.** The full-precision variant is new to the Python binding
+> and its performance profile is still being evaluated. It is not published to
+> PyPI; it ships only through tzfpy's own package index and GitHub Releases,
+> so opting in is always an explicit choice. The build, the index layout and
+> the numbers below may change between releases.
+
+If that ~111 m band matters for your use case, full-precision wheels embed the
+unsimplified dataset. Same package, same API, no extra knobs — they are built
+from the ~14 MB `full.tzb` instead of the ~4 MB `lite.tzb` and carry a `+full`
+[PEP 440 local version](https://packaging.python.org/en/latest/specifications/version-specifiers/#local-version-identifiers):
+
+```bash
+pip install tzfpy --index-url https://ringsaturn.github.io/tzfpy/full/simple/
+```
+
+```python
+>>> import importlib.metadata
+>>> importlib.metadata.version("tzfpy")
+'2.0.0+full'
+```
+
+`data_version()` reports the same tzdata release for both variants, so the
+distribution version above is how you tell them apart at runtime.
+
+The full variant runs on tzf-rs's `EmbeddedFinder`, which queries the `.tzb`
+bytes in place instead of expanding them into polygons the way the lite build's
+`DefaultFinder` does. So the trade is query latency, not memory: the full
+wheel is larger on disk yet lighter in RAM. Measured on an Apple M3 Max
+(macOS 26.6.2, CPython 3.10.18) over all 170,540 cities in
+[citiespy](https://github.com/ringsaturn/citiespy):
+
+| Metric                            |    Lite |    Full |
+| --------------------------------- | ------: | ------: |
+| Wheel size (macOS arm64)          |  2.9 MB | 10.8 MB |
+| Loaded extension                  |  4.7 MB | 14.5 MB |
+| RSS delta after first query       | 40.6 MB | 13.5 MB |
+| Cold start (import + first query) |   16 ms |    8 ms |
+| `get_tz` median                   |  208 ns |  375 ns |
+| `get_tzs` median (polygon scan)   |  375 ns | 5.33 µs |
+
+`get_tz` still answers most points from the FUZZY preindex, so its fast path
+costs under 2x. The exact polygon scan behind `get_tzs` (and behind `get_tz`
+on a preindex miss, i.e. near borders) decodes compressed geometry on every
+call and lands at ~14x. Both numbers are per-call and single-threaded; batch
+workloads that lean on `get_tzs` should budget for it. The lite build on PyPI
+stays the right default; reach for the full wheels when you query near borders
+and the extra microseconds are cheaper than the ~111 m band.
+
+These wheels are published only to
+[GitHub Releases](https://github.com/ringsaturn/tzfpy/releases) and the index
+above, never to PyPI. Keeping an experimental variant off PyPI means nobody
+gets it without asking for it, and the mechanics line up with that policy: the
+full dataset is git-only in [tzf-dist](https://github.com/ringsaturn/tzf-dist)
+because it exceeds the crates.io size limit, and PyPI rejects local versions
+by design. If the variant graduates, it will be announced in the changelog.
+
+The two variants sit on separate index paths on purpose — `2.0.0+full` sorts
+above `2.0.0`, so sharing one page would make pip silently prefer the full
+wheel. With uv, pin the index explicitly:
+
+```toml
+[[tool.uv.index]]
+name = "tzfpy-full"
+url = "https://ringsaturn.github.io/tzfpy/full/simple/"
+explicit = true
+
+[tool.uv.sources]
+tzfpy = { index = "tzfpy-full" }
+```
 
 ## Performance
 

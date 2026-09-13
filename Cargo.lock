@@ -221,6 +221,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4b578c3f4c607c9f31ae5c7cb0eb6c98359e172ab9517bb5683c3794fe42e78a"
 
 [[package]]
+name = "tzf-dist"
+version = "0.0.2026-c-tzb1"
+source = "git+https://github.com/ringsaturn/tzf-dist?rev=v0.0.2026-c-tzb1#b77d2b18e7f90235ce8156e3c1ae58ef8c0ac959"
+
+[[package]]
 name = "tzf-rs"
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -229,7 +234,18 @@ dependencies = [
  "geometry-rs",
  "serde",
  "serde_json",
- "tzf-dist",
+ "tzf-dist 0.0.2026-c-tzb1 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "tzf-rs"
+version = "2.0.0"
+source = "git+https://github.com/ringsaturn/tzf-rs?tag=v2.0.0#cc364726f3d7dc1d97df0cd24c97c7b6e37458ab"
+dependencies = [
+ "geometry-rs",
+ "serde",
+ "serde_json",
+ "tzf-dist 0.0.2026-c-tzb1 (git+https://github.com/ringsaturn/tzf-dist?rev=v0.0.2026-c-tzb1)",
 ]
 
 [[package]]
@@ -238,7 +254,9 @@ version = "2.0.0"
 dependencies = [
  "lazy_static",
  "pyo3",
- "tzf-rs",
+ "tzf-dist 0.0.2026-c-tzb1 (git+https://github.com/ringsaturn/tzf-dist?rev=v0.0.2026-c-tzb1)",
+ "tzf-rs 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tzf-rs 2.0.0 (git+https://github.com/ringsaturn/tzf-rs?tag=v2.0.0)",
 ]
 
 [[package]]

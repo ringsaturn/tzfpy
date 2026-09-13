@@ -22,11 +22,37 @@ crate-type = ["cdylib"]
 lazy_static = "1.5.0"
 pyo3 = {version = "0.29.0", features = ["extension-module", "generate-import-lib", "abi3-py310"]}
 
-# RELEASE SWITCH (see release-runbook-v2.md, step "switch dep"):
-# once tzf-rs 2.0.0 is on crates.io, comment out the `path` line below and
-# uncomment the `version` line, then run `cargo update -p tzf-rs`.
+# Lite (default, feature "lite"): the ~4 MB lite.tzb that tzf-dist bundles in
+# its crates.io package. This is the variant published to PyPI and the one
+# conda-forge builds.
+#
 # A path dependency MUST NOT be published: it makes the crates.io/conda-forge
 # vendoring path unbuildable and bloats the sdist with a copy of tzf-rs+tzf-dist.
-# tzf-rs = { path = "../tzf-rs", default-features = false, features = ["bundled", "export-geojson"] }
-tzf-rs = { version = "2.0.0", default-features = false, features = ["bundled", "export-geojson"] }
-# tzf-rs = { git =  "https://github.com/ringsaturn/tzf-rs", branch = "v2", default-features = false, features = ["bundled", "export-geojson"] }
+tzf-rs = { version = "2.0.0", default-features = false, features = ["bundled", "export-geojson"], optional = true }
+# tzf-rs = { path = "../tzf-rs", default-features = false, features = ["bundled", "export-geojson"], optional = true }
+
+# Full precision (feature "full"): the ~14 MB full.tzb, no topology
+# simplification. tzf-dist excludes full.tzb from its crates.io package and
+# crates.io forbids git dependencies, so this variant can only be built
+# against tzf-rs from git (the same tag as the crates.io release above).
+# Experimental in the Python binding: wheels ship to GitHub Releases and the
+# GitHub Pages index as `+full` local versions, never to PyPI.
+#
+# Mutually exclusive with "lite": build with
+#   maturin build --no-default-features --features full
+tzf-rs-full = { package = "tzf-rs", git = "https://github.com/ringsaturn/tzf-rs", tag = "v2.0.0", default-features = false, features = ["full", "export-geojson"], optional = true }
+# tzf-rs-full = { package = "tzf-rs", path = "../tzf-rs", default-features = false, features = ["full", "export-geojson"], optional = true }
+
+# The full variant runs on `EmbeddedFinder`, which queries full.tzb in place
+# instead of expanding it into owned polygons (DefaultFinder::new_full() costs
+# ~200 MB RSS). tzf-rs has no `EmbeddedFinder::new_full()` and does not
+# re-export tzf-dist, so the bytes come straight from tzf-dist. Must point at
+# the exact git rev tzf-rs v2.0.0 pins for its own `tzf-dist-git` dependency,
+# so cargo unifies the two into one package.
+tzf-dist-full = { package = "tzf-dist", git = "https://github.com/ringsaturn/tzf-dist", rev = "v0.0.2026-c-tzb1", features = ["full"], optional = true }
+# tzf-dist-full = { package = "tzf-dist", path = "../tzf-dist", features = ["full"], optional = true }
+
+[features]
+default = ["lite"]
+lite = ["dep:tzf-rs"]
+full = ["dep:tzf-rs-full", "dep:tzf-dist-full"]
