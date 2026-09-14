@@ -3376,7 +3376,7 @@ third_party_libraries:
 
       END OF TERMS AND CONDITIONS
 - package_name: tzf-dist
-  package_version: 0.0.2026-c-tzb1
+  package_version: 0.0.2026-c-tzb2
   repository: https://github.com/ringsaturn/tzf-dist
   license: MIT AND ODbL-1.0
   licenses:
@@ -3427,7 +3427,7 @@ third_party_libraries:
       OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
       SOFTWARE.
 - package_name: tzf-rs
-  package_version: 2.0.0
+  package_version: 2.1.1
   repository: https://github.com/ringsaturn/tzf-rs
   license: MIT
   licenses:

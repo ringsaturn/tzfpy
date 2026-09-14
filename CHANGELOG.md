@@ -3,6 +3,28 @@
 Release notes for `1.3.3` and earlier live in
 [GitHub Releases](https://github.com/ringsaturn/tzfpy/releases).
 
+## 2.1.0b2 (unreleased)
+
+Second pre-release on the same routing as 2.1.0b1: lite wheels to TestPyPI
+and GitHub Releases, `+full` wheels to GitHub Releases and tzfpy's own index.
+Built on tzf-rs 2.1.1 and tzf-dist `0.0.2026-c-tzb2`: the same `2026c`
+boundaries encoded at 64-point chunks, plus the tzf-rs in-place reader work
+(open-time group validation, chunk block skipping, per-group latitude
+stripes, endpoint-parity skip, targeted FUZZY probes). No API change; results
+are identical.
+
+The full-precision variant is the one that moves. tz-benchmark Python
+harness, Apple M3 Max, CPython 3.14, medians per call:
+
+| Candidate                     | random cities | edge cities | RSS delta |
+| ----------------------------- | ------------: | ----------: | --------: |
+| tzfpy 2.1.0b2 (lite)          |        625 ns |      875 ns |  39.0 MiB |
+| tzfpy 2.1.0b2+full (2.1.0b1+full in parentheses) | 750 ns (917) | 1.21 µs (6.25) | 16.0 MiB (13.5) |
+| timezonefinder 9.0.0          |       1.17 µs |     2.71 µs |  52.5 MiB |
+
+Wheel sizes grow with the chunk change: lite 2.9 → 3.0 MB, full 10.8 →
+11.8 MB (macOS arm64).
+
 ## 2.1.0b1 (unreleased)
 
 A pre-release: the lite wheels go to

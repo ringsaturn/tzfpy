@@ -242,11 +242,11 @@ pip install --pre tzfpy --index-url https://ringsaturn.github.io/tzfpy/full/simp
 ```python
 >>> import importlib.metadata
 >>> importlib.metadata.version("tzfpy")
-'2.1.0b1+full'
+'2.1.0b2+full'
 ```
 
 While the variant is experimental it is cut only from pre-release tags
-(`2.1.0b1+full`, not `2.1.0+full`). pip and uv fall back to pre-releases when
+(`2.1.0b2+full`, not `2.1.0+full`). pip and uv fall back to pre-releases when
 an index offers nothing else, so the plain command works today; `--pre` (or
 `prerelease = "allow"` under `[tool.uv]`) keeps it working once a stable
 release lands on the same index.
@@ -258,25 +258,27 @@ The full variant runs on tzf-rs's `EmbeddedFinder`, which queries the `.tzb`
 bytes in place instead of expanding them into polygons the way the lite build's
 `DefaultFinder` does. So the trade is query latency, not memory: the full
 wheel is larger on disk yet lighter in RAM. Measured on an Apple M3 Max
-(macOS 26.6.2, CPython 3.10.18) over all 170,540 cities in
-[citiespy](https://github.com/ringsaturn/citiespy):
+(macOS 26.6.2, CPython 3.14.0) over all 154,694 cities in
+[citiespy](https://github.com/ringsaturn/citiespy), tzfpy 2.1.0b2 on tzf-rs
+2.1.1 and the 64-point-chunk `2026c` data:
 
 | Metric                            |    Lite |    Full |
 | --------------------------------- | ------: | ------: |
-| Wheel size (macOS arm64)          |  2.9 MB | 10.8 MB |
-| Loaded extension                  |  4.7 MB | 14.5 MB |
-| RSS delta after first query       | 40.6 MB | 13.5 MB |
-| Cold start (import + first query) |   16 ms |    8 ms |
-| `get_tz` median                   |  208 ns |  375 ns |
-| `get_tzs` median (polygon scan)   |  375 ns | 5.33 µs |
+| Wheel size (macOS arm64)          |  3.0 MB | 11.8 MB |
+| Loaded extension                  |  4.9 MB | 16.0 MB |
+| RSS delta after first query       | 39.0 MB | 16.0 MB |
+| Cold start (import + first query) |   15 ms |   10 ms |
+| `get_tz` median                   |  208 ns |  250 ns |
+| `get_tzs` median (polygon scan)   |  375 ns |  791 ns |
 
 `get_tz` still answers most points from the FUZZY preindex, so its fast path
-costs under 2x. The exact polygon scan behind `get_tzs` (and behind `get_tz`
+costs about 20%. The exact polygon scan behind `get_tzs` (and behind `get_tz`
 on a preindex miss, i.e. near borders) decodes compressed geometry on every
-call and lands at ~14x. Both numbers are per-call and single-threaded; batch
-workloads that lean on `get_tzs` should budget for it. The lite build on PyPI
-stays the right default; reach for the full wheels when you query near borders
-and the extra microseconds are cheaper than the ~111 m band.
+call and lands at about 2x; on border cities `get_tz` sits around 1.2 µs
+against the lite build's 0.9 µs. Both numbers are per-call and
+single-threaded. The lite build on PyPI stays the right default; reach for the
+full wheels when you query near borders and the extra fraction of a
+microsecond is cheaper than the ~111 m band.
 
 These wheels are published only to
 [GitHub Releases](https://github.com/ringsaturn/tzfpy/releases) and the index
