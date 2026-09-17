@@ -49,9 +49,9 @@ checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 
 [[package]]
 name = "portable-atomic"
-version = "1.14.0"
+version = "1.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d20d5497ef88037a52ff98267d066e7f11fcc5e99bbfbd58a42336193aacec3"
+checksum = "05c8b63e8d9609db387f0324918f81d68fe27748f084ef092fb35954d0539a85"
 
 [[package]]
 name = "pqueue"
@@ -170,7 +170,7 @@ checksum = "e7a5d71263a5a7d47b41f6b3f06ba276f10cc18b0931f1799f710578e2309348"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 3.0.3",
+ "syn 3.0.6",
 ]
 
 [[package]]
@@ -199,9 +199,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "3.0.3"
+version = "3.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53e9bae58849f64dfa4f5d5ae372c8341f7305f82a3868709269343628b659a3"
+checksum = "8593e8e72159ed2257d083c7a454a85cbf854f37a0966d8d483aff8c8a3ebcee"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -216,54 +216,54 @@ checksum = "adb6935a6f5c20170eeceb1a3835a49e12e19d792f6dd344ccc76a985ca5a6ca"
 
 [[package]]
 name = "tzf-dist"
-version = "0.0.2026-c-tzb2"
+version = "0.0.2026-d"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "461d961bb7ad6f4b1445a8985fe0978c6c3eebdaec671baa3914c3d4419da18b"
+checksum = "5e2968ddd98d78d8f712b3165ee6dabc3f1e80c3a2fd7340ecd5c694e925782f"
 
 [[package]]
 name = "tzf-dist"
-version = "0.0.2026-c-tzb2"
-source = "git+https://github.com/ringsaturn/tzf-dist?rev=v0.0.2026-c-tzb2#6a01be0085b526ec6434f505ec8f5efa8f5ce40f"
+version = "0.0.2026-d"
+source = "git+https://github.com/ringsaturn/tzf-dist?rev=v0.0.2026-d#d3ddaca64800046ffef80f3e09269bc26be4bc45"
 
 [[package]]
 name = "tzf-rs"
-version = "2.1.1"
+version = "2.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "00340ee1c7c5b377c62a2e06f551d641b34e8bcbaf3d948f2f6ad4537385850b"
+checksum = "5bd4bd76dc7816db8a12043dbac00254158c17cd2c731aa951fd85f1a9d1f1ae"
 dependencies = [
  "geometry-rs",
  "serde",
  "serde_json",
- "tzf-dist 0.0.2026-c-tzb2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tzf-dist 0.0.2026-d (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "tzf-rs"
-version = "2.1.1"
-source = "git+https://github.com/ringsaturn/tzf-rs?tag=v2.1.1#73819a16acf60bd7d00e7de1155cf5780bb9948d"
+version = "2.1.2"
+source = "git+https://github.com/ringsaturn/tzf-rs?tag=v2.1.2#dce143aac4a07bf93d44a30230ca958ff8db5850"
 dependencies = [
  "geometry-rs",
  "serde",
  "serde_json",
- "tzf-dist 0.0.2026-c-tzb2 (git+https://github.com/ringsaturn/tzf-dist?rev=v0.0.2026-c-tzb2)",
+ "tzf-dist 0.0.2026-d (git+https://github.com/ringsaturn/tzf-dist?rev=v0.0.2026-d)",
 ]
 
 [[package]]
 name = "tzfpy"
-version = "2.1.0-beta.2"
+version = "2.1.0"
 dependencies = [
  "lazy_static",
  "pyo3",
- "tzf-dist 0.0.2026-c-tzb2 (git+https://github.com/ringsaturn/tzf-dist?rev=v0.0.2026-c-tzb2)",
- "tzf-rs 2.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "tzf-rs 2.1.1 (git+https://github.com/ringsaturn/tzf-rs?tag=v2.1.1)",
+ "tzf-dist 0.0.2026-d (git+https://github.com/ringsaturn/tzf-dist?rev=v0.0.2026-d)",
+ "tzf-rs 2.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tzf-rs 2.1.2 (git+https://github.com/ringsaturn/tzf-rs?tag=v2.1.2)",
 ]
 
 [[package]]
 name = "unicode-ident"
-version = "1.0.24"
+version = "1.0.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
+checksum = "ab72a15cf68d77cb0987d3684aa8a45c5ef827e8cb49ee2f30bfd7ba2feb519f"
 
 [[package]]
 name = "zmij"

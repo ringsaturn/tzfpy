@@ -3,34 +3,20 @@
 Release notes for `1.3.3` and earlier live in
 [GitHub Releases](https://github.com/ringsaturn/tzfpy/releases).
 
-## 2.1.0b2 (unreleased)
+## 2.1.0
 
-Second pre-release on the same routing as 2.1.0b1: lite wheels to TestPyPI
-and GitHub Releases, `+full` wheels to GitHub Releases and tzfpy's own index.
-Built on tzf-rs 2.1.1 and tzf-dist `0.0.2026-c-tzb2`: the same `2026c`
-boundaries encoded at 64-point chunks, plus the tzf-rs in-place reader work
-(open-time group validation, chunk block skipping, per-group latitude
-stripes, endpoint-parity skip, targeted FUZZY probes). No API change; results
-are identical.
+Rust core upgraded from tzf-rs 2.0.0 to 2.1.2, and the dataset from `2026c` to
+`2026d` (tzf-dist `0.0.2026-d`). No Python API change.
 
-The full-precision variant is the one that moves. tz-benchmark Python
-harness, Apple M3 Max, CPython 3.14, medians per call:
+### Data
 
-| Candidate                     | random cities | edge cities | RSS delta |
-| ----------------------------- | ------------: | ----------: | --------: |
-| tzfpy 2.1.0b2 (lite)          |        625 ns |      875 ns |  39.0 MiB |
-| tzfpy 2.1.0b2+full (2.1.0b1+full in parentheses) | 750 ns (917) | 1.21 µs (6.25) | 16.0 MiB (13.5) |
-| timezonefinder 9.0.0          |       1.17 µs |     2.71 µs |  52.5 MiB |
-
-Wheel sizes grow with the chunk change: lite 2.9 → 3.0 MB, full 10.8 →
-11.8 MB (macOS arm64).
-
-## 2.1.0b1 (unreleased)
-
-A pre-release: the lite wheels go to
-[TestPyPI](https://test.pypi.org/project/tzfpy/) and GitHub Releases, not
-PyPI. The point of the tag is to put the experimental full-precision wheels
-on tzfpy's own index.
+- `data_version()` now returns `"2026d"`. The upstream
+  [timezone-boundary-builder 2026d](https://github.com/evansiroky/timezone-boundary-builder/releases/tag/2026d)
+  release refreshes the OSM boundary data, assigns Golden, BC to
+  `America/Edmonton`, and recalculates the since-1970 / since-now zone sets
+  against the current tz database.
+- The `.tzb` files are now encoded at 64-point chunks. Lite wheels grow from
+  2.77 MB to about 3.0 MB (macOS arm64); query results are identical.
 
 ### Added
 
@@ -42,9 +28,31 @@ on tzfpy's own index.
   `https://ringsaturn.github.io/tzfpy/full/simple/` — never to PyPI, which
   rejects local versions by design. The PyPI and conda-forge builds are
   unchanged. The full variant runs on tzf-rs's `EmbeddedFinder`, which queries
-  the data in place: about 13.5 MB resident against lite's 40 MB, with
-  `get_tz` ~1.8x and `get_tzs` ~14x slower per call. See README
-  "Full-precision wheels" for the measurements and install instructions.
+  the data in place: about 16 MB resident against lite's 39 MB, at a higher
+  per-call cost. See README "Full-precision wheels" for the measurements and
+  install instructions.
+- `make build-full` and `scripts/set_local_version.py` for building the
+  `+full` wheel locally.
+
+### Performance
+
+The lite wheel is unchanged in speed. The full variant picks up the tzf-rs 2.1
+`EmbeddedFinder` query-path work (open-time group validation, chunk block
+skipping, integer segment pre-filter, endpoint-parity skip, targeted FUZZY
+probes). tz-benchmark Python harness, Apple M3 Max, CPython 3.14, medians per
+call:
+
+| Candidate             | random cities | edge cities | RSS delta |
+| --------------------- | ------------: | ----------: | --------: |
+| tzfpy 2.1.0 (lite)    |        625 ns |      875 ns |  39.0 MiB |
+| tzfpy 2.1.0+full      |        750 ns |     1.21 µs |  16.0 MiB |
+| timezonefinder 9.0.0  |       1.17 µs |     2.71 µs |  52.5 MiB |
+
+### Pre-releases
+
+2.1.0b1 and 2.1.0b2 shipped the same changes on tzf-rs 2.0.0 / 2.1.1 and the
+`2026c` data; their lite wheels went to TestPyPI and GitHub Releases, not
+PyPI. 2.1.0 is the first 2.1 build on PyPI.
 
 ## 2.0.0
 

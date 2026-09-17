@@ -236,20 +236,18 @@ from the ~14 MB `full.tzb` instead of the ~4 MB `lite.tzb` and carry a `+full`
 [PEP 440 local version](https://packaging.python.org/en/latest/specifications/version-specifiers/#local-version-identifiers):
 
 ```bash
-pip install --pre tzfpy --index-url https://ringsaturn.github.io/tzfpy/full/simple/
+pip install tzfpy --index-url https://ringsaturn.github.io/tzfpy/full/simple/
 ```
 
 ```python
 >>> import importlib.metadata
 >>> importlib.metadata.version("tzfpy")
-'2.1.0b2+full'
+'2.1.0+full'
 ```
 
-While the variant is experimental it is cut only from pre-release tags
-(`2.1.0b2+full`, not `2.1.0+full`). pip and uv fall back to pre-releases when
-an index offers nothing else, so the plain command works today; `--pre` (or
-`prerelease = "allow"` under `[tool.uv]`) keeps it working once a stable
-release lands on the same index.
+The index carries a `+full` wheel for every tagged release. pip and uv pick
+the newest stable one by default; pass `--pre` (or set
+`prerelease = "allow"` under `[tool.uv]`) to take a newer pre-release.
 
 `data_version()` reports the same tzdata release for both variants, so the
 distribution version above is how you tell them apart at runtime.
@@ -259,8 +257,8 @@ bytes in place instead of expanding them into polygons the way the lite build's
 `DefaultFinder` does. So the trade is query latency, not memory: the full
 wheel is larger on disk yet lighter in RAM. Measured on an Apple M3 Max
 (macOS 26.6.2, CPython 3.14.0) over all 154,694 cities in
-[citiespy](https://github.com/ringsaturn/citiespy), tzfpy 2.1.0b2 on tzf-rs
-2.1.1 and the 64-point-chunk `2026c` data:
+[citiespy](https://github.com/ringsaturn/citiespy), tzfpy 2.1.0 on tzf-rs
+2.1.2 and the 64-point-chunk `2026d` data:
 
 | Metric                            |    Lite |    Full |
 | --------------------------------- | ------: | ------: |

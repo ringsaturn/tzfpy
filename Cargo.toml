@@ -2,7 +2,7 @@
 edition = "2024"
 name = "tzfpy"
 repository = "https://github.com/ringsaturn/tzfpy"
-version = "2.1.0-beta.2"
+version = "2.1.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -28,7 +28,7 @@ pyo3 = {version = "0.29.0", features = ["extension-module", "generate-import-lib
 #
 # A path dependency MUST NOT be published: it makes the crates.io/conda-forge
 # vendoring path unbuildable and bloats the sdist with a copy of tzf-rs+tzf-dist.
-tzf-rs = { version = "2.1.1", default-features = false, features = ["bundled", "export-geojson"], optional = true }
+tzf-rs = { version = "2.1.2", default-features = false, features = ["bundled", "export-geojson"], optional = true }
 # tzf-rs = { path = "../tzf-rs", default-features = false, features = ["bundled", "export-geojson"], optional = true }
 
 # Full precision (feature "full"): the ~14 MB full.tzb, no topology
@@ -40,7 +40,7 @@ tzf-rs = { version = "2.1.1", default-features = false, features = ["bundled", "
 #
 # Mutually exclusive with "lite": build with
 #   maturin build --no-default-features --features full
-tzf-rs-full = { package = "tzf-rs", git = "https://github.com/ringsaturn/tzf-rs", tag = "v2.1.1", default-features = false, features = ["full", "export-geojson"], optional = true }
+tzf-rs-full = { package = "tzf-rs", git = "https://github.com/ringsaturn/tzf-rs", tag = "v2.1.2", default-features = false, features = ["full", "export-geojson"], optional = true }
 # tzf-rs-full = { package = "tzf-rs", path = "../tzf-rs", default-features = false, features = ["full", "export-geojson"], optional = true }
 
 # The full variant runs on `EmbeddedFinder`, which queries full.tzb in place
@@ -49,7 +49,7 @@ tzf-rs-full = { package = "tzf-rs", git = "https://github.com/ringsaturn/tzf-rs"
 # re-export tzf-dist, so the bytes come straight from tzf-dist. Must point at
 # the exact git rev tzf-rs v2.1.1 pins for its own `tzf-dist-git` dependency,
 # so cargo unifies the two into one package.
-tzf-dist-full = { package = "tzf-dist", git = "https://github.com/ringsaturn/tzf-dist", rev = "v0.0.2026-c-tzb2", features = ["full"], optional = true }
+tzf-dist-full = { package = "tzf-dist", git = "https://github.com/ringsaturn/tzf-dist", rev = "v0.0.2026-d", features = ["full"], optional = true }
 # tzf-dist-full = { package = "tzf-dist", path = "../tzf-dist", features = ["full"], optional = true }
 
 [features]
