@@ -221,19 +221,16 @@ jobs:
           python -m pip install --force-reinstall --no-deps "$wheel"
           python tests/test_smock.py
       - uses: actions/setup-python@v7
-        if: ${{ matrix.platform.target != 'aarch64' }}
         with:
           python-version: 3.14t
           architecture: ${{ matrix.platform.python_arch }}
       - name: Build free-threaded wheels
-        if: ${{ matrix.platform.target != 'aarch64' }}
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
           args: --release --out dist -i python3.14t
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
       - name: Validate cp314t wheel install
-        if: ${{ matrix.platform.target != 'aarch64' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -392,13 +389,15 @@ jobs:
         # smoke check.
         platform: >-
           ${{ fromJSON((startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch')
-          && '[{"runner":"ubuntu-22.04","target":"x86_64","manylinux":"auto","suffix":"manylinux"},{"runner":"ubuntu-22.04","target":"aarch64","manylinux":"auto","suffix":"manylinux"},{"runner":"ubuntu-22.04","target":"x86_64","manylinux":"musllinux_1_2","suffix":"musllinux"},{"runner":"ubuntu-22.04","target":"aarch64","manylinux":"musllinux_1_2","suffix":"musllinux"},{"runner":"macos-15","target":"x86_64","manylinux":"auto","suffix":"macos"},{"runner":"macos-15","target":"aarch64","manylinux":"auto","suffix":"macos"},{"runner":"windows-latest","target":"x64","manylinux":"auto","suffix":"windows"}]'
+          && '[{"runner":"ubuntu-22.04","target":"x86_64","manylinux":"auto","suffix":"manylinux"},{"runner":"ubuntu-22.04","target":"aarch64","manylinux":"auto","suffix":"manylinux"},{"runner":"ubuntu-22.04","target":"x86_64","manylinux":"musllinux_1_2","suffix":"musllinux"},{"runner":"ubuntu-22.04","target":"aarch64","manylinux":"musllinux_1_2","suffix":"musllinux"},{"runner":"macos-15","target":"x86_64","manylinux":"auto","suffix":"macos"},{"runner":"macos-15","target":"aarch64","manylinux":"auto","suffix":"macos"},{"runner":"windows-latest","target":"x64","manylinux":"auto","suffix":"windows"},{"runner":"windows-11-arm","target":"aarch64","manylinux":"auto","suffix":"windows"}]'
           || '[{"runner":"ubuntu-22.04","target":"x86_64","manylinux":"auto","suffix":"manylinux"}]') }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.10"
+          # GitHub Actions has no Python 3.10 for Windows ARM64 runners; the
+          # abi3 wheel still targets 3.10 via `-i python3.10` below.
+          python-version: ${{ matrix.platform.runner == 'windows-11-arm' && '3.11' || '3.10' }}
       - name: Tag the crate version as a `+full` local version
         shell: bash
         run: |
@@ -502,10 +501,14 @@ jobs:
         with:
           name: wheels-musllinux-aarch64
           path: dist
-      - name: Download windows wheel (x64)
+      - name: Download windows wheels (x64, aarch64)
         uses: actions/download-artifact@v8
         with:
           name: wheels-windows-x64
+          path: dist
+      - uses: actions/download-artifact@v8
+        with:
+          name: wheels-windows-aarch64
           path: dist
       - name: Download macOS wheels (x86_64, aarch64)
         uses: actions/download-artifact@v8
