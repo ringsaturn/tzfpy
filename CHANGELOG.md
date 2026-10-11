@@ -3,6 +3,19 @@
 Release notes for `1.3.3` and earlier live in
 [GitHub Releases](https://github.com/ringsaturn/tzfpy/releases).
 
+## 2.1.1
+
+Rust core upgraded from tzf-rs 2.1.2 to 2.1.3, and the dataset from `2026d` to
+`2026e` (tzf-dist `0.0.2026-e`). No Python API change.
+
+### Data
+
+- `data_version()` now returns `"2026e"`. The upstream
+  [timezone-boundary-builder 2026e](https://github.com/evansiroky/timezone-boundary-builder/releases/tag/2026e)
+  release refreshes the OSM boundary data, limits `Pacific/Easter` to Chilean
+  territorial waters, and recalculates the since-1970 / since-now zone sets
+  against the current tz database.
+
 ## 2.1.0
 
 Rust core upgraded from tzf-rs 2.0.0 to 2.1.2, and the dataset from `2026c` to
