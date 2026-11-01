@@ -20,7 +20,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 lazy_static = "1.5.0"
-pyo3 = {version = "0.29.0", features = ["extension-module", "generate-import-lib", "abi3-py310"]}
+pyo3 = {version = "0.30.1", features = ["extension-module", "generate-import-lib", "abi3-py310"]}
 
 # Lite (default, feature "lite"): the ~4 MB lite.tzb that tzf-dist bundles in
 # its crates.io package. This is the variant published to PyPI and the one
