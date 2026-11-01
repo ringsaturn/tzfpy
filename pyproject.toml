@@ -52,11 +52,11 @@ requires = ["maturin<2,>=1"]
 
 [dependency-groups]
 dev = [
-  "ruff==0.16.9",
+  "ruff==0.17.3",
   "citiespy>=0.6.13",
   "maturin==1.15.0",
   "pytest>=9.0.2",
-  "pytest-benchmark>=5.2.3",
+  "pytest-benchmark>=5.3.1",
   # pytest-benchmark 5.3 made py-cpuinfo optional, but --benchmark-json
   # (used by scripts/benchmark_index_modes.py and `make bench`) still needs it.
   "py-cpuinfo>=9.0.0",
