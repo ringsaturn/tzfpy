@@ -3,6 +3,20 @@
 Release notes for `1.3.3` and earlier live in
 [GitHub Releases](https://github.com/ringsaturn/tzfpy/releases).
 
+## 2.2.0b1
+
+Pre-release. Rust core upgraded from tzf-rs 2.1.4 to 2.2.0. Same dataset
+(`2026f`) and no Python API change; results are identical.
+
+### Performance
+
+- tzf-rs 2.2.0 speeds up the fuzzy-index step of `DefaultFinder` (the `lite`
+  build): the tile map uses FxHash, and each lookup probes only the zoom levels
+  present in the point's 1° cell. Locally, a Python loop of `get_tz` over 100k
+  world cities went from ~313 to ~235 ns per point. Loading is ~4% slower (the
+  ~130 KB table is built at import).
+- The `full` variant runs on `EmbeddedFinder` and is unchanged.
+
 ## 2.1.2
 
 Rust core upgraded from tzf-rs 2.1.3 to 2.1.4, and the dataset from `2026e` to

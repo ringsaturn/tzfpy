@@ -17,7 +17,7 @@ Author: dtolnay
 
 lazy_static (github.com/rust-lang-nursery/lazy-static.rs)
 License: MIT OR Apache-2.0
-Copyright (c) 2010 The Rust Project Developers
+Author: rust-lang-nursery
 
 libc (github.com/rust-lang/libc)
 License: MIT OR Apache-2.0
@@ -67,6 +67,10 @@ rtree_rs (github.com/tidwall/rtree.rs)
 License: MIT
 Copyright (c) 2022 Josh Baker
 
+rustc-hash (github.com/rust-lang/rustc-hash)
+License: Apache-2.0 OR MIT
+Author: rust-lang
+
 serde (github.com/serde-rs/serde)
 License: MIT OR Apache-2.0
 Author: serde-rs
@@ -82,10 +86,6 @@ Author: serde-rs
 serde_json (github.com/serde-rs/json)
 License: MIT OR Apache-2.0
 Author: serde-rs
-
-syn (github.com/dtolnay/syn)
-License: MIT OR Apache-2.0
-Author: dtolnay
 
 syn (github.com/dtolnay/syn)
 License: MIT OR Apache-2.0
