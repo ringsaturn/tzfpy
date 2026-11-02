@@ -3,6 +3,14 @@
 Release notes for `1.3.3` and earlier live in
 [GitHub Releases](https://github.com/ringsaturn/tzfpy/releases).
 
+## Unreleased
+
+### Packaging
+
+- Python 3.10 reached end of life on 2026-10-01 and is no longer
+  supported. The wheels now target `abi3-py311` (`cp311-abi3`) and
+  `requires-python` is `>=3.11`; Python 3.10 users stay on 2.2.x.
+
 ## 2.2.0b1
 
 Pre-release. Rust core upgraded from tzf-rs 2.1.4 to 2.2.0. Same dataset

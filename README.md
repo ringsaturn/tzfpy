@@ -21,7 +21,7 @@
 >    machine used in [Performance](#performance); later calls take under 1 µs.
 > 3. Uses about 40MB memory, down from about 72MB in 1.x. See
 >    [Memory](#memory).
-> 4. It's tested under Python 3.10+.
+> 4. It's tested under Python 3.11+.
 > 5. Try it online:
 >    - <https://ringsaturn.github.io/tzf-web/>, powered by tzf-rs and
 >      WebAssembly

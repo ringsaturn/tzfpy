@@ -16,7 +16,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass, replace
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 CSV_FIELDNAMES = [
     "key",
@@ -241,8 +241,8 @@ def normalize_iso8601_utc(timestamp: str) -> str:
     except ValueError:
         return clean_text(timestamp)
     if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
-    return dt.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+        dt = dt.replace(tzinfo=UTC)
+    return dt.astimezone(UTC).isoformat().replace("+00:00", "Z")
 
 
 def get_local_tag_created_at(tag: str) -> str:

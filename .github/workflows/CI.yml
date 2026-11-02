@@ -55,22 +55,22 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.10"
+          python-version: "3.11"
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --out dist -i python3.10
+          args: --release --out dist -i python3.11
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
           manylinux: auto
-      - name: Validate cp310 wheel install
+      - name: Validate cp311 wheel install
         if: ${{ matrix.platform.target == 'x86_64' }}
         shell: bash
         run: |
           set -euo pipefail
-          wheel="$(find dist -maxdepth 1 -type f -name '*cp310*.whl' | head -n 1)"
+          wheel="$(find dist -maxdepth 1 -type f -name '*cp311*.whl' | head -n 1)"
           if [ -z "$wheel" ]; then
-            echo "Missing cp310 wheel in dist"
+            echo "Missing cp311 wheel in dist"
             exit 1
           fi
           python -m pip install --upgrade pip
@@ -123,29 +123,29 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.10"
+          python-version: "3.11"
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --out dist -i python3.10
+          args: --release --out dist -i python3.11
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
           manylinux: musllinux_1_2
-      - name: Validate cp310 wheel install
+      - name: Validate cp311 wheel install
         if: ${{ false }} # Temporarily disabled for musllinux debugging.
         shell: bash
         run: |
           set -euo pipefail
-          wheel="$(find dist -maxdepth 1 -type f -name '*cp310*musllinux*.whl' | head -n 1)"
+          wheel="$(find dist -maxdepth 1 -type f -name '*cp311*musllinux*.whl' | head -n 1)"
           if [ -z "$wheel" ]; then
-            echo "Missing cp310 musllinux wheel in dist"
+            echo "Missing cp311 musllinux wheel in dist"
             exit 1
           fi
           docker run --rm -v "$PWD:/src:ro" -w /src quay.io/pypa/musllinux_1_2_x86_64 /bin/bash -lc '
             set -euo pipefail
-            /opt/python/cp310-cp310/bin/pip install --upgrade pip
-            /opt/python/cp310-cp310/bin/pip install --force-reinstall --no-deps /src/dist/*cp310*musllinux*.whl
-            /opt/python/cp310-cp310/bin/python /src/tests/test_smock.py
+            /opt/python/cp311-cp311/bin/pip install --upgrade pip
+            /opt/python/cp311-cp311/bin/pip install --force-reinstall --no-deps /src/dist/*cp311*musllinux*.whl
+            /opt/python/cp311-cp311/bin/python /src/tests/test_smock.py
           '
       - name: Build free-threaded wheels
         uses: PyO3/maturin-action@v1
@@ -206,15 +206,15 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --out dist -i python3.10
+          args: --release --out dist -i python3.11
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
-      - name: Validate cp310 wheel install
+      - name: Validate cp311 wheel install
         shell: bash
         run: |
           set -euo pipefail
-          wheel="$(find dist -maxdepth 1 -type f -name '*cp310*.whl' | head -n 1)"
+          wheel="$(find dist -maxdepth 1 -type f -name '*cp311*.whl' | head -n 1)"
           if [ -z "$wheel" ]; then
-            echo "Missing cp310 wheel in dist"
+            echo "Missing cp311 wheel in dist"
             exit 1
           fi
           python -m pip install --upgrade pip
@@ -261,21 +261,21 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.10"
+          python-version: "3.11"
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --out dist -i python3.10
+          args: --release --out dist -i python3.11
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
-      - name: Validate cp310 wheel install
+      - name: Validate cp311 wheel install
         if: ${{ matrix.platform.target == 'aarch64' }}
         shell: bash
         run: |
           set -euo pipefail
-          wheel="$(find dist -maxdepth 1 -type f -name '*cp310*.whl' | head -n 1)"
+          wheel="$(find dist -maxdepth 1 -type f -name '*cp311*.whl' | head -n 1)"
           if [ -z "$wheel" ]; then
-            echo "Missing cp310 wheel in dist"
+            echo "Missing cp311 wheel in dist"
             exit 1
           fi
           python -m pip install --upgrade pip
@@ -395,9 +395,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
-          # GitHub Actions has no Python 3.10 for Windows ARM64 runners; the
-          # abi3 wheel still targets 3.10 via `-i python3.10` below.
-          python-version: ${{ matrix.platform.runner == 'windows-11-arm' && '3.11' || '3.10' }}
+          python-version: "3.11"
       - name: Tag the crate version as a `+full` local version
         shell: bash
         run: |
@@ -407,7 +405,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --out dist -i python3.10 --no-default-features --features full
+          args: --release --out dist -i python3.11 --no-default-features --features full
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
           manylinux: ${{ matrix.platform.manylinux }}
       - name: Validate the wheel carries the full dataset
@@ -415,9 +413,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          wheel="$(find dist -maxdepth 1 -type f -name '*+full*cp310*.whl' | head -n 1)"
+          wheel="$(find dist -maxdepth 1 -type f -name '*+full*cp311*.whl' | head -n 1)"
           if [ -z "$wheel" ]; then
-            echo "Missing +full cp310 wheel in dist"
+            echo "Missing +full cp311 wheel in dist"
             find dist -maxdepth 1 -type f
             exit 1
           fi
