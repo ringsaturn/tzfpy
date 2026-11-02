@@ -247,7 +247,7 @@ dependencies = [
 
 [[package]]
 name = "tzfpy"
-version = "2.3.0-beta.1"
+version = "2.2.0-beta.2"
 dependencies = [
  "lazy_static",
  "pyo3",

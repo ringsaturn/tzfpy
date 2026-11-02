@@ -3,14 +3,10 @@
 Release notes for `1.3.3` and earlier live in
 [GitHub Releases](https://github.com/ringsaturn/tzfpy/releases).
 
-## 2.3.0b1
+## Unreleased
 
-Pre-release. Rust core upgraded from tzf-rs 2.2.0 to 2.3.0. Same dataset
-(`2026f`); results are identical.
-
-There is no 2.2.0 release: 2.2.0b1 was a pre-release only, and its changes
-ship in 2.3.0 together with the new `get_tz_batch` API and the move to
-Python 3.11+. The next stable release after 2.1.2 is 2.3.0.
+Rust core upgraded from tzf-rs 2.1.4 to 2.3.0. Same dataset (`2026f`);
+results are identical.
 
 ### New API
 
@@ -24,11 +20,11 @@ Python 3.11+. The next stable release after 2.1.2 is 2.3.0.
 
 ### Performance
 
-- tzf-rs 2.3.0 replaces the fuzzy-index hash probes of `DefaultFinder` (the
-  `lite` build) with a flat tile grid built at import. Locally, a Python loop
-  of `get_tz` over 100k world cities went from ~235 to ~190 ns per point;
-  `get_tz_batch` costs ~120 ns per point with lists and ~105 ns with numpy
-  arrays. Import cost is about the same as 2.2.0b1.
+- The fuzzy-index step of `DefaultFinder` (the `lite` build) is a flat tile
+  grid built at import instead of a hash probe per zoom level. Locally, a
+  Python loop of `get_tz` over 100k world cities went from ~313 to ~190 ns
+  per point; `get_tz_batch` costs ~120 ns per point with lists and ~105 ns
+  with numpy arrays.
 - The `full` variant runs on `EmbeddedFinder` and is unchanged; its
   `get_tz_batch` maps names back to positions with a small hash map.
 
@@ -36,21 +32,7 @@ Python 3.11+. The next stable release after 2.1.2 is 2.3.0.
 
 - Python 3.10 reached end of life on 2026-10-01 and is no longer
   supported. The wheels now target `abi3-py311` (`cp311-abi3`) and
-  `requires-python` is `>=3.11`; Python 3.10 users stay on 2.2.x.
-
-## 2.2.0b1
-
-Pre-release. Rust core upgraded from tzf-rs 2.1.4 to 2.2.0. Same dataset
-(`2026f`) and no Python API change; results are identical.
-
-### Performance
-
-- tzf-rs 2.2.0 speeds up the fuzzy-index step of `DefaultFinder` (the `lite`
-  build): the tile map uses FxHash, and each lookup probes only the zoom levels
-  present in the point's 1° cell. Locally, a Python loop of `get_tz` over 100k
-  world cities went from ~313 to ~235 ns per point. Loading is ~4% slower (the
-  ~130 KB table is built at import).
-- The `full` variant runs on `EmbeddedFinder` and is unchanged.
+  `requires-python` is `>=3.11`; Python 3.10 users stay on 2.1.x.
 
 ## 2.1.2
 
