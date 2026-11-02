@@ -222,9 +222,9 @@ source = "git+https://github.com/ringsaturn/tzf-dist?rev=v0.0.2026-f#eab6431f8a7
 
 [[package]]
 name = "tzf-rs"
-version = "2.2.0"
+version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4e87eff24a611e2fd4f1932c7854e30db789b988633c96fd03d358ea1ae49ef"
+checksum = "4fdf8262c938adb6613ceb1871ce43857cabd26d74d4c38313c20f9223459eda"
 dependencies = [
  "geometry-rs",
  "rustc-hash",
@@ -235,8 +235,8 @@ dependencies = [
 
 [[package]]
 name = "tzf-rs"
-version = "2.2.0"
-source = "git+https://github.com/ringsaturn/tzf-rs?tag=v2.2.0#ee9bee30fa6867ed0774d5a07423d8c513ab9885"
+version = "2.3.0"
+source = "git+https://github.com/ringsaturn/tzf-rs?tag=v2.3.0#edc806706b30b70f34b1b84cac0578fa8bacac97"
 dependencies = [
  "geometry-rs",
  "rustc-hash",
@@ -247,13 +247,13 @@ dependencies = [
 
 [[package]]
 name = "tzfpy"
-version = "2.2.0-beta.1"
+version = "2.3.0-beta.1"
 dependencies = [
  "lazy_static",
  "pyo3",
  "tzf-dist 0.0.2026-f (git+https://github.com/ringsaturn/tzf-dist?rev=v0.0.2026-f)",
- "tzf-rs 2.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "tzf-rs 2.2.0 (git+https://github.com/ringsaturn/tzf-rs?tag=v2.2.0)",
+ "tzf-rs 2.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tzf-rs 2.3.0 (git+https://github.com/ringsaturn/tzf-rs?tag=v2.3.0)",
 ]
 
 [[package]]

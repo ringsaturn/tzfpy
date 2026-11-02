@@ -3,6 +3,8 @@
 use lazy_static::lazy_static;
 use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
+use pyo3::sync::PyOnceLock;
+use pyo3::types::{PyList, PyString};
 
 #[cfg(all(feature = "lite", feature = "full"))]
 compile_error!(
@@ -85,10 +87,85 @@ pub fn get_tz_index_geojson(timezone_name: &str) -> PyResult<String> {
     }
 }
 
+/// Position of the point's zone in `timezonenames()`, or `None`.
+#[cfg(feature = "lite")]
+fn tz_index(lng: f64, lat: f64) -> Option<usize> {
+    FINDER.get_tz_index(lng, lat)
+}
+
+/// `EmbeddedFinder` has no index API, so map the name back to its position.
+#[cfg(all(not(feature = "lite"), feature = "full"))]
+fn tz_index(lng: f64, lat: f64) -> Option<usize> {
+    use std::collections::HashMap;
+    use std::sync::LazyLock;
+    static POS: LazyLock<HashMap<&'static str, usize>> = LazyLock::new(|| {
+        FINDER
+            .timezonenames()
+            .into_iter()
+            .enumerate()
+            .map(|(i, n)| (n, i))
+            .collect()
+    });
+    match FINDER.get_tz_name(lng, lat) {
+        "" => None,
+        name => POS.get(name).copied(),
+    }
+}
+
+/// One Python string per zone (slot 0 = `""` for no zone), built once and
+/// shared, so a batch answer costs a reference per point, not a new string.
+static ZONE_STRS: PyOnceLock<Vec<Py<PyString>>> = PyOnceLock::new();
+
+fn zone_strs(py: Python<'_>) -> &[Py<PyString>] {
+    ZONE_STRS.get_or_init(py, || {
+        std::iter::once("")
+            .chain(FINDER.timezonenames())
+            .map(|n| PyString::new(py, n).unbind())
+            .collect()
+    })
+}
+
+/// Coordinates from a C-contiguous float64 buffer (numpy array,
+/// `array('d')`, ...) when the object offers one, else from any sequence of
+/// floats.
+fn coords(obj: &Bound<'_, PyAny>) -> PyResult<Vec<f64>> {
+    if let Ok(buf) = pyo3::buffer::PyBuffer::<f64>::get(obj)
+        && buf.is_c_contiguous()
+    {
+        return buf.to_vec(obj.py());
+    }
+    obj.extract()
+}
+
+#[pyfunction]
+pub fn get_tz_batch<'py>(
+    py: Python<'py>,
+    lngs: &Bound<'py, PyAny>,
+    lats: &Bound<'py, PyAny>,
+) -> PyResult<Bound<'py, PyList>> {
+    let (lngs, lats) = (coords(lngs)?, coords(lats)?);
+    if lngs.len() != lats.len() {
+        return Err(PyValueError::new_err(format!(
+            "lngs and lats differ in length: {} != {}",
+            lngs.len(),
+            lats.len()
+        )));
+    }
+    let strs = zone_strs(py);
+    let pos: Vec<u32> = py.detach(|| {
+        lngs.iter()
+            .zip(&lats)
+            .map(|(&lng, &lat)| tz_index(lng, lat).map_or(0, |i| i as u32 + 1))
+            .collect()
+    });
+    PyList::new(py, pos.iter().map(|&i| strs[i as usize].bind(py)))
+}
+
 #[pymodule]
 fn tzfpy(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(get_tz, m)?)?;
     m.add_function(wrap_pyfunction!(get_tzs, m)?)?;
+    m.add_function(wrap_pyfunction!(get_tz_batch, m)?)?;
     m.add_function(wrap_pyfunction!(timezonenames, m)?)?;
     m.add_function(wrap_pyfunction!(data_version, m)?)?;
     m.add_function(wrap_pyfunction!(get_tz_polygon_geojson, m)?)?;

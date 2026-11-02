@@ -3,7 +3,30 @@
 Release notes for `1.3.3` and earlier live in
 [GitHub Releases](https://github.com/ringsaturn/tzfpy/releases).
 
-## Unreleased
+## 2.3.0b1
+
+Pre-release. Rust core upgraded from tzf-rs 2.2.0 to 2.3.0. Same dataset
+(`2026f`); results are identical.
+
+### New API
+
+- `get_tz_batch(lngs, lats) -> list[str]`: `get_tz` for every
+  `(lngs[i], lats[i])` pair, with the GIL released during the lookups.
+  Accepts C-contiguous float64 buffers (numpy `float64` arrays,
+  `array.array("d")`) without copying through Python floats, or any
+  sequences of floats. Raises `ValueError` when the lengths differ. Each
+  zone name is one shared `str` object, so results cost a reference per
+  point. numpy is not a dependency.
+
+### Performance
+
+- tzf-rs 2.3.0 replaces the fuzzy-index hash probes of `DefaultFinder` (the
+  `lite` build) with a flat tile grid built at import. Locally, a Python loop
+  of `get_tz` over 100k world cities went from ~235 to ~190 ns per point;
+  `get_tz_batch` costs ~120 ns per point with lists and ~105 ns with numpy
+  arrays. Import cost is about the same as 2.2.0b1.
+- The `full` variant runs on `EmbeddedFinder` and is unchanged; its
+  `get_tz_batch` maps names back to positions with a small hash map.
 
 ### Packaging
 

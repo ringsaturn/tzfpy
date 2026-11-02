@@ -114,6 +114,23 @@ uvx --with tzfpy python -c "from tzfpy import get_tz;tz = get_tz(116.3883,39.928
 Asia/Shanghai
 ```
 
+### Batch lookup
+
+`get_tz_batch(lngs, lats)` returns `get_tz` for every pair, without the
+per-call overhead, and runs the lookups with the GIL released. It takes
+float64 buffers (a `numpy` `float64` array, `array.array("d")`) or plain
+sequences of floats; numpy is not a dependency.
+
+```python
+>>> from tzfpy import get_tz_batch
+>>> get_tz_batch([116.3883, 2.3522], [39.9289, 48.8566])
+['Asia/Shanghai', 'Europe/Paris']
+```
+
+On 100k world cities (Apple M-series, lite wheel) a `get_tz` loop costs about
+190 ns per point, `get_tz_batch` about 120 ns with lists and 105 ns with numpy
+arrays.
+
 ### Export to GeoJSON
 
 For data visualization, you can get timezone polygon GeoJSON data from tzfpy.

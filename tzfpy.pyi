@@ -7,6 +7,8 @@ built lazily on the first call and shared for the lifetime of the process.
 All coordinates are ``(longitude, latitude)`` — longitude first.
 """
 
+from collections.abc import Buffer, Sequence
+
 def get_tz(lng: float, lat: float) -> str:
     """Return one timezone name for the location, or ``""`` if none covers it.
 
@@ -14,6 +16,18 @@ def get_tz(lng: float, lat: float) -> str:
     majority of queries) and by exact point-in-polygon otherwise. Where
     timezones overlap, this returns the first match; use :func:`get_tzs` to
     see every match.
+    """
+
+def get_tz_batch(
+    lngs: Sequence[float] | Buffer, lats: Sequence[float] | Buffer
+) -> list[str]:
+    """Return :func:`get_tz` for each ``(lngs[i], lats[i])`` pair.
+
+    Same answers as calling :func:`get_tz` in a loop, without the per-call
+    overhead; the lookups run with the GIL released. ``lngs`` and ``lats``
+    are C-contiguous float64 buffers (a ``numpy.ndarray`` of ``float64``,
+    ``array.array("d")``) or any sequences of floats, and must have the same
+    length, else :exc:`ValueError`. Points in no timezone yield ``""``.
     """
 
 def get_tzs(lng: float, lat: float) -> list[str]:
