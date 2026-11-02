@@ -8,6 +8,10 @@ Release notes for `1.3.3` and earlier live in
 Pre-release. Rust core upgraded from tzf-rs 2.2.0 to 2.3.0. Same dataset
 (`2026f`); results are identical.
 
+There is no 2.2.0 release: 2.2.0b1 was a pre-release only, and its changes
+ship in 2.3.0 together with the new `get_tz_batch` API and the move to
+Python 3.11+. The next stable release after 2.1.2 is 2.3.0.
+
 ### New API
 
 - `get_tz_batch(lngs, lats) -> list[str]`: `get_tz` for every
